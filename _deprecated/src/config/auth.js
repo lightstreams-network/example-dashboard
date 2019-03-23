@@ -1,4 +1,4 @@
-const { JWT_SECRET, FAUCET_PWD, FAUCET_ADDRESS } = process.env;
+const { JWT_SECRET, AUTHOR_ACC_PWD, AUTHOR_ACC_PWD } = process.env;
 
 module.exports = {
     jwt: {
@@ -8,7 +8,7 @@ module.exports = {
         }
     },
     faucet: {
-        address: FAUCET_ADDRESS,
-        pwd: FAUCET_PWD
+        address: AUTHOR_ACC_PWD,
+        pwd: AUTHOR_ACC_PWD
     }
 };

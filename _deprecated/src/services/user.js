@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const { DateTime } = require('luxon');
-const { user: User } = require('src/models');
+const { user: User } = require('../models');
 
 class UserServiceError extends Error {
 
@@ -8,7 +8,7 @@ class UserServiceError extends Error {
 
 module.exports.UserServiceError = UserServiceError;
 
-    module.exports.createUser = ({ username, password, ethAddress }) => {
+    module.exports.createFanbaseUser = ({ username, password, ethAddress }) => {
     const now = DateTime.utc().toSQL();
     const attrs = {
         email: username,

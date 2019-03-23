@@ -1,5 +1,5 @@
 {
-  "name": "Lightchain-Truffle",
+  "name": "Library-Truffle",
   "version": "1.0.0",
   "description": "Servers as truffle suite and support for JS based parts of Lightchain codebase.",
   "scripts": {

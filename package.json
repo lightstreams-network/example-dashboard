@@ -1,37 +1,32 @@
 {
-  "name": "@fanbase/server",
-  "version": "0.1.0",
-  "private": true,
+  "name": "lightstreams-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bin/www",
   "scripts": {
-    "prestart": "if [ ! -d node_modules ]; then npm install; fi",
-    "start": "NODE_PATH=. node ./bin/www",
+    "start": "NODE_PATH=. ./bin/www",
     "dev": "NODE_PATH=. nodemon --watch src --inspect=0.0.0.0:9230 ./bin/www",
-    "local": "env $(grep -v '^#' .env | xargs) npm run dev"
+    "postinstall": "rm -f node_modules/src; ln -nsf ../src node_modules/src"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lightstreams-network/lightstreams-demo.git"
+  },
+  "author": "Gabriel Garrido",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lightstreams-network/lightstreams-demo/issues"
+  },
+  "homepage": "https://github.com/lightstreams-network/lightstreams-demo#readme",
   "dependencies": {
-    "bcrypt": "^2.0.1",
-    "body-parser": "~1.18.2",
-    "cookie-parser": "~1.4.3",
-    "cors": "^2.8.4",
-    "debug": "~2.6.9",
-    "dotenv": "^5.0.1",
-    "dotenv-expand": "^4.2.0",
-    "express": "^4.16.3",
-    "got": "^9.2.2",
-    "hbs": "~4.0.1",
-    "jwt-simple": "^0.5.1",
-    "lodash": "^4.17.5",
-    "luxon": "^1.1.0",
-    "module-alias": "^2.1.0",
-    "morgan": "~1.9.0",
-    "nodemon": "^1.17.5",
+    "bcrypt": "^3.0.5",
+    "dotenv": "^7.0.0",
+    "express": "^4.16.4",
+    "lightstreams-js-sdk": "git+ssh://git@github.com/lightstreams-network/lightstreams-js-sdk.git#master",
+    "lodash": "^4.17.11",
+    "luxon": "^1.12.0",
     "passport": "^0.4.0",
-    "passport-http": "^0.3.0",
-    "passport-jwt": "^4.0.0",
-    "sequelize": "^4.37.6",
-    "serve-favicon": "~2.4.5",
-    "socket.io": "^2.1.1",
-    "sqlite3": "^4.0.2",
-    "url": "^0.11.0"
+    "sequelize": "^5.1.1",
+    "web3": "^1.0.0-beta.50"
   }
 }

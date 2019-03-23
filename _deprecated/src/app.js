@@ -5,12 +5,13 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 
 const cors = require('cors');
-const passportSession = require('src/services/session').passport();
+const passport = require('passport');
 
+const { urls } = require('./config');
 // const passport = require('passport');
 // const basicAuth = require('./middleware/auth/basic')(passport);
 // const jwtAuth = require('./middleware/auth/jwt')(passport);
-const { notFoundHandler, errorHandler } = require('src/middleware/errors');
+const { notFoundHandler, errorHandler } = require('./middleware/errors');
 
 const app = express();
 require('http').Server(app);
@@ -19,17 +20,17 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
 
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger(process.env.NODE_ENV === 'development' ? 'dev' : 'prod'));
+app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors({
-    origin: '*', // @TODO Restrict rule
+    origin: '*', // urls.FANBASE_URI
     credentials: true,
 }));
-app.use(passportSession.initialize());
-app.use(passportSession.session()); //persistent login session
+app.use(passport.initialize());
+app.use(passport.session()); //persistent login session
 
 
 app.use('/', require('./routes'));

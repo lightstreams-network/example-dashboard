@@ -14,12 +14,12 @@ contract libraryFaucet {
         balance = balance + msg.value;
     }
 
-    function requestTopUp() public {
+    function requestTopUp(address destAddr) public {
         require(balance > topUpLimit);
-        require(topUpList[msg.sender] == 0);
+        require(topUpList[addr] == 0);
 
-        topUpList[msg.sender] = topUpLimit;
-        msg.sender.transfer(topUpList);
+        topUpList[addr] = topUpLimit;
+        destAddr.transfer(topUpList);
         balance -= topUpList;
     }
 }
