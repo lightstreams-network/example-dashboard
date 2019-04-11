@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define('user', {
-        email: { type: DataTypes.STRING, unique: true },
+        username: { type: DataTypes.STRING, unique: true },
         eth_address: { type: DataTypes.STRING, unique: true },
         leth_token: DataTypes.STRING,
         password: DataTypes.STRING
@@ -15,8 +15,8 @@ module.exports = (sequelize, DataTypes) => {
         return values;
     };
 
-    User.findByEmail = (email) => {
-        return User.findOne({ where: { email } });
+    User.findOneByUsername = (username) => {
+        return User.findOne({ where: { username } });
     };
 
     return User;

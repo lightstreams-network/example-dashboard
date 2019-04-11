@@ -11,7 +11,7 @@ module.exports.UserServiceError = UserServiceError;
     module.exports.createUser = ({ username, password, ethAddress }) => {
     const now = DateTime.utc().toSQL();
     const attrs = {
-        email: username,
+        username: username,
         password: bcrypt.hashSync(password, 10),
         eth_address: ethAddress,
         created_at: now,
@@ -22,7 +22,7 @@ module.exports.UserServiceError = UserServiceError;
 };
 
 module.exports.verifyUser = async (username, password ) => {
-    const user = await User.findByEmail(username);
+    const user = await User.findOneByUsername(username);
     if (!user) {
         throw new UserServiceError(`User ${username} is not found`);
     }
@@ -42,7 +42,7 @@ module.exports.verifyUser = async (username, password ) => {
 };
 
 module.exports.updateUser = async (username, values) => {
-    const user = await User.findByEmail(username);
+    const user = await User.findOneByUsername(username);
     if (!user) {
         throw new UserServiceError(`User ${username} is not found`);
     }

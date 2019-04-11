@@ -43,10 +43,10 @@ router.post('/sign-up', async (req, res, next) => {
       const sequelizeValidationError = new Error(err.errors[0].message);
       sequelizeValidationError.status = 400;
       return next(sequelizeValidationError);
-    } else {
-      debug(err);
-      next(err);
     }
+
+    debug(err);
+    next(err);
   }
 });
 

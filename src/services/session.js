@@ -3,12 +3,12 @@ const jwt = require('jwt-simple');
 
 const { user: User } = require('../models');
 
-const { JWT_SECRET } = process.env;
+const { authCfg } = require('src/lib/config');
 
 let passportSession;
 
 module.exports.jwtEncode = (payload) => {
-    return jwt.encode(payload, authConfig.jwt.secret);
+    return jwt.encode(payload, authCfg.jwtSecret);
 };
 
 module.exports.passport = () => {
@@ -19,7 +19,7 @@ module.exports.passport = () => {
   passportSession = require('passport');
 
   const params = {
-    secretOrKey: JWT_SECRET,
+    secretOrKey: authCfg.jwtSecret,
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
   };
 

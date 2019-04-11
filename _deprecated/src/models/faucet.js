@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
         underscored: true
     });
 
-    Model.findByToAddress = function findByEmail(ethAddress) {
+    Model.findByToAddress = (ethAddress) => {
         return Model.findAll({ where: { to_address: ethAddress } });
     };
 

@@ -18,6 +18,10 @@ module.exports.webCfg = {
   pwd: process.env.STAKEHOLDER_ADDRESS_PWD,
 };
 
+module.exports.authCfg = {
+  jwtSecret: process.env.JWT_SECRET
+};
+
 module.exports.urls = {
   gateway: process.env.GATEWAY_DOMAIN,
 };

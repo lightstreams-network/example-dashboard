@@ -5,6 +5,7 @@ module.exports.notFoundHandler = (req, res, next) => {
 };
 
 module.exports.errorHandler = (err, req, res, next) => {
+    console.error(err);
     // set locals, only providing error in development
     res.locals.message = err.message;
 
