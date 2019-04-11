@@ -12,8 +12,9 @@ module.exports.dbCfg = {
   storage: process.env.DB_FILE_PATH || '/tmp/demo.sqlite'
 };
 
-module.exports.webCfg = {
+module.exports.web3Cfg = {
   provider: process.env.WEB3_PROVIDER,
+  gasPrice: process.env.WEB3_GAS_PRICE,
   from: process.env.STAKEHOLDER_ADDRESS,
   pwd: process.env.STAKEHOLDER_ADDRESS_PWD,
 };
