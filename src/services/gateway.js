@@ -5,8 +5,8 @@
  */
 
 const Gateway = require('lightstreams-js-sdk');
-const { GATEWAY_DOMAIN } = process.env;
+const { urls } = require('src/lib/config');
 
-module.exports.gateway = () => {
-  return Gateway(GATEWAY_DOMAIN);
+module.exports.gateway = ({ gwDomain } = {}) => {
+  return Gateway(gwDomain || urls.gateway);
 };

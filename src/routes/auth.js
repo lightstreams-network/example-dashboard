@@ -6,6 +6,7 @@ const { Sequelize } = require('src/models');
 const { badInputResponse, unauthorizedResponse, jsonResponse } = require('src/lib/responses');
 const { jwtEncode } = require('src/services/session');
 const { verifyUser, createUser, updateUser, UserServiceError } = require('src/services/user');
+const gateway = require('src/services/gateway').gateway();
 
 const userAttrFields = [
   'username',
@@ -22,7 +23,7 @@ function extractRequestAttrs(req, fields) {
   }, {});
 }
 
-router.post('/create-user', async (req, res, next) => {
+router.post('/sign-up', async (req, res, next) => {
   const attrs = extractRequestAttrs(req, userAttrFields);
   if (!attrs.username || !attrs.password) {
     next(badInputResponse());
@@ -49,7 +50,7 @@ router.post('/create-user', async (req, res, next) => {
   }
 });
 
-router.post('/authenticate', async (req, res, next) => {
+router.post('/sign-in', async (req, res, next) => {
   const attrs = extractRequestAttrs(req, userAttrFields);
   if (!attrs.username || !attrs.password) {
     next(badInputResponse());

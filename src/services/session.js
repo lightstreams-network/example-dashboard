@@ -31,4 +31,5 @@ module.exports.passport = () => {
   });
 
   passportSession.use(jwtStrategy);
+  return passportSession;
 };
