@@ -53,18 +53,14 @@ const _mineBlock = function() {
   })
 };
 
-const VI = {
-  startTimestamp: 0,
-  endTimestamp: 1,
-  lockPeriod: 2,
-  balanceInitial: 3,
-  balanceClaimed: 4,
-  balanceRemaining: 5,
-  bonusInitial: 6,
-  bonusClaimed: 7,
-  bonusRemaining: 8,
-  revocable: 9,
-  revoked: 10
+const BookAttr = {
+  title: 0,
+  owner: 1,
+  price: 2,
+  file: 3,
+  cover: 4,
+  acl: 5,
+  purchasers: 6,
 };
 
 module.exports = {
@@ -73,5 +69,5 @@ module.exports = {
   pht2wei: pht2Wei,
   toBN: toBN,
   calculateGasCost: calculateGasCost,
-  VI: VI
+  BookAttr: BookAttr
 };
