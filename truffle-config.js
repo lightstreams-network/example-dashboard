@@ -37,9 +37,9 @@ module.exports = {
             from: "0xd119b8b038d3a67d34ca1d46e1898881626a082b"
         }
     },
-    plugins: [
-        "truffle-security"
-    ],
+    // plugins: [
+    //     "truffle-security"
+    // ],
     // Set default mocha options here, use special reporters etc.
     mocha: {
         // timeout: 100000

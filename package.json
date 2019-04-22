@@ -7,6 +7,7 @@
     "start": "NODE_PATH=. ./bin/www",
     "dev": "NODE_PATH=. nodemon --watch src --debug --inspect=0.0.0.0:9230 ./bin/www",
     "deploy-sirius": "truffle deploy --reset --network=sirius",
+    "test": "truffle test --reset --network=ganache",
     "postinstall": "rm -f node_modules/src; ln -nsf ../src node_modules/src"
   },
   "repository": {
@@ -39,6 +40,8 @@
   },
   "devDependencies": {
     "nodemon": "^1.18.11",
-    "truffle": "^5.0.12"
+    "truffle": "^5.0.12",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1"
   }
 }
