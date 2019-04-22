@@ -4,25 +4,22 @@ const _ = require('lodash');
 const debug = require('debug')('fanbase:server');
 const { Sequelize } = require('src/models');
 const { badInputResponse, unauthorizedResponse, jsonResponse } = require('src/lib/responses');
-const { extractRequestAttrs } = require('src/lib/request');
+const { extractRequestAttrs, validateRequestAttrs } = require('src/lib/request');
 const { jwtEncode } = require('src/services/session');
 const { verifyUser, createUser, updateUser, UserServiceError } = require('src/services/user');
 const gateway = require('src/services/gateway').gateway();
 
-const userAttrFields = [
-  'username',
-  'password'
-];
-
-
 router.post('/sign-up', async (req, res, next) => {
-  const attrs = extractRequestAttrs(req, userAttrFields);
-  if (!attrs.username || !attrs.password) {
-    next(badInputResponse());
+  const query = ['username', 'password'];
+  try {
+    validateRequestAttrs(req, query);
+  } catch ( err ) {
+    next(badInputResponse(err.message));
     return;
   }
 
   try {
+    const attrs = extractRequestAttrs(req, query);
     const { account } = await gateway.user.signUp(attrs.password);
     const user = await createUser({
       username: attrs.username,
@@ -43,13 +40,16 @@ router.post('/sign-up', async (req, res, next) => {
 });
 
 router.post('/sign-in', async (req, res, next) => {
-  const attrs = extractRequestAttrs(req, userAttrFields);
-  if (!attrs.username || !attrs.password) {
-    next(badInputResponse());
+  const query = ['username', 'password'];
+  try {
+    validateRequestAttrs(req, query);
+  } catch ( err ) {
+    next(badInputResponse(err.message));
     return;
   }
 
   try {
+    const attrs = extractRequestAttrs(req, query);
     const user = await verifyUser(attrs.username, attrs.password);
     const { token } = await gateway.user.signIn(user.eth_address, attrs.password);
     // @TODO: replace by session

@@ -7,5 +7,6 @@ router.get('/', (req, res) => {
 
 router.use('/auth', require('./auth'));
 router.use('/wallet', require('./wallet'));
+router.use('/storage', require('./storage'));
 
 module.exports = router;

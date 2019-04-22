@@ -4,21 +4,29 @@
  * Copyright 2019 (c) Lightstreams, Palma
  */
 
-const { validateRequestAttrs, extractRequestAttrs } = require('src/lib/request');
-const { ErrorBadInputResponse } = require('src/lib/response');
+const express = require('express');
+const router = express.Router();
+const debug = require('debug')('app:server');
 
-router.get('/upload-file', async (req, res, next) => {
-    const query = ['owner', 'password', 'file'];
+const { extractRequestAttrs, validateRequestAttrs } = require('src/lib/request');
+const { badInputResponse, jsonResponse } = require('src/lib/responses');
+
+const passport = require('src/services/session').passport();
+const gateway = require('src/services/gateway').gateway();
+
+router.post('/upload-file', passport.authenticate('jwt', { session: false }),
+  async (req, res, next) => {
+    const query = ['file', 'password'];
     try {
       validateRequestAttrs(req, query);
     } catch ( err ) {
-      next(ErrorBadInputResponse(err.message));
+      next(badInputResponse(err.message));
       return;
     }
 
     try {
       const attrs = extractRequestAttrs(req, query);
-      const reqStream = await gwApi.storage.addProxy(attrs.owner, attrs.password, attrs.file);
+      const reqStream = await gateway.storage.addProxy(req.user.eth_address, attrs.password, attrs.file);
       reqStream
         .on('uploadProgress', progress => {
           console.log(`Uploading: ${progress.transferred} KB`);
@@ -27,7 +35,8 @@ router.get('/upload-file', async (req, res, next) => {
           }
         })
         .pipe(res);
-    } catch ( err ) {
+    } catch (err) {
+      debug(err);
       next(err);
     }
   });
@@ -37,7 +46,7 @@ router.post('/fetch-file', async (req, res, next) => {
   try {
     validateRequestAttrs(req, query);
   } catch ( err ) {
-    next(ErrorBadInputResponse(err.message));
+    next(badInputResponse(err.message));
     return;
   }
 
@@ -53,6 +62,7 @@ router.post('/fetch-file', async (req, res, next) => {
       })
       .pipe(res);
   } catch ( err ) {
+    debug(err);
     next(err);
   }
 });

@@ -28,8 +28,8 @@ contract('ShopShelves', (accounts) => {
     title: 'test book',
     priceInPht: '0.5',
     acl: '0x5307C0F1146233884B3A9BC857738d8bDe0802E4',
-    file: '0x50c9406f0942711b6e2e28301CE86bFbF42eBE3F',
-    cover: '0x50c9406f0942711b6e2e28301CE86bFbF42eBE3E',
+    file: 'QmPHYAfcy2MpVvKiS1pqPJg8b3juLi9N76VXAa12AYvaAg',
+    cover: 'QmPHYAfcy2MpVvKiS1pqPJg8b3juLi9N76VXAa12AYvaAg',
   };
 
   it('should deploy the Faucet contract and store the address', async () => {

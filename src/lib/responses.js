@@ -5,8 +5,8 @@ module.exports.notFoundResponse = function notFound() {
     return err;
 };
 
-module.exports.badInputResponse = function badInput() {
-    const err = new Error('Bad input parameter');
+module.exports.badInputResponse = function badInput(msg) {
+    const err = new Error(msg || 'Bad input parameter');
     err.status = 400;
     return err;
 };

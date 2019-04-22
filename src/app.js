@@ -3,9 +3,10 @@ const path = require('path');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
-
+const formData = require("express-form-data");
+const os = require("os");
 const cors = require('cors');
-const passportSession = require('src/services/session').passport();
+
 
 // const passport = require('passport');
 // const basicAuth = require('./middleware/auth/basic')(passport);
@@ -28,9 +29,22 @@ app.use(cors({
     origin: '*', // @TODO Restrict rule
     credentials: true,
 }));
+
+const passportSession = require('src/services/session').passport();
 app.use(passportSession.initialize());
 app.use(passportSession.session()); //persistent login session
 
+// parse data with connect-multiparty.
+app.use(formData.parse({
+  uploadDir: os.tmpdir(),
+  autoClean: true
+}));
+// clear from the request and delete all empty files (size == 0)
+app.use(formData.format());
+// change file objects to stream.Readable
+app.use(formData.stream());
+// union body and files
+app.use(formData.union());
 
 app.use('/', require('./routes'));
 

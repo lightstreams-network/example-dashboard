@@ -3,8 +3,8 @@ const router = express.Router();
 const _ = require('lodash');
 const debug = require('debug')('app:server');
 const { weiToPht } = require('src/lib/ethereum');
-const { extractRequestAttrs } = require('src/lib/request');
-const { badInputResponse, unauthorizedResponse, jsonResponse } = require('src/lib/responses');
+const { extractRequestAttrs, validateRequestAttrs } = require('src/lib/request');
+const { badInputResponse, jsonResponse } = require('src/lib/responses');
 
 const passport = require('src/services/session').passport();
 const gateway = require('src/services/gateway').gateway();
@@ -26,12 +26,16 @@ router.get('/balance', passport.authenticate('jwt', { session: false }),
   });
 
 router.post('/request-top-up', passport.authenticate('jwt', { session: false }), async (req, res, next) => {
-  const attrs = extractRequestAttrs(req, ['amount']);
-  if (!attrs.amount) {
-    next(badInputResponse());
+  const query = ['amount'];
+  try {
+    validateRequestAttrs(req, query);
+  } catch ( err ) {
+    next(badInputResponse(err.message));
     return;
   }
+
   try {
+    const attrs = extractRequestAttrs(req, query);
     await faucetSC.requestFreeToken(await Web3(), {
       beneficiary: req.user.eth_address,
       amountInPht: attrs.amount

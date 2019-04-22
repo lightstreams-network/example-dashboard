@@ -22,7 +22,7 @@ module.exports.validateRequestAttrs = (req, query) => {
   for ( let i = 0; i < query.length; i++ ) {
     const param = query[i];
     if (!attrs[param]) {
-      throw new Error(`Missing query param: ${param}`);
+      throw new Error(`Missing request param: '${param}'`);
     }
   }
 };
