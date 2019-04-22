@@ -6,6 +6,7 @@
 
 const express = require('express');
 const router = express.Router();
+const streams = require('memory-streams');
 const debug = require('debug')('app:server');
 
 const { extractRequestAttrs, validateRequestAttrs } = require('src/lib/request');
@@ -27,15 +28,28 @@ router.post('/upload-file', passport.authenticate('jwt', { session: false }),
     try {
       const attrs = extractRequestAttrs(req, query);
       const reqStream = await gateway.storage.addProxy(req.user.eth_address, attrs.password, attrs.file);
-      reqStream
-        .on('uploadProgress', progress => {
-          console.log(`Uploading: ${progress.transferred} KB`);
-          if (progress.percent === 1) {
-            console.log("Upload completed");
-          }
-        })
-        .pipe(res);
-    } catch (err) {
+      const resStream = new streams.WritableStream();
+
+      resStream.on('finish', () => {
+        const gwRes = JSON.parse(resStream.toString());
+        if(gwRes.error) {
+          res.json(jsonResponse(gwRes, 'Failed to upload file'));
+        } else {
+          // @TODO
+        }
+        res.send();
+      });
+
+      await reqStream.on('uploadProgress', progress => {
+        console.log(`Uploading: ${progress.transferred} KB`);
+        if (progress.percent === 1) {
+          console.log("Upload completed");
+        }
+      }).on('error', err => {
+        debug(err);
+        next(err);
+      }).pipe(resStream);
+    } catch ( err ) {
       debug(err);
       next(err);
     }

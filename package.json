@@ -34,6 +34,7 @@
     "lightstreams-js-sdk": "git+ssh://git@github.com/lightstreams-network/lightstreams-js-sdk.git#master",
     "lodash": "^4.17.11",
     "luxon": "^1.12.0",
+    "memory-streams": "^0.1.3",
     "morgan": "^1.9.1",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
