@@ -11,13 +11,15 @@ const debug = require('debug')('app:server');
 
 const { extractRequestAttrs, validateRequestAttrs } = require('src/lib/request');
 const { badInputResponse, jsonResponse } = require('src/lib/responses');
+const Web3 = require('src/services/web3');
 
 const passport = require('src/services/session').passport();
 const gateway = require('src/services/gateway').gateway();
+const shelvesSC = require('src/smartcontracts/shelves');
 
 router.post('/upload-file', passport.authenticate('jwt', { session: false }),
   async (req, res, next) => {
-    const query = ['file', 'password'];
+    const query = ['file', 'password', 'title', 'priceInPht'];
     try {
       validateRequestAttrs(req, query);
     } catch ( err ) {
@@ -30,14 +32,27 @@ router.post('/upload-file', passport.authenticate('jwt', { session: false }),
       const reqStream = await gateway.storage.addProxy(req.user.eth_address, attrs.password, attrs.file);
       const resStream = new streams.WritableStream();
 
-      resStream.on('finish', () => {
+      resStream.on('finish', async () => {
         const gwRes = JSON.parse(resStream.toString());
         if(gwRes.error) {
           res.json(jsonResponse(gwRes, 'Failed to upload file'));
+          res.send();
         } else {
-          // @TODO
+          // Granting admin access to Shelves SC of the new file
+          await gateway.acl.grant(gwRes.acl, req.user.eth_address, attrs.password, shelvesSC.address(), 'ADMIN');
+          // Adding file to shelves
+          const book = shelvesSC.stackBook(await Web3(), {
+            owner: req.user.eth_address,
+            pwd: attrs.password
+          }, {
+            title: attrs.title,
+            priceInPht: attrs.priceInPht,
+            file: gwRes.meta,
+            acl: gwRes.acl
+          });
+          res.json(jsonResponse(book));
+          res.send();
         }
-        res.send();
       });
 
       await reqStream.on('uploadProgress', progress => {

@@ -5,6 +5,7 @@
  */
 
 let faucetSCData = require(`${process.env.PWD}/build/contracts/Faucet.json`);
+let shopShelvesSCData = require(`${process.env.PWD}/build/contracts/ShopShelves.json`);
 
 module.exports.dbCfg = {
   username: process.env.DB_USER || null,
@@ -37,5 +38,7 @@ module.exports.smartContract = {
   },
   shelves: {
     address: process.env.SMART_CONTRACT_SHELVES_ADDRESS,
+    owner: process.env.STAKEHOLDER_ADDRESS,
+    abi: shopShelvesSCData.abi
   }
 };

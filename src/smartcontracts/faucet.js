@@ -27,7 +27,7 @@ module.exports.requestFreeToken = (web3, { beneficiary, amountInPht }) => {
         .on('error', (error) => {
           reject(new Error(error));
         });
-    } catch ( err ) {
+    } catch (err) {
       reject(new Error('Failed to request tokens'));
     }
   });
