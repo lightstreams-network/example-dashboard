@@ -19,6 +19,7 @@ const unitMap = {
   'milliether': '1000000000000000',
   'milli': '1000000000000000',
   'ether': '1000000000000000000',
+  'pht': '1000000000000000000',
   'kether': '1000000000000000000000',
   'grand': '1000000000000000000000',
   'einstein': '1000000000000000000000',
@@ -27,21 +28,28 @@ const unitMap = {
   'tether': '1000000000000000000000000000000'
 };
 
-const getValueOfUnit = function(unit) {
-  unit = unit ? unit.toLowerCase() : 'ether';
-  var unitValue = unitMap[unit];
+module.exports.getValueOfUnit = (unit) => {
+  unit = unit ? unit.toLowerCase() : 'pht';
+  const unitValue = unitMap[unit];
   if (unitValue === undefined) {
     throw new Error(globalFuncs.errorMsgs[4] + JSON.stringify(unitMap, null, 2));
   }
   return new BigNumber(unitValue, 10);
 };
 
+module.exports.weiToPht = (number) => {
+  return this.toPht(number, 'wei');
+};
+module.exports.phtToWei = (number) => {
+  return this.toWei(number, 'pht');
+};
+
 module.exports.toWei = (number, unit) => {
-  var returnValue = new BigNumber(this.toWei(number, unit)).div(getValueOfUnit('ether'));
+  const returnValue = new BigNumber(String(number)).times(this.getValueOfUnit(unit));
   return returnValue.toString(10);
 };
 
-module.exports.toEth = (number, unit) => {
-  var returnValue = new BigNumber(String(number)).times(getValueOfUnit(unit));
+module.exports.toPht = function(number, unit) {
+  const returnValue = new BigNumber(this.toWei(number, unit)).div(this.getValueOfUnit('pht'));
   return returnValue.toString(10);
 };

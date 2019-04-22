@@ -4,6 +4,7 @@ const _ = require('lodash');
 const debug = require('debug')('fanbase:server');
 const { Sequelize } = require('src/models');
 const { badInputResponse, unauthorizedResponse, jsonResponse } = require('src/lib/responses');
+const { extractRequestAttrs } = require('src/lib/request');
 const { jwtEncode } = require('src/services/session');
 const { verifyUser, createUser, updateUser, UserServiceError } = require('src/services/user');
 const gateway = require('src/services/gateway').gateway();
@@ -13,15 +14,6 @@ const userAttrFields = [
   'password'
 ];
 
-function extractRequestAttrs(req, fields) {
-  const params = { ...req.body, ...req.query };
-  return _.reduce(Object.keys(params), (result, key) => {
-    if (fields.indexOf(key) !== -1) {
-      result[key] = params[key];
-    }
-    return result;
-  }, {});
-}
 
 router.post('/sign-up', async (req, res, next) => {
   const attrs = extractRequestAttrs(req, userAttrFields);

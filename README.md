@@ -11,29 +11,38 @@ npm run dev
 npm run deploy-sirius
 ```
 
+## How to compile smart contracts
+```
+npm run compile
+```
+
 
 ## Smart Contracts
 
+### Sirius
 ```
-   Deploying 'Faucet'
-   ------------------
-   > transaction hash:    0x19b15636fd7b4cafc053e36f1f667f604bc57838ccee6b5bfd237d3ba18f1040
-   > Blocks: 0            Seconds: 0
-   > contract address:    0xF434994aE69678e0503f39f31150e86a0ED91Cb2
-   > block number:        350449
-   > block timestamp:     1555003037
-   > account:             0xD119b8B038d3A67d34ca1D46e1898881626a082b
-   > balance:             821.362085136
-   > gas used:            494920
-   > gas price:           500 gwei
-   > value sent:          0 ETH
-   > total cost:          0.24746 ETH
+   2_deploy_faucet.js
+   ==================
 
-Distribution contract deployed! 0xF434994aE69678e0503f39f31150e86a0ED91Cb2
+      Replacing 'Faucet'
+      ------------------
+      > transaction hash:    0xe668c223c291fcd2a7b2e9a4f80114c0759579565a0a5e4f43cab60937557539
+      > Blocks: 0            Seconds: 0
+      > contract address:    0xE520b26E1D6902417E76361e30677DB5a581216C
+      > block number:        364701
+      > block timestamp:     1555919610
+      > account:             0xD119b8B038d3A67d34ca1D46e1898881626a082b
+      > balance:             794.552423136
+      > gas used:            563039
+      > gas price:           500 gwei
+      > value sent:          0 ETH
+      > total cost:          0.2815195 ETH
 
-   > Saving migration to chain.
-   > Saving artifacts
-   -------------------------------------
-   > Total cost:             0.24746 ETH
+   Distribution contract deployed! 0xE520b26E1D6902417E76361e30677DB5a581216C
+
+      > Saving migration to chain.
+      > Saving artifacts
+      -------------------------------------
+      > Total cost:           0.2815195 ETH
 
 ```

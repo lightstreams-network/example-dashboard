@@ -7,7 +7,7 @@
 const { web3Cfg } = require('src/lib/config');
 const Web3 = require('web3');
 
-module.exports = async ({ provider, from, pwd }) => {
+module.exports = async ({ provider, from, pwd } = {}) => {
   const cfg = {
     provider: provider || web3Cfg.provider,
     from: from || web3Cfg.from,

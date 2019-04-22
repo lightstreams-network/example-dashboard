@@ -4,6 +4,8 @@
  * Copyright 2019 (c) Lightstreams, Granada
  */
 
+let faucetSCData = require(`${process.env.PWD}/build/contracts/Faucet.json`);
+
 module.exports.dbCfg = {
   username: process.env.DB_USER || null,
   password: process.env.DB_PASSWORD || null,
@@ -29,11 +31,11 @@ module.exports.urls = {
 
 module.exports.smartContract = {
   faucet: {
-    address: process.env.SMART_CONTRACT_FAUCET_ADDRESS,
-    abci: ""
+    address: process.env.SMARTCONTRACT_FAUCET_ADDRESS,
+    owner: process.env.STAKEHOLDER_ADDRESS,
+    abi: faucetSCData.abi
   },
   shelves: {
     address: process.env.SMART_CONTRACT_SHELVES_ADDRESS,
-    abci: ""
   }
 };

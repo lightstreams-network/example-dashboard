@@ -8,6 +8,7 @@
     "dev": "NODE_PATH=. nodemon --watch src --debug --inspect=0.0.0.0:9230 ./bin/www",
     "deploy-sirius": "truffle deploy --reset --network=sirius",
     "test": "truffle test --reset --network=ganache",
+    "compile": "truffle build --reset",
     "postinstall": "rm -f node_modules/src; ln -nsf ../src node_modules/src"
   },
   "repository": {
@@ -26,6 +27,7 @@
     "cookie-parser": "^1.4.4",
     "dotenv": "^7.0.0",
     "express": "^4.16.4",
+    "fs": "0.0.1-security",
     "hbs": "^4.0.3",
     "jwt-simple": "^0.5.6",
     "lightstreams-js-sdk": "git+ssh://git@github.com/lightstreams-network/lightstreams-js-sdk.git#master",
