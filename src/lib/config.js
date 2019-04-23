@@ -37,7 +37,7 @@ module.exports.smartContract = {
     abi: faucetSCData.abi
   },
   shelves: {
-    address: process.env.SMART_CONTRACT_SHELVES_ADDRESS,
+    address: process.env.SMARTCONTRACT_SHELVES_ADDRESS,
     owner: process.env.STAKEHOLDER_ADDRESS,
     abi: shopShelvesSCData.abi
   }

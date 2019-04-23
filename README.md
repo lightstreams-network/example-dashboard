@@ -50,25 +50,26 @@ Distribution contract deployed! 0xE520b26E1D6902417E76361e30677DB5a581216C
 3_deploy_shelves.js
 ===================
 
-   Deploying 'ShopShelves'
+   Replacing 'ShopShelves'
    -----------------------
-   > transaction hash:    0x29427b456c5b25ffc4eebf9db1825d45f5d062e5f125f62d4811afb2201e69f1
+   > transaction hash:    0x2656dc2a862690b0fdd86e4a0d2466e1da5ad2b6721a6fdeaa79c2b605342f30
    > Blocks: 0            Seconds: 0
-   > contract address:    0x07Ac9babF99552eD7F44D3e84D406e1769C336aF
-   > block number:        365015
-   > block timestamp:     1555938018
+   > contract address:    0x48Ff3E66182Cd602A02a0C5Bc38b47B9cfbD85e1
+   > block number:        366323
+   > block timestamp:     1556017449
    > account:             0xD119b8B038d3A67d34ca1D46e1898881626a082b
-   > balance:             783.389616136
-   > gas used:            948450
+   > balance:             743.313405136
+   > gas used:            1053232
    > gas price:           500 gwei
    > value sent:          0 ETH
-   > total cost:          0.474225 ETH
+   > total cost:          0.526616 ETH
 
-Distribution contract deployed! 0x07Ac9babF99552eD7F44D3e84D406e1769C336aF
+Distribution contract deployed! 0x48Ff3E66182Cd602A02a0C5Bc38b47B9cfbD85e1
 
    > Saving migration to chain.
    > Saving artifacts
    -------------------------------------
-   > Total cost:            0.474225 ETH
+   > Total cost:            0.526616 ETH
+
 
 ```
