@@ -1,0 +1,50 @@
+.invoice-card-container {
+   display: flex;
+   // flex-flow: row nowrap;
+
+   md-card {
+      margin: 0 16px 16px 0;
+      width: 700px;
+   }
+
+   img {
+      background-color: gray;
+   }
+
+   .demo-basic-list md-grid-tile {
+      background: rgba(0, 0, 0, 0.32);
+   }
+
+   .content {
+      display:flex;
+      flex-flow: column;
+      margin-top: 20px;
+
+      .transaction {
+         display: flex;
+         flex-direction: row;
+         width: 100%;
+
+         .field {
+
+            .title {
+               width: 120px;
+            }
+         }
+
+         .fields {
+            display: flex;
+            flex-direction: row;
+
+            .field {
+               width: 80px;
+            }
+         }
+
+         .total {
+            width: 80px;
+         }
+      }
+   }
+}
+

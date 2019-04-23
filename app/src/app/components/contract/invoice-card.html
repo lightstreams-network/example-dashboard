@@ -1,0 +1,30 @@
+<div class="invoice-card-container">
+   <md-card>
+      <md-card-title-group>
+         <md-card-title>Invoice</md-card-title>
+         <md-card-subtitle>Monthly</md-card-subtitle>
+      </md-card-title-group>
+      <md-card-content class="content">
+         <div class="transaction" *ngFor="let transaction of transactions">
+            <div class="field title" style="width: 210px">
+               <span *ngIf="!transaction.minor">{{transaction.title}}</span>
+            </div>
+            <div *ngFor="let field of transaction.fields">
+               <div class="fields">
+                  <div class="field">
+                     <md-input placeholder="{{field.name}}" disabled value="{{field.value}}">
+                     </md-input>
+                  </div>
+               </div>
+            </div>
+
+            <div style="flex: 1">
+            </div>
+            <div style="margin-left: auto">
+               <md-input class="total" placeholder="{{transaction.title}}" align="end" disabled value="{{transaction.total}}" >
+               </md-input>
+            </div>
+         </div>
+      </md-card-content>
+   </md-card>
+</div>

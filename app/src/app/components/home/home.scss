@@ -1,0 +1,34 @@
+.component-container{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  md-card {
+    min-width: 500px;
+  }
+
+  md-card-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  main {
+    display: flex;
+    margin-bottom: 20px;
+  }
+
+  section {
+    display: flex;
+    flex-flow: column;
+
+    flex-grow: 1;
+
+    button {
+      width: 130px;
+      margin-top: 15px;
+    }
+  }
+}
+
+

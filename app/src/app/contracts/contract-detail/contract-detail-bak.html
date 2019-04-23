@@ -1,0 +1,70 @@
+<div class="component-container">
+    <md-card *ngIf="isContractOwner()">
+        <md-card-title-group>
+            <md-card-title>Contract Menu</md-card-title>
+        </md-card-title-group>
+        <md-card-content class="content">
+            <section *ngIf="!isNew" class="newContract">
+                <p>Choose a contract action:</p>
+            </section>
+            <section *ngIf="isNew" class="newContract">
+                <p>Congratulations! The contract has been activated on the block chain.</p>
+                <p>What would you like to do next?</p>
+            </section>
+            <section>
+
+
+                <div class="button-options">
+                    <button md-button
+                            md-raised-button color="primary"
+                            [disabled]="processing$ | async"
+                            (click)="permissions()">
+                        Grant Permissions
+                    </button>
+
+                    <button md-button *ngIf="contract.header.contractType == 'Asset'"
+                            md-raised-button color="primary"
+                            [disabled]="processing$ | async"
+                            (click)="transfer()">
+                        Transfer Ownership
+                    </button>
+
+                    <button md-button *ngIf="contract.header.contractType == 'Profile'"
+                            md-raised-button color="primary"
+                            [disabled]="processing$ | async"
+                            (click)="transfer()">
+                        Transfer Profile
+                    </button>
+
+                </div>
+
+            </section>
+        </md-card-content>
+    </md-card>
+
+    <md-card *ngIf="!isContractOwner()">
+        <md-card-title-group>
+            <md-card-title>Contract Menu</md-card-title>
+        </md-card-title-group>
+        <md-card-content class="content">
+            <section *ngIf="!isNew" class="newContract">
+                <p>Choose a contract action:</p>
+            </section>
+            <section>
+
+                <div class="button-options">
+
+                    <button md-button *ngIf="contract.header.contractType == 'Profile'"
+                            md-raised-button color="primary"  style="width: 180px;"
+                            [disabled]="processing$ | async"
+                            (click)="insure()">
+                        New Insurance Policy
+                    </button>
+                </div>
+
+            </section>
+        </md-card-content>
+    </md-card>
+
+    <contract-card [contract]="contract"></contract-card>
+</div>

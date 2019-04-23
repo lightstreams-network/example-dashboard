@@ -1,0 +1,40 @@
+.component-container{
+  display: flex;
+  flex-flow: column nowrap;
+
+  align-items: center;
+  justify-content: center;
+
+  md-card {
+    min-width: 550px;
+    min-height: 180px;
+  }
+
+  md-card-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  main {
+    display: flex;
+    margin-bottom: 20px;
+  }
+
+  section {
+    display: flex;
+    flex-flow: column;
+
+    flex-grow: 1;
+  }
+}
+
+td {
+  padding-right: 20px;
+  padding-bottom: 5px;
+}
+
+.error {
+  color: #ff0000;
+}
+
+

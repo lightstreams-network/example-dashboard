@@ -1,0 +1,36 @@
+<div class="component-container">
+    <md-card>
+        <md-card-title-group>
+            <md-card-title>Contract Permissions</md-card-title>
+        </md-card-title-group>
+        <md-card-content>
+            <section>
+                <p>Enter the signature ID for granting read access:</p>
+
+                <input-debounce #sigComp placeholder="Signature ID"
+                          [disabled]="processing$ | async"
+                          [reset]="signatureIdReset"
+                          (value)="verify($event)">
+                </input-debounce>
+                <md-input placeholder="Name"
+                          [disabled]="(processing$ | async) || !verified"
+                          [(ngModel)]="signature.name">
+                </md-input>
+                <button md-button
+                        md-raised-button color="primary"
+                        [disabled]="!verified || (processing$ | async)"
+                        (click)="grant()">
+                    Grant
+                </button>
+            </section>
+            <section *ngIf="error">
+                <p class="error">{{error}}</p>
+            </section>
+        </md-card-content>
+        <md-card-footer>
+            <md-progress-bar *ngIf="processing$ | async" mode="indeterminate"></md-progress-bar>
+        </md-card-footer>
+    </md-card>
+
+    <contract-card [contract]="contract"></contract-card>
+</div>

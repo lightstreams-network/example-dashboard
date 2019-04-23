@@ -1,0 +1,70 @@
+<div class="contract-design">
+
+   <section class="control-bar">
+      <div class="left">
+
+      </div>
+      <div class="right">
+         <button md-raised-button color="primary" >Sign</button>
+      </div>
+   </section>
+
+   <upload-card></upload-card>
+
+   <invoice-card></invoice-card>
+
+   <div class="demo-card-container">
+      <md-card>
+         <md-card-title-group>
+            <md-card-title>Transaction</md-card-title>
+            <md-card-subtitle>Unit Cost</md-card-subtitle>
+         </md-card-title-group>
+
+         <div class="transaction-event">
+            <div class="content">
+               <md-input placeholder="Event" value="Booking Complete"></md-input>
+            </div>
+         </div>
+
+         <md-card-content>
+            <transactions-editor [transaction]="unitCost" #transactionsGrid (change)="transactionsGridChange($event)"></transactions-editor>
+         </md-card-content>
+      </md-card>
+
+      <md-card>
+         <md-card-title-group>
+            <md-card-title>Transaction</md-card-title>
+            <md-card-subtitle>Commission</md-card-subtitle>
+         </md-card-title-group>
+
+         <div class="transaction-event">
+            <div class="content">
+               <md-input placeholder="Event" value="Unit Cost transaction"></md-input>
+            </div>
+         </div>
+
+         <md-card-content>
+            <transactions-editor [transaction]="commission"></transactions-editor>
+         </md-card-content>
+      </md-card>
+
+      <md-card>
+         <md-card-title-group>
+            <md-card-title>Transaction</md-card-title>
+            <md-card-subtitle>Incentive</md-card-subtitle>
+         </md-card-title-group>
+
+         <div class="transaction-event">
+            <div class="content">
+               <md-input placeholder="Event" value="Annual sales over 1M"></md-input>
+            </div>
+         </div>
+
+         <md-card-content>
+            <transactions-editor [transaction]="incentive"></transactions-editor>
+         </md-card-content>
+      </md-card>
+   </div>
+
+
+</div>

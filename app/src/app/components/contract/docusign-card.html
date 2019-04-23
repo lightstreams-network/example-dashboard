@@ -1,0 +1,41 @@
+<div class="docusign-card-container">
+   <md-card>
+      <md-card-title-group>
+         <md-card-title>Contract</md-card-title>
+         <md-card-subtitle>HotelBeds / Acme Taxis - Contract Agreement</md-card-subtitle>
+      </md-card-title-group>
+
+      <md-card-content>
+         <section *ngIf="!is_authenticated">
+            <p>Please connect your Docusign account.</p>
+
+            <button md-button
+                    md-raised-button color="primary"
+                    (click)="actions.authenticate('/contract-design?auth=true')">
+               Connect
+            </button>
+         </section>
+
+         <img [src]="'data:image/png;base64,' + imageBase64" />
+
+         <div *ngIf="is_authenticated">
+            <p>Choose a Contract</p>
+            <button md-button (click)="actions.logout()">Log out</button>
+            <button md-button (click)="actions.getTemplates()">Get templates</button>
+            <button md-button
+                    (click)="getImage()">
+               Get Image</button>
+            <div class="demo-list-group">
+               <md-nav-list>
+                  <a md-list-item *ngFor="let link of links" href="#">
+                     <md-icon md-list-icon>folder</md-icon>
+                     <span md-line>{{ link.name }}</span>
+                     <span md-line class="demo-secondary-text"> Description </span>
+                  </a>
+               </md-nav-list>
+            </div>
+
+         </div>
+      </md-card-content>
+   </md-card>
+</div>

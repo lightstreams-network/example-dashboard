@@ -1,0 +1,69 @@
+<div class="uphold-card-container">
+    <md-card>
+        <md-toolbar color="primary">Paying for goods of services</md-toolbar>
+        <md-card-content >
+            <md-card-title>
+                Pay someone
+            </md-card-title>
+            <main>
+                <section *ngIf="!is_authenticated">
+                    <p>Please connect your Uphold account.</p>
+
+                    <button md-button
+                            md-raised-button color="primary"
+                            (click)="actions.authenticate('/uphold-pay?auth=true')">
+                        Connect
+                    </button>
+                </section>
+
+                <section *ngIf="transactionReceipt">
+                    <p>Your payment was successful.</p>
+                    <p>Transaction receipt: <br> {{transactionReceipt.id}}</p>
+
+                    <button md-button
+                            md-raised-button color="primary"
+                            (click)="actions.newPayment()">
+                        New
+                    </button>
+                </section>
+
+                <section *ngIf="is_authenticated && !transactionReceipt">
+                    <md-input placeholder="Email"
+                              hintLabel="The account you are paying money to"
+                              [(ngModel)]="destination">
+                    </md-input>
+
+                    <p-dropdown [options]="cards" [(ngModel)]="selectedCard"></p-dropdown>
+
+                    <md-input placeholder="Amount"
+                              hintLabel="Your amount you are paying."
+                              [(ngModel)]="amount"
+                              style="width: 150px">
+                    </md-input>
+
+                    <md-input placeholder="Message"
+                              hintLabel="Message to send to payee"
+                              [(ngModel)]="message">
+                    </md-input>
+
+                    <button md-button
+                            [disabled]="processingPayment"
+                            md-raised-button color="primary"
+                            (click)="isClickedOnce = true; executeTransaction()">
+                        Pay
+                    </button>
+
+                    <div *ngIf="errorMessage"
+                         style="color: red; margin-top: 10px">
+                        <p>Sorry, there was an issue processing your payment. {{errorMessage}}</p>
+                    </div>
+                </section>
+                <aside></aside>
+            </main>
+        </md-card-content>
+        <md-card-footer>
+            <md-progress-bar *ngIf="processing$ | async" mode="indeterminate"></md-progress-bar>
+        </md-card-footer>
+    </md-card>
+</div>
+

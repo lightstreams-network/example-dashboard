@@ -1,0 +1,164 @@
+<div class="component-container">
+    <md-card>
+        <md-card-title-group>
+            <md-card-title>Microinsurance Contract</md-card-title>
+        </md-card-title-group>
+
+        <md-card-content>
+
+            <section *ngIf="contract.state === INITIALISED || contract.state === ERROR">
+                <p>Agricultural microinsurance underwriting:</p>
+                <br>
+                <p-dropdown [options]="regions" [(ngModel)]="header.region"></p-dropdown>
+                <p-dropdown [options]="districts" [(ngModel)]="header.district"></p-dropdown>
+
+                <md-input placeholder="Sum insured"
+                          [(ngModel)]="header.sumInsured"
+                          [disabled]="processing$ | async">
+                </md-input>
+
+                <md-input placeholder="Premium"
+                          [(ngModel)]="header.premium"
+                          [disabled]="processing$ | async">
+                </md-input>
+
+                <md-input placeholder="Months"
+                          [(ngModel)]="header.months"
+                          [disabled]="processing$ | async">
+                </md-input>
+
+                <md-input placeholder="Strike Level"
+                          [(ngModel)]="header.strike"
+                          [disabled]="processing$ | async">
+                </md-input>
+
+                <md-input placeholder="Exit Level"
+                          [(ngModel)]="header.level"
+                          [disabled]="processing$ | async">
+                </md-input>
+
+                <button md-button
+                        md-raised-button color="primary"
+                        [disabled]="processing$ | async"
+                        (click)="contract.state = INITIALISED2">
+                    Next
+                </button>
+
+            </section>
+
+            <section *ngIf="contract.state === INITIALISED2">
+                <p>Index Provider:</p>
+
+                <input-debounce #sigComp placeholder="Signature ID"
+                                [disabled]="processing$ | async"
+                                [reset]="signatureIdReset"
+                                (value)="verify($event)">
+                </input-debounce>
+                <md-input placeholder="Name"
+                          [disabled]="(processing$ | async) || !verified"
+                          [(ngModel)]="indexProviderSignature.name">
+                </md-input>
+                <button md-button
+                        md-raised-button color="primary"
+                        [disabled]="!verified || (processing$ | async)"
+                        (click)="newAsset()">
+                    Add
+                </button>
+            </section>
+
+            <section *ngFor="let status of contract.statusLog">
+                <p>{{status}}</p>
+            </section>
+
+            <section *ngIf="contract.state === CREATED">
+                <p>Add underwriting documentation.</p>
+                <p><br></p>
+                <div class="button-options">
+                    <button md-button
+                            md-raised-button color="secondary"
+                            [disabled]="processing$ | async"
+                            (click)="cancel()">
+                        Cancel
+                    </button>
+                    <button md-button
+                            md-raised-button color="primary"
+                            [disabled]="true"
+                            (click)="sign()">
+                        Sign
+                    </button>
+                </div>
+            </section>
+
+            <section *ngIf="contract.state === READY">
+                <p>Please click Sign to activate this insurance contract on the blockchain.</p>
+                <p><br></p>
+                <div class="button-options">
+                    <button md-button
+                            md-raised-button color="secondary"
+                            [disabled]="processing$ | async"
+                            (click)="cancel()">
+                        Cancel
+                    </button>
+                    <button md-button
+                            md-raised-button color="primary"
+                            [disabled]="processing$ | async"
+                            (click)="sign()">
+                        Sign
+                    </button>
+                </div>
+            </section>
+
+            <section *ngIf="contract.state === SIGNING">
+                <p>Activating insurance policy...</p>
+            </section>
+
+            <section *ngIf="error">
+                <p class="error">{{error}}</p>
+            </section>
+
+        </md-card-content>
+        <md-card-footer>
+            <md-progress-bar *ngIf="processing$ | async" mode="indeterminate"></md-progress-bar>
+        </md-card-footer>
+    </md-card>
+
+    <md-card *ngIf="contract.state === CREATED || contract.state === READY">
+        <md-card-title-group>
+            <md-card-title>Underwriting Documentation and Policies</md-card-title>
+        </md-card-title-group>
+
+        <md-card-content>
+
+            <section >
+
+                <div *ngIf="contract.state === READY">
+                    <p>Modify documents:</p>
+                </div>
+
+                <div *ngIf="contract.state !== READY">
+                    <p>Add documents:</p>
+                </div>
+
+                <p-fileUpload #uploader name="files[]" url="{{termsUrl}}"
+                              auto="true"
+                              uploadLabel="xxx"
+                              (onBeforeUpload)="beforeUpload($event)"
+                              (onUpload)="uploadComplete($event)">
+                    <template pTemplate type="content">
+                        <div>
+                            <div *ngIf="!termsFile">
+                                <p>Drop documentation here.</p>
+                            </div>
+
+                            <div *ngIf="termsFile">{{termsFile.name}} - {{termsFileSize}}</div>
+                        </div>
+
+                    </template>
+                </p-fileUpload>
+            </section>
+        </md-card-content>
+        <md-card-footer>
+            <md-progress-bar *ngIf="addingTerms" mode="indeterminate"></md-progress-bar>
+        </md-card-footer>
+    </md-card>
+</div>

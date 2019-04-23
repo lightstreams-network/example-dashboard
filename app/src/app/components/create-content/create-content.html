@@ -1,0 +1,175 @@
+<div class="component-container">
+    <md-card>
+
+        <md-card-title-group>
+            <md-card-title>Publish</md-card-title>
+        </md-card-title-group>
+
+        <md-card-content>
+            <form #contractForm="ngForm">
+
+            <section *ngIf="contract.state === INITIALISED">
+               <p>This demonstrates how you can publish a smart contract with a document that is stored to your device.</p>
+               <p>Only those that have puchased the document will be permitted to access the content.</p>
+
+                <div class="copyright-warning">
+                    <p>You take full responsibility and liability for the content that you publish using the Lightstreams Test Network.</p>
+
+                   <p>Your published content will not appear on the home page.</p>
+                </div>
+
+                <section *ngIf="insufficientFunds">
+                    <p class="error">Your account has insufficient funds.</p>
+                </section>
+
+                <section *ngIf="!insufficientFunds">
+                    <p>Click Agree to continue.</p>
+                </section>
+
+                <button md-button
+                        md-raised-button color="primary"
+                        [disabled]="(processing$ | async) || !contractForm.form.valid || insufficientFunds"
+                        (click)="newContent()">
+                    I Agree
+                </button>
+            </section>
+
+            <section *ngFor="let status of contract.statusLog">
+                <p>{{status}}</p>
+            </section>
+
+            <section *ngIf="contract.state === CREATED">
+
+                <p style="padding-bottom: 10px">Enter the details of the content you will be publishing:
+                </p>
+
+                <md-input name="title"
+                          #title="ngModel"
+                          placeholder="Title"
+                          required
+                          minlength="4"
+                          [(ngModel)]="publicState.title"
+                          [disabled]="processing$ | async">
+                </md-input>
+                <div *ngIf="title.invalid && (title.dirty || title.touched)"
+                     class="error">
+                    <div *ngIf="title.errors.required">
+                        Title is required.
+                    </div>
+                    <div *ngIf="title.errors.minlength">
+                        Title must be at least 4 characters long.
+                    </div>
+                </div>
+
+                <md-input name="description"
+                          #description="ngModel"
+                          placeholder="Description"
+                          [(ngModel)]="publicState.description"
+                          [disabled]="processing$ | async">
+                </md-input>
+
+                <div>
+                    <p>Cover Image:</p>
+                </div>
+                <div class="uploader">
+                    <p-fileUpload name="files[]" url="{{addCoverUrl}}"
+                                  auto="true"
+                                  accept="image/*"
+                                  (onBeforeUpload)="beforeUploadCover($event)"
+                                  (onUpload)="uploadCoverComplete($event)"
+                                  (onError)="uploadError($event)"
+                    >
+                        <template pTemplate type="content">
+                            <div>
+                                <div *ngIf="!coverFile">
+                                    <p>Add a file as the cover image for your content.</p>
+                                </div>
+
+                                <div *ngIf="coverFile">{{coverFile.name}} - {{coverFile.size | fileSize}}</div>
+                            </div>
+
+                        </template>
+                    </p-fileUpload>
+                </div>
+
+                <div>
+                    <p>Content File *:</p>
+                </div>
+                <div class="uploader">
+                    <p-fileUpload #uploader name="files[]" url="{{addFileUrl}}"
+                                  auto="true"
+                                  (onBeforeUpload)="beforeUploadContent($event)"
+                                  (onUpload)="uploadContentComplete($event)"
+                                  (onError)="uploadError($event)"
+                    >
+                        <template pTemplate type="content">
+                            <div>
+                                <div *ngIf="!contentFile">
+                                    <p *ngIf="selectedContentType=='Document'">Add the document file that you are selling.</p>
+                                    <p *ngIf="selectedContentType=='Video'">Add an *.mp4 file that you are selling.</p>
+                                </div>
+
+                                <div *ngIf="contentFile">{{contentFile.name}} - {{contentFile.size | fileSize}}</div>
+
+                                <div *ngIf="contentError">
+                                    <p class="error">{{contentError}}</p>
+                                </div>
+                            </div>
+
+                        </template>
+                    </p-fileUpload>
+                </div>
+
+                <md-input placeholder="Price (PHT)"
+                          id="name"
+                          name="name"
+                          #name="ngModel"
+                          required
+                          positiveNumber=""
+                          [(ngModel)]="price"
+                          [disabled]="processing$ | async">
+                </md-input>
+                <div *ngIf="name.invalid && (name.dirty || name.touched)"
+                     class="error">
+                    <div *ngIf="name.errors.required">
+                        Price is required.
+                    </div>
+                    <div *ngIf="name.errors.negativeNumber">
+                        Price must be a positive integer
+                    </div>
+                </div>
+
+                <div class="button-options">
+                    <button md-button
+                            md-raised-button color="secondary"
+                            [disabled]="(processing$ | async)"
+                            (click)="cancel()">
+                        Cancel
+                    </button>
+                    <button md-button
+                            md-raised-button color="primary"
+                            [disabled]="(processing$ | async) || !contractForm.form.valid || !contentAdded"
+                            (click)="sign()">
+                        Publish
+                    </button>
+                </div>
+            </section>
+
+
+            <section *ngIf="contract.state === SIGNING">
+                <p>Publishing...</p>
+            </section>
+
+            <section *ngIf="error">
+                <p class="error">{{error}}</p>
+            </section>
+
+
+            </form>
+        </md-card-content>
+
+        <md-card-footer>
+            <md-progress-bar *ngIf="processing$ | async" mode="indeterminate"></md-progress-bar>
+        </md-card-footer>
+    </md-card>
+</div>

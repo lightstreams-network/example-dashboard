@@ -1,0 +1,56 @@
+<div class="component-container">
+    <md-card>
+        <md-card-title-group>
+            <md-card-title>Transfer Ownership</md-card-title>
+        </md-card-title-group>
+        <md-card-content>
+            <section *ngIf="!receipt">
+                <p>Enter the signature ID to transfer ownership to:</p>
+
+                <input-debounce #sigComp placeholder="Signature ID"
+                          [disabled]="processing$ | async"
+                          [reset]="signatureIdReset"
+                          (value)="verify($event)">
+                </input-debounce>
+                <md-input placeholder="Name"
+                          [disabled]="(processing$ | async) || !verified"
+                          [(ngModel)]="signature.name">
+                </md-input>
+                <button md-button
+                        md-raised-button color="primary"
+                        [disabled]="!verified || (processing$ | async)"
+                        (click)="transfer()">
+                    Transfer
+                </button>
+            </section>
+            <section *ngIf="receipt">
+                <h3>Transaction Receipt</h3>
+                <p>Transfer complete. </p>
+                <table>
+                    <tr>
+                        <td>Hash</td>
+                        <td>{{receipt.transactionHash}}</td>
+                    </tr>
+                    <tr>
+                        <td>Block</td>
+                        <td>{{receipt.blockNumber}}</td>
+                    </tr>
+                </table>
+
+                <!--<button md-button
+                        md-raised-button color="primary"
+                        (click)="router.navigate(['/'])">
+                    Home
+                </button>-->
+            </section>
+            <section *ngIf="error">
+                <p class="error">{{error}}</p>
+            </section>
+        </md-card-content>
+        <md-card-footer>
+            <md-progress-bar *ngIf="processing$ | async" mode="indeterminate"></md-progress-bar>
+        </md-card-footer>
+    </md-card>
+
+    <contract-card [contract]="contract"></contract-card>
+</div>

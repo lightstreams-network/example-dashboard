@@ -1,0 +1,144 @@
+<div class="component-container">
+    <md-card>
+        <md-card-title-group>
+            <md-card-title>Register Farmer</md-card-title>
+        </md-card-title-group>
+
+        <md-card-content>
+
+            <section *ngIf="contract.state === INITIALISED || contract.state === ERROR">
+                <p>Enter farm details:</p>
+                <md-input placeholder="Name"
+                          [(ngModel)]="header.description"
+                          [disabled]="processing$ | async">
+                </md-input>
+
+                <md-input placeholder="Mobile Phone"
+                          [(ngModel)]="header.phone"
+                          [disabled]="processing$ | async">
+                </md-input>
+
+                <p-dropdown [options]="crops" [(ngModel)]="header.crop"></p-dropdown>
+
+                <md-input placeholder="Farm Coordinates"
+                          [(ngModel)]="header.coordinates"
+                          [disabled]="processing$ | async">
+                </md-input>
+
+                <md-input placeholder="Land Area"
+                          [(ngModel)]="header.area"
+                          [disabled]="processing$ | async">
+                </md-input>
+
+                <md-input placeholder="Notes"
+                          [(ngModel)]="header.notes"
+                          [disabled]="processing$ | async">
+                </md-input>
+
+                <button md-button
+                        md-raised-button color="primary"
+                        [disabled]="processing$ | async"
+                        (click)="newAsset()">
+                    Next
+                </button>
+
+            </section>
+
+            <section *ngFor="let status of contract.statusLog">
+                <p>{{status}}</p>
+            </section>
+
+            <section *ngIf="contract.state === CREATED">
+                <p>Add the land title and any other documentation.</p>
+                <p><br></p>
+                <div class="button-options">
+                    <button md-button
+                            md-raised-button color="secondary"
+                            [disabled]="processing$ | async"
+                            (click)="cancel()">
+                        Cancel
+                    </button>
+                    <button md-button
+                            md-raised-button color="primary"
+                            [disabled]="true"
+                            (click)="sign()">
+                        Sign
+                    </button>
+                </div>
+            </section>
+
+            <section *ngIf="contract.state === READY">
+                <p>Please click Sign to activate this profile on the blockchain.</p>
+                <p><br></p>
+                <div class="button-options">
+                    <button md-button
+                            md-raised-button color="secondary"
+                            [disabled]="processing$ | async"
+                            (click)="cancel()">
+                        Cancel
+                    </button>
+                    <button md-button
+                            md-raised-button color="primary"
+                            [disabled]="processing$ | async"
+                            (click)="sign()">
+                        Sign
+                    </button>
+                </div>
+            </section>
+
+            <section *ngIf="contract.state === SIGNING">
+                <p>Activating profile...</p>
+            </section>
+
+            <section *ngIf="error">
+                <p class="error">{{error}}</p>
+            </section>
+
+
+        </md-card-content>
+        <md-card-footer>
+            <md-progress-bar *ngIf="processing$ | async" mode="indeterminate"></md-progress-bar>
+        </md-card-footer>
+    </md-card>
+
+    <md-card *ngIf="contract.state === CREATED || contract.state === READY">
+        <md-card-title-group>
+            <md-card-title>Land Title</md-card-title>
+            <md-card-subtitle *ngIf="contract.termsAddr">Certificate Address: {{contract.termsAddr}}</md-card-subtitle>
+        </md-card-title-group>
+
+        <md-card-content>
+
+            <section >
+
+                <div *ngIf="contract.state === READY">
+                    <p>Modify content:</p>
+                </div>
+
+                <div *ngIf="contract.state !== READY">
+                    <p>Add content:</p>
+                </div>
+
+                <p-fileUpload #uploader name="files[]" url="{{termsUrl}}"
+                              auto="true"
+                              uploadLabel="xxx"
+                              (onBeforeUpload)="beforeUpload($event)"
+                              (onUpload)="uploadComplete($event)">
+                    <template pTemplate type="content">
+                        <div>
+                            <div *ngIf="!termsFile">
+                                <p>Drop a digital copy of the land title certificate here.</p>
+                            </div>
+
+                            <div *ngIf="termsFile">{{termsFile.name}} - {{termsFileSize}}</div>
+                        </div>
+
+                    </template>
+                </p-fileUpload>
+            </section>
+        </md-card-content>
+        <md-card-footer>
+            <md-progress-bar *ngIf="addingTerms" mode="indeterminate"></md-progress-bar>
+        </md-card-footer>
+    </md-card>
+</div>

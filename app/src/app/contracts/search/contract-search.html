@@ -1,0 +1,40 @@
+<div class="component-container">
+    <md-card>
+        <md-card-title-group>
+            <md-card-title>Search</md-card-title>
+        </md-card-title-group>
+        <md-card-content>
+            <section>
+                <p>Enter the address of the content to search.</p>
+                <p></p>
+                <md-input placeholder="Address"
+                          [disabled]="searching"
+                          [(ngModel)]="metaAddr">
+                </md-input>
+
+                <div class="button-options">
+                    <button md-button
+                            md-raised-button color="secondary"
+                            [disabled]="!searching"
+                            (click)="cancel()">
+                        Cancel
+                    </button>
+                    <button md-button
+                            md-raised-button color="secondary"
+                            [disabled]="searching"
+                            (click)="search(metaAddr)">
+                        Search
+                    </button>
+                </div>
+            </section>
+            <section *ngIf="error">
+                <p class="error">{{error}}</p>
+            </section>
+        </md-card-content>
+        <md-card-footer>
+            <md-progress-bar *ngIf="searching" mode="indeterminate"></md-progress-bar>
+        </md-card-footer>
+    </md-card>
+
+    <contract-card *ngIf="found" [contract]="contract"></contract-card>
+</div>

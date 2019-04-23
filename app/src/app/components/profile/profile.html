@@ -1,0 +1,24 @@
+<div class="register-container">
+    <md-card>
+        <md-card-title-group>
+            <md-card-title>Device Key</md-card-title>
+        </md-card-title-group>
+
+        <md-card-content>
+            <section>
+                <p>Please paste your device's public key below:</p>
+                <md-textarea placeholder="public key:" [(ngModel)]="profile.publicKey" maxlength="100">
+                </md-textarea>
+                <button md-button
+                        md-raised-button color="primary"
+                        [disabled]="processing$ | async"
+                        (click)="onSave()">
+                    Save
+                </button>
+            </section>
+        </md-card-content>
+        <md-card-footer>
+            <md-progress-bar *ngIf="processing$ | async" mode="indeterminate"></md-progress-bar>
+        </md-card-footer>
+    </md-card>
+</div>

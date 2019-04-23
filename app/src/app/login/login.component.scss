@@ -1,0 +1,15 @@
+.login-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+
+  md-card {
+    min-width: 350px;
+
+    md-card-content {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}

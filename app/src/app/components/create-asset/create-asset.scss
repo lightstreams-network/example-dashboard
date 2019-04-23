@@ -1,0 +1,63 @@
+.component-container{
+  display: flex;
+  flex-flow: column nowrap;
+
+  align-items: center;
+  justify-content: center;
+
+  md-card {
+    min-height: 200px;
+  }
+
+  md-card-content {
+    display: flex;
+    flex-direction: column;
+  }
+
+  main {
+    display: flex;
+    margin-bottom: 20px;
+  }
+
+  section {
+    display: flex;
+    flex-flow: column;
+
+    flex-grow: 1;
+  }
+
+  aside {
+    flex-basis: 30%;
+    flex-shrink: 1;
+  }
+
+}
+
+button {
+  width: 100px;
+  margin-top: 15px;
+}
+
+.button-options {
+  display: flex;
+  flex-direction: row;
+  button {
+    width: 100px;
+    margin-left: 20px;
+  }
+}
+
+.button-menu {
+  display: flex;
+  flex-direction: row;
+  button {
+    width: 150px;
+    margin-left: 20px;
+  }
+}
+
+.error {
+  color: #ff0000;
+}
+
+

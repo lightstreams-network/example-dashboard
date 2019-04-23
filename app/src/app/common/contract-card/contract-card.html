@@ -1,0 +1,118 @@
+<div class="component-container">
+    <md-card>
+        <md-card-title-group>
+            <md-card-title>{{publicState.title}}</md-card-title>
+
+            <button md-icon-button
+                    color="primary"
+                    [disabled]="refreshing"
+                    (click)="refresh()">
+                <i class="fa fa-refresh" aria-hidden="true"></i>
+            </button>
+        </md-card-title-group>
+        <md-card-content class="content">
+            <section>
+                <div>
+                    <div>
+                        <a href="{{documentAddrUrl}}"
+                            (click)="getCoverData(); false;">
+                            <img class="cover-img" *ngIf="cover.base64Encoded"
+                                 src="{{cover.base64Encoded}}"
+                                 [style.width.px]="coverImgWidth"
+                                 [style.height.px]="coverImgHeight"
+                            />
+                        </a>
+                    </div>
+                    <table>
+                       <tr>
+                          <td>Address</td>
+                          <td>{{contract.metaAddr}}</td>
+                       </tr>
+                       <tr *ngIf="privateState">
+                          <td>Content</td>
+                          <td><a href="{{privateState.documentAddr}}"
+                                 (click)="getContentData(); false;">{{publicState.title}}</a></td>
+                          <td><a id="anchor"></a></td>
+                       </tr>
+                       <tr *ngIf="publicState.description">
+                          <td>Description</td>
+                          <td>{{publicState.description}}</td>
+                       </tr>
+                        <tr>
+                            <td>Price</td>
+                            <td>{{contract.price | price}}</td>
+                        </tr>
+                        <tr *ngIf="privateState">
+                            <td>Size</td>
+                            <td>{{privateState.documentSize | fileSize}}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div *ngIf="contract.unlocked">
+
+                    <div *ngIf="contract.permissions.length > 0">
+                        <h3>Permissions</h3>
+
+                        <table>
+                            <thead>
+                            <td><b>Name</b></td>
+                            <td><b>Signature ID</b></td>
+                            <td><b>Granted</b></td>
+                            </thead>
+                            <tr *ngFor="let p of contract.permissions">
+                                <td>{{p.signature.name}}</td>
+                                <td>{{p.signature.signatureId}}</td>
+                                <td>{{displayRole(p)}}</td>
+                                <td><a href="#">Revoke</a></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!--<h3>Metadata</h3>
+                <table>
+                    <tr>
+                        <td>Contract</td>
+                        <td>{{contract.meta.address}}</td>
+                    </tr>
+                </table>-->
+
+                <section *ngIf="!contract.unlocked">
+                    <button md-button
+                            md-raised-button
+                            color="primary"
+                            [disabled]="contract.state === UNLOCKING || insufficientFunds"
+                            (click)="purchase()">
+                        Purchase
+                    </button>
+                </section>
+
+                <div *ngIf="contract.purchaseReceipt">
+                    <h3>Purchase Receipt</h3>
+                    <table>
+                        <tr>
+                            <td>Hash</td>
+                           <td><a href="{{explorerUrl + contract.purchaseReceipt.transactionHash}}" target="_blank">{{contract.purchaseReceipt.transactionHash}}</a></td>
+                        </tr>
+                       <tr>
+                          <td>Contract</td>
+                          <td>{{contract.meta.address}}</td>
+                       </tr>
+                        <tr>
+                            <td>Block</td>
+                            <td>{{contract.purchaseReceipt.blockNumber}}</td>
+                        </tr>
+                    </table>
+                </div>
+
+            </section>
+            <section *ngIf="contract.error">
+                <p class="error">{{contract.error}}</p>
+            </section>
+        </md-card-content>
+        <md-card-footer>
+            <md-progress-bar *ngIf="contract.state === UNLOCKING || refreshing" mode="indeterminate"></md-progress-bar>
+        </md-card-footer>
+    </md-card>
+</div>

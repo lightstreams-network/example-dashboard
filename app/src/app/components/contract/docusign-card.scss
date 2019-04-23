@@ -1,0 +1,65 @@
+.docusign-card-container {
+   display: flex;
+
+   md-card {
+      margin: 0 16px 16px 0;
+      width: 700px;
+   }
+
+   section {
+      display: flex;
+      flex-flow: column;
+
+      flex-grow: 1;
+
+      md-input {
+         margin-bottom: 20px;
+      }
+
+      button {
+         width: 100px;
+         margin-top: 15px;
+      }
+   }
+
+   aside {
+      flex-basis: 30%;
+      flex-shrink: 1;
+   }
+
+   img {
+      background-color: gray;
+   }
+
+   .demo-basic-list md-grid-tile {
+      background: rgba(0, 0, 0, 0.32);
+   }
+}
+
+.demo-list-group {
+   display: flex;
+   flex-flow: row wrap;
+
+   md-list, md-nav-list {
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      width: 350px;
+      margin: 20px 20px 0 0;
+
+   }
+   h2 {
+      margin-top: 20px;
+   }
+
+   md-icon {
+      color: rgba(0, 0, 0, 0.12);
+   }
+
+   [md-list-icon] {
+      color: white;
+      background: rgba(0, 0, 0, 0.3);
+   }
+}
+
+.demo-secondary-text {
+   color: rgba(0, 0, 0, 0.54);
+}
