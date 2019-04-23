@@ -60,36 +60,33 @@ module.exports.retrieveBookById = async (web3, bookId) => {
   };
 };
 
-module.exports.purchase = async (web3, { owner, pwd }, { bookId, amountInPht }) => {
+module.exports.purchase = (web3, { owner, pwd }, { bookId, amountInPht }) => {
   const { shelves: shelvesSC } = smartContract;
   const amountInWei = phtToWei(amountInPht);
   const Shelves = web3.eth.Contract(shelvesSC.abi, shelvesSC.address);
 
-  const book = await this.retrieveBookById(web3, bookId);
-  if (book.priceInPht > amountInPht) {
-    throw new Error('Not enough PHT sent');
-  }
-
-  web3.eth.personal.unlockAccount(owner, pwd, 100)
-    .then(() => {
-      Shelves.methods.purchase(bookId).send({
-        from: owner,
-        value: amountInWei,
-        gasLimit: '300000',
-      }).on('confirmation', (confirmationNumber, txReceipt) => {
-        web3.eth.personal.lockAccount(owner);
-        if (txReceipt.status === true || txReceipt.status === '0x1') {
-          resolve(txReceipt.events.PurchasedBook.returnValues['_bookId']);
-        } else {
-          reject(new Error("Transaction failed"));
-        }
-      }).on('error', (error) => {
-        web3.eth.personal.lockAccount(owner);
-        reject(new Error(error));
+  return new Promise((resolve, reject) => {
+    web3.eth.personal.unlockAccount(owner, pwd, 100)
+      .then(() => {
+        Shelves.methods.purchase(bookId).send({
+          from: owner,
+          value: amountInWei,
+          gasLimit: '300000',
+        }).on('confirmation', (confirmationNumber, txReceipt) => {
+          web3.eth.personal.lockAccount(owner);
+          if (txReceipt.status === true || txReceipt.status === '0x1') {
+            resolve(txReceipt.events.PurchasedBook.returnValues['_bookId']);
+          } else {
+            reject(new Error("Transaction failed"));
+          }
+        }).on('error', (error) => {
+          web3.eth.personal.lockAccount(owner);
+          reject(new Error(error));
+        });
+      })
+      .catch((err) => {
+        debug(err);
+        reject(err);
       });
-    })
-    .catch((err) => {
-      debug(err);
-      reject(err);
-    });
+  });
 };

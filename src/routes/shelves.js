@@ -91,6 +91,36 @@ router.get('/info', session.authenticate('jwt', { session: false }), async (req,
   }
 });
 
+router.post('/purchase', session.authenticate('jwt', { session: false }), async (req, res, next) => {
+  const query = ['book_id', 'password'];
+  try {
+    validateRequestAttrs(req, query);
+  } catch ( err ) {
+    next(badInputResponse(err.message));
+    return;
+  }
+
+  try {
+    const attrs = extractRequestAttrs(req, query);
+    const web3 = await Web3();
+    const book = await shelvesSC.retrieveBookById(web3, attrs.book_id);
+    await shelvesSC.purchase(web3, {
+      owner: req.user.eth_address,
+      pwd: attrs.password,
+    }, {
+      bookId: attrs.book_id,
+      amountInPht: book.priceInPht
+    });
+    res.json(jsonResponse({
+      confirmed: true
+    }));
+    res.send();
+  } catch ( err ) {
+    debug(err);
+    next(err);
+  }
+});
+
 router.get('/download', session.authenticate('jwt', { session: false }), async (req, res, next) => {
   const query = ['book_id'];
   try {

@@ -34,7 +34,6 @@ contract ShopShelves {
     function purchase(uint32 bookId) public payable {
         require(shelves[bookId].owner != address(0x0));
         require(shelves[bookId].price <= msg.value);
-        require(shelves[bookId].purchasers[msg.sender] == false);
 
         PermissionedFile(address(shelves[bookId].acl)).grantRead(msg.sender);
 
