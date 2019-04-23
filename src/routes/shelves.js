@@ -42,7 +42,7 @@ router.post('/stack', session.authenticate('jwt', { session: false }), async (re
       // Granting admin access to Shelves SC of the new file
       await gateway.acl.grant(gwRes.acl, req.user.eth_address, attrs.password, shelvesSC.address(), 'admin');
       // Adding file to shelves
-      const book = await shelvesSC.stackBook(await Web3(), {
+      const item = await shelvesSC.stackItem(await Web3(), {
         owner: req.user.eth_address,
         pwd: attrs.password
       }, {
@@ -52,7 +52,7 @@ router.post('/stack', session.authenticate('jwt', { session: false }), async (re
         acl: gwRes.acl
       });
 
-      res.json(jsonResponse(book));
+      res.json(jsonResponse(item));
       res.send();
     } catch ( err ) {
       debug(err);
@@ -72,7 +72,7 @@ router.post('/stack', session.authenticate('jwt', { session: false }), async (re
 });
 
 router.get('/info', session.authenticate('jwt', { session: false }), async (req, res, next) => {
-  const query = ['book_id'];
+  const query = ['item_id'];
   try {
     validateRequestAttrs(req, query);
   } catch ( err ) {
@@ -82,8 +82,8 @@ router.get('/info', session.authenticate('jwt', { session: false }), async (req,
 
   try {
     const attrs = extractRequestAttrs(req, query);
-    const book = await shelvesSC.retrieveBookById(await Web3(), attrs.book_id);
-    res.json(jsonResponse(book));
+    const item = await shelvesSC.retrieveItemById(await Web3(), attrs.item_id);
+    res.json(jsonResponse(item));
     res.send();
   } catch ( err ) {
     debug(err);
@@ -92,7 +92,7 @@ router.get('/info', session.authenticate('jwt', { session: false }), async (req,
 });
 
 router.post('/purchase', session.authenticate('jwt', { session: false }), async (req, res, next) => {
-  const query = ['book_id', 'password'];
+  const query = ['item_id', 'password'];
   try {
     validateRequestAttrs(req, query);
   } catch ( err ) {
@@ -103,16 +103,19 @@ router.post('/purchase', session.authenticate('jwt', { session: false }), async 
   try {
     const attrs = extractRequestAttrs(req, query);
     const web3 = await Web3();
-    const book = await shelvesSC.retrieveBookById(web3, attrs.book_id);
+    const item = await shelvesSC.retrieveItemById(web3, attrs.item_id);
+    if (!item.file) {
+      throw new Error(`Item with id ${attrs.item_id} was not found`);
+    }
     await shelvesSC.purchase(web3, {
       owner: req.user.eth_address,
       pwd: attrs.password,
     }, {
-      bookId: attrs.book_id,
-      amountInPht: book.priceInPht
+      itemId: attrs.item_id,
+      amountInPht: item.priceInPht
     });
     res.json(jsonResponse({
-      confirmed: true
+      purchased: true
     }));
     res.send();
   } catch ( err ) {
@@ -122,7 +125,7 @@ router.post('/purchase', session.authenticate('jwt', { session: false }), async 
 });
 
 router.get('/download', session.authenticate('jwt', { session: false }), async (req, res, next) => {
-  const query = ['book_id'];
+  const query = ['item_id'];
   try {
     validateRequestAttrs(req, query);
   } catch ( err ) {
@@ -132,8 +135,11 @@ router.get('/download', session.authenticate('jwt', { session: false }), async (
 
   try {
     const attrs = extractRequestAttrs(req, query);
-    const book = await shelvesSC.retrieveBookById(await Web3(), attrs.book_id);
-    const reqStream = await gateway.storage.fetchProxy(book.file, req.user.leth_token);
+    const item = await shelvesSC.retrieveItemById(await Web3(), attrs.item_id);
+    if (!item.file) {
+      throw new Error(`Item with id ${attrs.item_id} was not found`);
+    }
+    const reqStream = await gateway.storage.fetchProxy(item.file, req.user.leth_token);
     reqStream
       .on('downloadProgress', progress => {
         console.log(`Transferring: ${progress.transferred} KB`);

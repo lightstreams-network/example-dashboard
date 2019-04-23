@@ -8,7 +8,8 @@ const chai = require('chai');
 chai.use(require('chai-as-promised'));
 const assert = chai.assert;
 
-const ShopShelves = artifacts.require("ShopShelves");
+const Shelves = artifacts.require("Shelves");
+const PermissionedFile = artifacts.require("PermissionedFile");
 const { web3Cfg } = require('src/lib/config');
 
 const {
@@ -17,79 +18,86 @@ const {
   pht2wei,
   toBN,
   calculateGasCost,
-  BookAttr
+  ItemAttr
 } = require('./utils');
 
-contract('ShopShelves', (accounts) => {
+contract('Shelves', (accounts) => {
   const ROOT_ACCOUNT = process.env.NETWORK === 'ganache' ? accounts[0] : web3Cfg.from;
   const SELLER_ACCOUNT = accounts[1];
   const BUYER_ACCOUNT = accounts[2];
-  const bookInfo = {
-    title: 'test book',
+  const itemInfo = {
+    title: 'test item',
     priceInPht: '0.5',
-    acl: '0x5307C0F1146233884B3A9BC857738d8bDe0802E4',
+    acl: '',
     file: 'QmPHYAfcy2MpVvKiS1pqPJg8b3juLi9N76VXAa12AYvaAg',
     cover: 'QmPHYAfcy2MpVvKiS1pqPJg8b3juLi9N76VXAa12AYvaAg',
   };
 
   it('should deploy the Faucet contract and store the address', async () => {
-    const instance = await ShopShelves.deployed();
+    const instance = await Shelves.deployed();
     assert.isDefined(instance.address, 'Token address could not be stored');
   });
 
-  it('should add a new book into the shelved', async () => {
-    const instance = await ShopShelves.deployed();
-    const priceInWei = pht2wei(bookInfo.priceInPht);
+  it('should deploy an permissioned file contract and grant with admin rights to shelves SC', async() => {
+    const instanceShelves = await Shelves.deployed();
+    const instance = await PermissionedFile.new(ROOT_ACCOUNT);
+    await instance.grantAdmin(instanceShelves.address);
+    itemInfo.acl = instance.address;
+  });
 
-    await instance.stackBook(bookInfo.title,
+  it('should add a new item into the shelved', async () => {
+    const instance = await Shelves.deployed();
+    const priceInWei = pht2wei(itemInfo.priceInPht);
+
+    await instance.stackItem(itemInfo.title,
       priceInWei,
-      bookInfo.file,
-      bookInfo.cover,
-      bookInfo.acl, {
+      itemInfo.file,
+      itemInfo.cover,
+      itemInfo.acl, {
         from: SELLER_ACCOUNT
       });
 
-    const bookId = await instance.lastBookId.call();
-    const bookObj = await instance.shelves(bookId);
-    assert.equal(bookObj[BookAttr.title], bookInfo.title);
-    assert.equal(bookObj[BookAttr.file], bookInfo.file);
-    assert.equal(bookObj[BookAttr.price].toString(), priceInWei.toString());
+    const itemId = await instance.lastItemId.call();
+    const itemObj = await instance.items(itemId);
+    assert.equal(itemObj[ItemAttr.title], itemInfo.title);
+    assert.equal(itemObj[ItemAttr.file], itemInfo.file);
+    assert.equal(itemObj[ItemAttr.price].toString(), priceInWei.toString());
   });
 
-  it('should buyer user complete a purchasing of a book', async () => {
-    const instance = await ShopShelves.deployed();
-    const bookId = await instance.lastBookId.call();
+  it('should buyer user complete a purchasing of a item', async () => {
+    const instance = await Shelves.deployed();
+    const itemId = await instance.lastItemId.call();
 
-    const bookObjBefore = await instance.shelves(bookId);
-    const bookPriceInWei = bookObjBefore[BookAttr.price];
+    const itemObjBefore = await instance.items(itemId);
+    const itemPriceInWei = itemObjBefore[ItemAttr.price];
     const sellerBalanceBefore = toBN(await web3.eth.getBalance(SELLER_ACCOUNT));
     const buyerBalanceBefore = toBN(await web3.eth.getBalance(BUYER_ACCOUNT));
 
-    const tx = await instance.purchase(bookId, {
+    const tx = await instance.purchase(itemId, {
       from: BUYER_ACCOUNT,
-      value: bookPriceInWei
+      value: itemPriceInWei
     });
     const txCost = await calculateGasCost(tx.receipt.gasUsed);
 
-    const isPurchased = await instance.hasPurchased(bookId, BUYER_ACCOUNT);
+    const isPurchased = await instance.hasPurchased(itemId, BUYER_ACCOUNT);
     const sellerBalanceAfter = toBN(await web3.eth.getBalance(SELLER_ACCOUNT));
     const buyerBalanceAfter = toBN(await web3.eth.getBalance(BUYER_ACCOUNT));
 
-    assert.equal(buyerBalanceAfter.toString(), buyerBalanceBefore.sub(bookPriceInWei).sub(txCost).toString());
-    assert.equal(sellerBalanceAfter.toString(), sellerBalanceBefore.add(bookPriceInWei).toString());
+    assert.equal(buyerBalanceAfter.toString(), buyerBalanceBefore.sub(itemPriceInWei).sub(txCost).toString());
+    assert.equal(sellerBalanceAfter.toString(), sellerBalanceBefore.add(itemPriceInWei).toString());
     assert.equal(isPurchased, true);
   });
 
-  it('should buyer cannot buy same book twice', async () => {
-    const instance = await ShopShelves.deployed();
-    const bookId = await instance.lastBookId.call();
-
-    const bookObjBefore = await instance.shelves(bookId);
-    const bookPriceInWei = bookObjBefore[BookAttr.price];
-
-    return assert.isRejected(instance.purchase(bookId, {
-      from: BUYER_ACCOUNT,
-      value: bookPriceInWei
-    }));
-  });
+  // it('should buyer cannot buy same item twice', async () => {
+  //   const instance = await Shelves.deployed();
+  //   const itemId = await instance.lastItemId.call();
+  //
+  //   const itemObjBefore = await instance.items(itemId);
+  //   const itemPriceInWei = itemObjBefore[ItemAttr.price];
+  //
+  //   return assert.isRejected(instance.purchase(itemId, {
+  //     from: BUYER_ACCOUNT,
+  //     value: itemPriceInWei
+  //   }));
+  // });
 });

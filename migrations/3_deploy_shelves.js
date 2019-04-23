@@ -1,7 +1,7 @@
-const ShopShelves = artifacts.require("ShopShelves");
+const Shelves = artifacts.require("Shelves");
 
 module.exports = function(deployer) {
-  deployer.deploy(ShopShelves)
+  deployer.deploy(Shelves)
     .then((instance) => {
       console.log(`Distribution contract deployed! ${instance.address}`)
     });

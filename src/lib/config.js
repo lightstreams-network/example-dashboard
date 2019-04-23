@@ -5,7 +5,7 @@
  */
 
 let faucetSCData = require(`${process.env.PWD}/build/contracts/Faucet.json`);
-let shopShelvesSCData = require(`${process.env.PWD}/build/contracts/ShopShelves.json`);
+let shopShelvesSCData = require(`${process.env.PWD}/build/contracts/Shelves.json`);
 
 module.exports.dbCfg = {
   username: process.env.DB_USER || null,
