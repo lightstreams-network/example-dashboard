@@ -6,12 +6,12 @@ const { weiToPht } = require('src/lib/ethereum');
 const { extractRequestAttrs, validateRequestAttrs } = require('src/lib/request');
 const { badInputResponse, jsonResponse } = require('src/lib/responses');
 
-const passport = require('src/services/session').passport();
+const session = require('src/services/session').passport();
 const gateway = require('src/services/gateway').gateway();
 const Web3 = require('src/services/web3');
 const faucetSC = require('src/smartcontracts/faucet');
 
-router.get('/balance', passport.authenticate('jwt', { session: false }),
+router.get('/balance', session.authenticate('jwt', { session: false }),
   async (req, res, next) => {
     try {
       const { balance } = await gateway.wallet.balance(req.user.eth_address);
@@ -25,7 +25,7 @@ router.get('/balance', passport.authenticate('jwt', { session: false }),
     }
   });
 
-router.post('/request-top-up', passport.authenticate('jwt', { session: false }), async (req, res, next) => {
+router.post('/request-top-up', session.authenticate('jwt', { session: false }), async (req, res, next) => {
   const query = ['amount'];
   try {
     validateRequestAttrs(req, query);
