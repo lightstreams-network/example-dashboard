@@ -28,6 +28,7 @@ module.exports.authCfg = {
 
 module.exports.urls = {
   gateway: process.env.GATEWAY_DOMAIN,
+  localhost: `http://localhost:${process.env.PORT}`
 };
 
 module.exports.smartContract = {

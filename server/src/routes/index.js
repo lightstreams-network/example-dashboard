@@ -8,5 +8,6 @@ router.get('/', (req, res) => {
 router.use('/auth', require('./auth'));
 router.use('/wallet', require('./wallet'));
 router.use('/shelves', require('./shelves'));
+router.use('/bridge', require('./bridge'));
 
 module.exports = router;

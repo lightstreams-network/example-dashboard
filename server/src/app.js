@@ -7,11 +7,8 @@ const formData = require("express-form-data");
 const os = require("os");
 const cors = require('cors');
 
-
-// const passport = require('passport');
-// const basicAuth = require('./middleware/auth/basic')(passport);
-// const jwtAuth = require('./middleware/auth/jwt')(passport);
 const { notFoundHandler, errorHandler } = require('src/middleware/errors');
+const { syncItems } = require('src/services/shelves');
 
 const app = express();
 require('http').Server(app);
@@ -29,6 +26,17 @@ app.use(cors({
     origin: '*', // @TODO Restrict rule
     credentials: true,
 }));
+
+// if (process.env.USE_SESSION) {
+//   app.set('trust proxy', 1); // trust first proxy
+//   app.use(session({
+//     secret: process.env.JWT_SECRET,
+//     resave: true,
+//     saveUninitialized: true,
+//     cookie: { }
+//   }));
+//   app.use(sessionHandler);
+// }
 
 const passportSession = require('src/services/session').passport();
 app.use(passportSession.initialize());
@@ -53,5 +61,10 @@ app.use(notFoundHandler);
 
 // error handler
 app.use(errorHandler);
+
+// setInterval(() => {
+//   syncItems();
+// }, 60000);
+syncItems();
 
 module.exports = app;

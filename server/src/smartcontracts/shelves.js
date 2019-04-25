@@ -13,6 +13,12 @@ module.exports.address = () => {
   return shelvesSC.address;
 };
 
+module.exports.getMaxItemId = (web3) => {
+  const { shelves: shelvesSC } = smartContract;
+  const Shelves = web3.eth.Contract(shelvesSC.abi, shelvesSC.address);
+  return Shelves.methods.lastItemId.call();
+};
+
 module.exports.stackItem = (web3, { owner, pwd }, { title, priceInPht, file, cover, acl }) => {
   return new Promise((resolve, reject) => {
     const { shelves: shelvesSC } = smartContract;
