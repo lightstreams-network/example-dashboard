@@ -1,6 +1,0 @@
-export class ServerActions {
-   static REQUEST_PENDING = 'SERVER_REQUEST_PENDING';
-   static REQUEST_COMPLETE = 'SERVER_REQUEST_COMPLETE';
-   static ERROR = 'SERVER_ERROR';
-   static ASYNC_ERROR = 'ASYNC_ERROR';
-}
