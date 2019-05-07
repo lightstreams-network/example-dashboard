@@ -1,0 +1,8 @@
+**/node_modules
+.happyPack
+yarn-error.log
+.vscode
+**/web/dist
+lerna-debug.log
+.idea
+**/.env
