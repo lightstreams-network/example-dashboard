@@ -53,11 +53,11 @@ router.post('/sign-in', async (req, res, next) => {
     const user = await verifyUser(attrs.username, attrs.password);
     const { token } = await gateway.user.signIn(user.eth_address, attrs.password);
     // @TODO: replace by session
-    await updateUser(attrs.username, {
+    const nextUser = await updateUser(attrs.username, {
       leth_token: token
     });
     const authToken = jwtEncode({ id: user.id });
-    res.json(jsonResponse({ token: authToken, user }));
+    res.json(jsonResponse({ token: authToken, user: nextUser }));
   } catch ( err ) {
     if (err instanceof UserServiceError) {
       next(unauthorizedResponse(err.message));
