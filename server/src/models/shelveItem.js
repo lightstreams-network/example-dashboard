@@ -1,29 +1,31 @@
 module.exports = (sequelize, DataTypes) => {
-  const ShelveItem = sequelize.define('shelveItem', {
+  const Item = sequelize.define('items', {
     item_id: { type: DataTypes.INTEGER, primaryKey: true },
+    user_id: { type: DataTypes.INTEGER, primaryKey: true },
     title: { type: DataTypes.STRING },
     description: { type: DataTypes.STRING },
-    file: { type: DataTypes.STRING, unique: true },
-    cover: { type: DataTypes.STRING },
+    meta: { type: DataTypes.STRING, unique: true },
     acl: { type: DataTypes.STRING },
-    owner: { type: DataTypes.STRING },
-    price: { type: DataTypes.FLOAT }
   }, {
-    tableName: 'shelve_item',
+    tableName: 'items',
     underscored: true
   });
 
-  ShelveItem.prototype.toJSON = function toJSON() {
+  Item.prototype.toJSON = function toJSON() {
     return Object.assign({}, this.get());
   };
 
-  ShelveItem.findOneByFileHash = (fileHash) => {
-    return ShelveItem.findOne({ where: { file: fileHash } });
+  Item.findOneByFileHash = (fileHash) => {
+    return Item.findOne({ where: { file: fileHash } });
   };
 
-  ShelveItem.getMaxItemId = () => {
-    return ShelveItem.max('item_id');
+  Item.findByUserId = (userId) => {
+    return Item.find({ where: { user_id: userId } });
   };
 
-  return ShelveItem;
+  Item.getMaxItemId = (userId) => {
+    return Item.max('item_id', { where: { user_id: userId } });
+  };
+
+  return Item;
 };

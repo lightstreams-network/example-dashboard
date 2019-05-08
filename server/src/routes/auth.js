@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
-const debug = require('debug')('fanbase:server');
+const debug = require('debug')('app:server');
 const { Sequelize } = require('src/models');
 const { badInputResponse, unauthorizedResponse, jsonResponse } = require('src/lib/responses');
 const { extractRequestAttrs, validateRequestAttrs } = require('src/lib/request');

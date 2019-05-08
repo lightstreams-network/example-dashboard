@@ -65,6 +65,6 @@ app.use(errorHandler);
 // setInterval(() => {
 //   syncItems();
 // }, 60000);
-syncItems();
+// syncItems();
 
 module.exports = app;

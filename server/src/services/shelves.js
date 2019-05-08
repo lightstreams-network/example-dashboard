@@ -7,7 +7,7 @@
 const { shelveItem: ShelveItem } = require('src/models');
 
 const Web3 = require('src/services/web3');
-const shelvesSC = require('src/smartcontracts/shelves');
+const shelvesSC = require('src/smartcontracts/profile');
 
 module.exports.syncItems = async () => {
   const web3 = await Web3();

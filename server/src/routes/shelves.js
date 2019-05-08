@@ -15,7 +15,7 @@ const Web3 = require('src/services/web3');
 
 const session = require('src/services/session').passport();
 const gateway = require('src/services/gateway').gateway();
-const shelvesSC = require('src/smartcontracts/shelves');
+const shelvesSC = require('src/smartcontracts/profile');
 
 router.post('/stack', session.authenticate('jwt', { session: false }), async (req, res, next) => {
   const query = ['file', 'password', 'title', 'priceInPht'];
@@ -109,7 +109,7 @@ router.post('/purchase', session.authenticate('jwt', { session: false }), async 
     }
     await shelvesSC.purchase(web3, {
       owner: req.user.eth_address,
-      pwd: attrs.password,
+      password: attrs.password,
     }, {
       itemId: attrs.item_id,
       amountInPht: item.priceInPht

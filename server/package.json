@@ -8,7 +8,7 @@
     "dev": "NODE_PATH=. nodemon --watch src --debug --inspect=0.0.0.0:9230 ./bin/www",
     "deploy-sirius": "truffle deploy --reset --network=sirius",
     "test": "truffle test --reset --network=ganache",
-    "compile": "truffle build --reset",
+    "compile": "truffle compile --all --reset",
     "postinstall": "rm -f node_modules/src; ln -nsf ../src node_modules/src"
   },
   "repository": {

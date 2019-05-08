@@ -3,6 +3,7 @@
 
 ## Development
 ```
+npm run compile
 npm run dev
 ```
 
@@ -17,6 +18,17 @@ npm run deploy-sirius
 npm run compile
 ```
 
+## SqlLite
+
+Connect
+```
+sqlite3 .database/demo.sqlite
+```
+
+Cleaning
+```
+drop table user;
+```
 
 ## Deploys
 

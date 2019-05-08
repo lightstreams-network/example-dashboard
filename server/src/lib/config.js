@@ -5,7 +5,9 @@
  */
 
 let faucetSCData = require(`${process.env.PWD}/build/contracts/Faucet.json`);
-let shopShelvesSCData = require(`${process.env.PWD}/build/contracts/Shelves.json`);
+let profileSCData = require(`${process.env.PWD}/build/contracts/Profile.json`);
+let dashboardUserSCData = require(`${process.env.PWD}/build/contracts/DashboardUser.json`);
+let PermissionedFileSCData = require(`${process.env.PWD}/build/contracts/PermissionedFile.json`);
 
 module.exports.dbCfg = {
   username: process.env.DB_USER || null,
@@ -18,8 +20,9 @@ module.exports.dbCfg = {
 module.exports.web3Cfg = {
   provider: process.env.WEB3_PROVIDER,
   gasPrice: process.env.WEB3_GAS_PRICE,
+  defaultGas: 300000,
   from: process.env.STAKEHOLDER_ADDRESS,
-  pwd: process.env.STAKEHOLDER_ADDRESS_PWD,
+  password: process.env.STAKEHOLDER_ADDRESS_PWD,
 };
 
 module.exports.authCfg = {
@@ -37,9 +40,16 @@ module.exports.smartContract = {
     owner: process.env.STAKEHOLDER_ADDRESS,
     abi: faucetSCData.abi
   },
-  shelves: {
-    address: process.env.SMARTCONTRACT_SHELVES_ADDRESS,
-    owner: process.env.STAKEHOLDER_ADDRESS,
-    abi: shopShelvesSCData.abi
+  profile: {
+    bytecode: profileSCData.bytecode,
+    abi: profileSCData.abi,
+  },
+  dashboardUser: {
+    bytecode: dashboardUserSCData.bytecode,
+    abi: dashboardUserSCData.abi,
+  },
+  permissionedFile: {
+    bytecode: PermissionedFileSCData.bytecode,
+    abi: PermissionedFileSCData.abi,
   }
 };
