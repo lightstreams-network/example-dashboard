@@ -4,31 +4,16 @@
  * Copyright 2019 (c) Lightstreams, Granada
  */
 
-const { smartContract, web3Cfg } = require('src/lib/config');
+const { smartContract } = require('src/lib/config');
 const { phtToWei } = require('src/lib/ethereum');
+const { web3SendTx } = require('src/services/web3');
 
-module.exports.requestFreeToken = (web3, { beneficiary, amountInPht }) => {
-  return new Promise((resolve, reject) => {
-    try {
-      const { faucet: faucetSC } = smartContract;
-      const topUpAmountInWei = phtToWei(amountInPht);
-      const Faucet = web3.eth.Contract(faucetSC.abi, faucetSC.address, {
-        defaultAccount: web3Cfg.from
-      });
+module.exports.requestFreeToken = async (web3, { beneficiary, amountInPht }) => {
+  const topUpAmountInWei = phtToWei(amountInPht);
 
-      Faucet.methods.topUp(beneficiary, topUpAmountInWei).send()
-        .on('confirmation', (confirmationNumber, txReceipt) => {
-          if (txReceipt.status === true || txReceipt.status === '0x1') {
-            resolve();
-          } else {
-            reject(new Error("Transaction failed"));
-          }
-        })
-        .on('error', (error) => {
-          reject(new Error(error));
-        });
-    } catch (err) {
-      reject(new Error('Failed to request tokens'));
-    }
+  await web3SendTx(web3, () => {
+    const { faucet: faucetSC } = smartContract;
+    const Faucet = web3.eth.Contract(faucetSC.abi, faucetSC.address);
+    return Faucet.methods.topUp(beneficiary, topUpAmountInWei);
   });
 };
