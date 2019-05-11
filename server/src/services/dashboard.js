@@ -85,6 +85,18 @@ module.exports.retrieveRemoteItemInfo = async (user, itemId) => {
   return { ...item, id: itemId };
 };
 
+module.exports.retrieveRemoteItemList = async (user) => {
+  const web3 = await Web3();
+  const remoteMaxItemId = await profileSCService.getMaxItemId(web3, user.profile_address);
+
+  const items = [];
+  for ( let i = 0; i <= remoteMaxItemId; i++ ) {
+    items.push(await this.retrieveRemoteItemInfo(user, i));
+  }
+
+  return items;
+};
+
 module.exports.syncItems = async () => {
   const web3 = await Web3();
   const localMaxItemId = (await ShelveItem.getMaxItemId() || 0) + 1;

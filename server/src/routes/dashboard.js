@@ -11,7 +11,7 @@ const debug = require('debug')('app:server');
 const { extractRequestAttrs, validateRequestAttrs } = require('src/lib/request');
 const { badInputResponse, jsonResponse } = require('src/lib/responses');
 
-const { uploadNewItem, retrieveRemoteItemInfo } = require('src/services/dashboard');
+const { uploadNewItem, retrieveRemoteItemInfo, retrieveRemoteItemList } = require('src/services/dashboard');
 
 const session = require('src/services/session').passport();
 const gateway = require('src/services/gateway').gateway();
@@ -41,6 +41,19 @@ router.post('/add-item', session.authenticate('jwt', { session: false }), async 
     next(err);
   }
 });
+
+router.get('/list-items', session.authenticate('jwt', { session: false }), async (req, res, next) => {
+
+  try {
+    const item = await retrieveRemoteItemList(req.user);
+    res.json(jsonResponse(item));
+    res.send();
+  } catch ( err ) {
+    debug(err);
+    next(err);
+  }
+});
+
 
 router.get('/get-item-info', session.authenticate('jwt', { session: false }), async (req, res, next) => {
   const query = ['item_id'];
