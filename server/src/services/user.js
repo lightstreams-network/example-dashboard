@@ -2,9 +2,8 @@ const bcrypt = require('bcrypt');
 const { DateTime } = require('luxon');
 const { user: User } = require('src/models');
 const Web3 = require('src/services/web3');
-const { sendPhtTo } = require('src/services/web3');
 const debug = require('debug')('app:user');
-
+const { requestFunding } = require('src/services/faucet');
 const profileSCService = require('src/smartcontracts/profile');
 const gateway = require('src/services/gateway').gateway();
 
@@ -17,8 +16,8 @@ module.exports.createUser = async ({ username, password }) => {
   const web3 = await Web3();
   const { account: ethAddress } = await gateway.user.signUp(password);
   debug(`New wallet requested to leth: ${ethAddress}`);
-  const amountInPht = 0.5;
-  sendPhtTo(web3, ethAddress, amountInPht);
+
+  await requestFunding(ethAddress, 0.5);
   const profileAddress = await profileSCService.createProfile(web3, { from: ethAddress, password });
 
   const attrs = {

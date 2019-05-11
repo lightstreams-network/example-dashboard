@@ -7,9 +7,9 @@
 const { shelveItem: ShelveItem } = require('src/models');
 const { items: Items } = require('src/models');
 const Web3 = require('src/services/web3');
-const { sendPhtTo } = require('src/services/web3');
 const gateway = require('src/services/gateway').gateway();
 
+const { requestFunding } = require('src/services/faucet');
 const profileSCService = require('src/smartcontracts/profile');
 const dashboardSCService = require('src/smartcontracts/dashboard');
 const streams = require('memory-streams');
@@ -29,9 +29,8 @@ module.exports.createUserDashboard = async (user) => {
 
 module.exports.uploadNewItem = (user, password, { title, description, file }) => {
   return new Promise(async (resolve, reject) => {
-    const web3 = await Web3();
-    const amountInPht = 0.7;
-    await sendPhtTo(web3, user.eth_address, amountInPht);
+
+    await requestFunding(user.eth_address, 1);
     const reqStream = await gateway.storage.addProxy(user.eth_address, password, file);
     const resStream = new streams.WritableStream();
 
