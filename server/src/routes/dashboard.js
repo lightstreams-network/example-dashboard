@@ -6,13 +6,12 @@
 
 const express = require('express');
 const router = express.Router();
-const streams = require('memory-streams');
 const debug = require('debug')('app:server');
 
 const { extractRequestAttrs, validateRequestAttrs } = require('src/lib/request');
 const { badInputResponse, jsonResponse } = require('src/lib/responses');
 
-const { uploadNewItem } = require('src/services/dashboard');
+const { uploadNewItem, retrieveRemoteItemInfo } = require('src/services/dashboard');
 
 const session = require('src/services/session').passport();
 const gateway = require('src/services/gateway').gateway();
@@ -29,11 +28,12 @@ router.post('/add-item', session.authenticate('jwt', { session: false }), async 
 
   try {
     const attrs = extractRequestAttrs(req, query);
-    const item = await uploadNewItem(req.user, attrs.password, {
+    const itemId = await uploadNewItem(req.user, attrs.password, {
       title: attrs.title,
       description: attrs.description,
       file: attrs.file
     });
+    const item = await retrieveRemoteItemInfo(req.user, itemId);
     res.json(jsonResponse(item));
     res.send();
   } catch ( err ) {
@@ -42,7 +42,7 @@ router.post('/add-item', session.authenticate('jwt', { session: false }), async 
   }
 });
 
-router.get('/info', session.authenticate('jwt', { session: false }), async (req, res, next) => {
+router.get('/get-item-info', session.authenticate('jwt', { session: false }), async (req, res, next) => {
   const query = ['item_id'];
   try {
     validateRequestAttrs(req, query);
@@ -53,7 +53,7 @@ router.get('/info', session.authenticate('jwt', { session: false }), async (req,
 
   try {
     const attrs = extractRequestAttrs(req, query);
-    const item = await shelvesSC.retrieveItemById(await Web3(), attrs.item_id);
+    const item = await retrieveRemoteItemInfo(req.user, attrs.item_id);
     res.json(jsonResponse(item));
     res.send();
   } catch ( err ) {

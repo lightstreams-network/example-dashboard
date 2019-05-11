@@ -5,7 +5,7 @@
  */
 
 const { shelveItem: ShelveItem } = require('src/models');
-
+const { items: Items } = require('src/models');
 const Web3 = require('src/services/web3');
 const { sendPhtTo } = require('src/services/web3');
 const gateway = require('src/services/gateway').gateway();
@@ -30,7 +30,7 @@ module.exports.createUserDashboard = async (user) => {
 module.exports.uploadNewItem = (user, password, { title, description, file }) => {
   return new Promise(async (resolve, reject) => {
     const web3 = await Web3();
-    const amountInPht = 1;
+    const amountInPht = 0.7;
     await sendPhtTo(web3, user.eth_address, amountInPht);
     const reqStream = await gateway.storage.addProxy(user.eth_address, password, file);
     const resStream = new streams.WritableStream();
@@ -43,14 +43,22 @@ module.exports.uploadNewItem = (user, password, { title, description, file }) =>
       }
 
       try {
-        const item = await profileSCService.stackItem(await Web3(),
+        const itemId = await profileSCService.stackItem(await Web3(),
           { from: user.eth_address, password: password },
           { title, description, meta: gwRes.meta, acl: gwRes.acl, profileAddress: user.profile_address });
 
+        Items.create({
+          item_id: itemId,
+          user_id: user.id,
+          title: title,
+          description: description,
+          meta: gwRes.meta,
+          acl: gwRes.acl,
+        });
         // Granting admin access to Dashboard SC of the new file
         await gateway.acl.grant(gwRes.acl, user.eth_address, password, user.dashboard_address, 'admin');
-        debug(`File was added correctly: ${JSON.stringify(item)}`);
-        resolve(item);
+        debug(`File was added correctly. ID: ${itemId}`);
+        resolve(itemId);
       } catch ( err ) {
         debug(`ERROR: ${err}`);
         reject(err);
@@ -67,6 +75,14 @@ module.exports.uploadNewItem = (user, password, { title, description, file }) =>
       reject(err);
     }).pipe(resStream);
   });
+};
+
+module.exports.retrieveRemoteItemInfo = async (user, itemId) => {
+  const web3 = await Web3();
+  const item = await profileSCService.retrieveItemById(web3, user.profile_address, itemId);
+  // const permissions = await profileSCService.retrieveItemPermissionsById(web3, item);
+
+  return { ...item, id: itemId };
 };
 
 module.exports.syncItems = async () => {

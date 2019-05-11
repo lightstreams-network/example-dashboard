@@ -49,23 +49,25 @@ module.exports.stackItem = async (web3, { from, password }, { title, description
     gas: '1200000'
   });
 
-  return {
-    itemId: txReceipt.events.StackItem.returnValues['_itemId']
-  };
+  return txReceipt.events.StackItem.returnValues['_itemId'];
 };
 
 module.exports.retrieveItemById = async (web3, profileAddress, itemId) => {
-  const { profile: profileSC, permissionedFile: permissionedFileSC } = smartContract;
+  const { profile: profileSC } = smartContract;
   const Profile = web3.eth.Contract(profileSC.abi, profileAddress);
-  const item = await Profile.methods.items(itemId).call();
-
-  const File = web3.eth.Contract(permissionedFileSC.abi, item.meta);
-  const permissions = await File.methods.permissions().call();
-
+  const itemObj = await Profile.methods.items(itemId).call();
   return {
-    title: item.title,
-    description: item.description,
-    meta: item.meta,
-    permissions: permissions
-  };
+    title: itemObj.title,
+    description: itemObj.description,
+    meta: itemObj.meta,
+    acl: itemObj.acl,
+  }
+};
+
+module.exports.retrieveItemPermissionsById = async (web3, item) => {
+  const { permissionedFile: permissionedFileSC } = smartContract;
+
+  const File = web3.eth.Contract(permissionedFileSC.abi, item.acl);
+  const permissionsObj = await File.methods.permissions.call();
+  return permissionsObj;
 };
