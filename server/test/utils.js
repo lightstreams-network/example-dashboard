@@ -55,10 +55,7 @@ module.exports.calculateGasCost = async function(gasAmount) {
 
 module.exports.ItemAttr = {
   title: 0,
-  owner: 1,
-  price: 2,
-  file: 3,
-  cover: 4,
-  acl: 5,
-  purchasers: 6,
+  desc: 1,
+  meta: 2,
+  acl: 3
 };

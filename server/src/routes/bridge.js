@@ -9,7 +9,7 @@ const session = require('src/services/session').passport();
 const Web3 = require('src/services/web3');
 const { weiToPht } = require('src/lib/ethereum');
 const faucetSC = require('src/smartcontracts/faucet');
-const shelvesService = require('src/services/shelves');
+const shelvesService = require('src/services/dashboard');
 const { extractRequestAttrs, validateRequestAttrs } = require('src/lib/request');
 const {  badInputResponse } = require('src/lib/responses');
 

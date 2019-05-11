@@ -7,6 +7,7 @@
 const { smartContract } = require('src/lib/config');
 const { phtToWei } = require('src/lib/ethereum');
 const { web3SendTx } = require('src/services/web3');
+const debug = require('debug')('app:web3');
 
 module.exports.requestFreeToken = async (web3, { beneficiary, amountInPht }) => {
   const topUpAmountInWei = phtToWei(amountInPht);
@@ -16,4 +17,6 @@ module.exports.requestFreeToken = async (web3, { beneficiary, amountInPht }) => 
     const Faucet = web3.eth.Contract(faucetSC.abi, faucetSC.address);
     return Faucet.methods.topUp(beneficiary, topUpAmountInWei);
   });
+
+  debug(`Account ${beneficiary} was top-up with: ${amountInPht} PHT`);
 };

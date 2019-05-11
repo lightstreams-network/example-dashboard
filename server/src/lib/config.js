@@ -4,6 +4,11 @@
  * Copyright 2019 (c) Lightstreams, Granada
  */
 
+delete require.cache[require.resolve(`${process.env.PWD}/build/contracts/Faucet.json`)];
+delete require.cache[require.resolve(`${process.env.PWD}/build/contracts/Profile.json`)];
+delete require.cache[require.resolve(`${process.env.PWD}/build/contracts/DashboardUser.json`)];
+delete require.cache[require.resolve(`${process.env.PWD}/build/contracts/PermissionedFile.json`)];
+
 let faucetSCData = require(`${process.env.PWD}/build/contracts/Faucet.json`);
 let profileSCData = require(`${process.env.PWD}/build/contracts/Profile.json`);
 let dashboardUserSCData = require(`${process.env.PWD}/build/contracts/DashboardUser.json`);

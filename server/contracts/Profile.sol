@@ -15,31 +15,11 @@ contract Profile is Ownable {
 
     mapping(uint32 => Content) public items; // Key map is the meta
     uint32 public lastItemId;
-    address holder;
 
-    constructor (address _holder) public {
-        holder = _holder;
-    }
-
-    function stackItem(string memory title, string memory description, string memory meta, address acl) onlyAuthorized public {
+    function stackItem(string memory title, string memory description, string memory meta, address acl) onlyOwner public {
         lastItemId = lastItemId + 1;
         Content memory newItem = Content(title, description, meta, acl);
         items[lastItemId] = newItem;
         emit StackItem(lastItemId);
-    }
-
-    /**
-   * @dev Throws if called by any account other than the owner.
-   */
-    modifier onlyAuthorized() {
-        require(isAuthorized());
-        _;
-    }
-
-    /**
-   * @return true if `msg.sender` is the owner of the contract or profile owner
-   */
-    function isAuthorized() public view returns (bool) {
-        return isOwner() || msg.sender == holder;
     }
 }

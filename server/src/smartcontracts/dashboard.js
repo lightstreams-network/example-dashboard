@@ -19,25 +19,25 @@ module.exports.getMaxItemId = (web3, profileAddress) => {
   return Shelves.methods.lastItemId.call();
 };
 
-module.exports.createProfile = async (web3, { from, password }) => {
-  const { profile: profileSC } = smartContract;
-  const ProfileArtifact = web3.eth.Contract(profileSC.abi, null);
+module.exports.createUserDashboard = async (web3, { username, profileAddress }) => {
+  const { dashboardUser: dashboardSC } = smartContract;
+  const DashboardArtifact = web3.eth.Contract(dashboardSC.abi, null);
 
-  const ProfileInstance = await web3SendTx(web3, () => {
-    return ProfileArtifact.deploy({
-      data: profileSC.bytecode,
-      arguments: []
+  const DashboardInstance = await web3SendTx(web3, () => {
+    return DashboardArtifact.deploy({
+      arguments: [username, profileAddress],
+      data: dashboardSC.bytecode
     });
-  }, {
-    gas: 900000, from, password
+  },{
+    gas: 1000000
   });
 
-  debug(`Profile SmartContract created at: ${ProfileInstance.options.address}`);
+  debug(`DashboardUser SmartContract created at: ${DashboardInstance.options.address}`);
 
-  return ProfileInstance.options.address;
+  return DashboardInstance.options.address;
 };
 
-module.exports.stackItem = async (web3, { from, password }, { title, description, meta, acl, profileAddress }) => {
+module.exports.stackItem = async (web3, {from, password, address: profileAddress}, { title, description, meta, acl }) => {
   const { profile: profileSC } = smartContract;
 
   const txReceipt = await web3SendTx(web3, () => {
@@ -50,7 +50,7 @@ module.exports.stackItem = async (web3, { from, password }, { title, description
   });
 
   return {
-    itemId: txReceipt.events.StackItem.returnValues['_itemId']
+    itemId: txReceipt.events.StackContent.returnValues['_itemId']
   };
 };
 

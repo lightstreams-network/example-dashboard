@@ -8,7 +8,7 @@ const os = require("os");
 const cors = require('cors');
 
 const { notFoundHandler, errorHandler } = require('src/middleware/errors');
-const { syncItems } = require('src/services/shelves');
+const { syncItems } = require('src/services/dashboard');
 
 const app = express();
 require('http').Server(app);

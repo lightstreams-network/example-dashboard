@@ -7,6 +7,7 @@ const { badInputResponse, unauthorizedResponse, jsonResponse } = require('src/li
 const { extractRequestAttrs, validateRequestAttrs } = require('src/lib/request');
 const { jwtEncode } = require('src/services/session');
 const { verifyUser, createUser, updateUser, UserServiceError } = require('src/services/user');
+const { createUserDashboard } = require('src/services/dashboard');
 const gateway = require('src/services/gateway').gateway();
 
 router.post('/sign-up', async (req, res, next) => {
@@ -20,12 +21,11 @@ router.post('/sign-up', async (req, res, next) => {
 
   try {
     const attrs = extractRequestAttrs(req, query);
-    const { account } = await gateway.user.signUp(attrs.password);
     const user = await createUser({
       username: attrs.username,
-      password: attrs.password,
-      ethAddress: account
+      password: attrs.password
     });
+    await createUserDashboard(user);
     res.send(jsonResponse({ user }));
   } catch ( err ) {
     if (err instanceof Sequelize.ValidationError) {

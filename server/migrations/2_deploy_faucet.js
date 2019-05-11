@@ -3,6 +3,6 @@ const Faucet = artifacts.require("Faucet");
 module.exports = function(deployer) {
   deployer.deploy(Faucet)
     .then((instance) => {
-      console.log(`Distribution contract deployed! ${instance.address}`)
+      console.log(`Faucet contract deployed! ${instance.address}`)
     });
 };
