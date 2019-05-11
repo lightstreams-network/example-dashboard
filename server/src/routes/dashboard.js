@@ -62,40 +62,40 @@ router.get('/get-item-info', session.authenticate('jwt', { session: false }), as
   }
 });
 
-router.post('/purchase', session.authenticate('jwt', { session: false }), async (req, res, next) => {
-  const query = ['item_id', 'password'];
-  try {
-    validateRequestAttrs(req, query);
-  } catch ( err ) {
-    next(badInputResponse(err.message));
-    return;
-  }
+// router.post('/purchase', session.authenticate('jwt', { session: false }), async (req, res, next) => {
+//   const query = ['item_id', 'password'];
+//   try {
+//     validateRequestAttrs(req, query);
+//   } catch ( err ) {
+//     next(badInputResponse(err.message));
+//     return;
+//   }
+//
+//   try {
+//     const attrs = extractRequestAttrs(req, query);
+//     const web3 = await Web3();
+//     const item = await shelvesSC.retrieveItemById(web3, attrs.item_id);
+//     if (!item.file) {
+//       throw new Error(`Item with id ${attrs.item_id} was not found`);
+//     }
+//     await shelvesSC.purchase(web3, {
+//       owner: req.user.eth_address,
+//       password: attrs.password,
+//     }, {
+//       itemId: attrs.item_id,
+//       amountInPht: item.priceInPht
+//     });
+//     res.json(jsonResponse({
+//       purchased: true
+//     }));
+//     res.send();
+//   } catch ( err ) {
+//     debug(err);
+//     next(err);
+//   }
+// });
 
-  try {
-    const attrs = extractRequestAttrs(req, query);
-    const web3 = await Web3();
-    const item = await shelvesSC.retrieveItemById(web3, attrs.item_id);
-    if (!item.file) {
-      throw new Error(`Item with id ${attrs.item_id} was not found`);
-    }
-    await shelvesSC.purchase(web3, {
-      owner: req.user.eth_address,
-      password: attrs.password,
-    }, {
-      itemId: attrs.item_id,
-      amountInPht: item.priceInPht
-    });
-    res.json(jsonResponse({
-      purchased: true
-    }));
-    res.send();
-  } catch ( err ) {
-    debug(err);
-    next(err);
-  }
-});
-
-router.get('/download', session.authenticate('jwt', { session: false }), async (req, res, next) => {
+router.get('/download-item-content', session.authenticate('jwt', { session: false }), async (req, res, next) => {
   const query = ['item_id'];
   try {
     validateRequestAttrs(req, query);
@@ -106,16 +106,17 @@ router.get('/download', session.authenticate('jwt', { session: false }), async (
 
   try {
     const attrs = extractRequestAttrs(req, query);
-    const item = await shelvesSC.retrieveItemById(await Web3(), attrs.item_id);
-    if (!item.file) {
+    const item = await retrieveRemoteItemInfo(req.user, attrs.item_id);
+    if (!item.meta) {
       throw new Error(`Item with id ${attrs.item_id} was not found`);
     }
-    const reqStream = await gateway.storage.fetchProxy(item.file, req.user.leth_token);
+
+    const reqStream = await gateway.storage.fetchProxy(item.meta, req.user.leth_token);
     reqStream
       .on('downloadProgress', progress => {
-        console.log(`Transferring: ${progress.transferred} KB`);
+        debug(`Transferring: ${progress.transferred} KB`);
         if (progress.percent === 1) {
-          console.log("Transfer completed");
+          debug("Transfer completed");
         }
       })
       .pipe(res);
