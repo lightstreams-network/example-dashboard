@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-  const Item = sequelize.define('items', {
+  const Item = sequelize.define('item', {
     item_id: { type: DataTypes.INTEGER, primaryKey: true },
     user_id: { type: DataTypes.INTEGER, primaryKey: true },
     title: { type: DataTypes.STRING },
@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
     meta: { type: DataTypes.STRING, unique: true },
     acl: { type: DataTypes.STRING },
   }, {
-    tableName: 'items',
+    tableName: 'item',
     underscored: true
   });
 
@@ -15,8 +15,8 @@ module.exports = (sequelize, DataTypes) => {
     return Object.assign({}, this.get());
   };
 
-  Item.findOneByFileHash = (fileHash) => {
-    return Item.findOne({ where: { file: fileHash } });
+  Item.findOneByMeta = (meta) => {
+    return Item.findOne({ where: { meta: meta } });
   };
 
   Item.findByUserId = (userId) => {

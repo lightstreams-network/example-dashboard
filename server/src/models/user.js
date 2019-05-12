@@ -4,7 +4,6 @@ module.exports = (sequelize, DataTypes) => {
     eth_address: { type: DataTypes.STRING, unique: true },
     leth_token: DataTypes.STRING,
     profile_address: { type: DataTypes.STRING, unique: true },
-    dashboard_address: { type: DataTypes.STRING, unique: true },
     password: DataTypes.STRING
   }, {
     tableName: 'user',

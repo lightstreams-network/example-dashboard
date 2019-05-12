@@ -30,7 +30,7 @@
     "express-form-data": "^2.0.8",
     "express-session": "^1.16.1",
     "fs": "0.0.1-security",
-    "hbs": "^4.0.3",
+    "hbs": "^4.0.4",
     "jwt-simple": "^0.5.6",
     "lightstreams-js-sdk": "git+ssh://git@github.com/lightstreams-network/lightstreams-js-sdk.git#master",
     "lodash": "^4.17.11",
@@ -39,8 +39,9 @@
     "morgan": "^1.9.1",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
-    "sequelize": "^5.1.1",
+    "sequelize": "^5.8.6",
     "sqlite3": "^4.0.6",
+    "uuid": "^3.3.2",
     "web3": "^1.0.0-beta.50"
   },
   "devDependencies": {

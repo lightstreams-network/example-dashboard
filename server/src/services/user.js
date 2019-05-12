@@ -14,24 +14,32 @@ module.exports.UserServiceError = UserServiceError;
 module.exports.createUser = async ({ username, password }) => {
   const now = DateTime.utc().toSQL();
   const web3 = await Web3();
+  const userTaken = await User.findOneByUsername(username);
+  if (userTaken) {
+    throw new UserServiceError(`username '${username}' is already taken`);
+  }
+
   const { account: ethAddress } = await gateway.user.signUp(password);
   debug(`New wallet requested to leth: ${ethAddress}`);
-
-  await requestFunding(ethAddress, 0.5);
-  const profileAddress = await profileSCService.createProfile(web3, { from: ethAddress, password });
 
   const attrs = {
     username: username,
     password: bcrypt.hashSync(password, 10),
     eth_address: ethAddress,
-    dashboard_address: null,
-    profile_address: profileAddress,
+    profile_address: null,
     created_at: now,
     modified_at: now,
   };
 
   debug(`User added: ${JSON.stringify(attrs)}`);
-  return User.create(attrs);
+  User.create(attrs);
+
+  await requestFunding(ethAddress, 1);
+  const profileAddress = await profileSCService.createProfile(web3, { from: ethAddress, password });
+
+  return await this.updateUser(username, {
+    profile_address: profileAddress
+  });
 };
 
 
@@ -61,7 +69,8 @@ module.exports.updateUser = async (username, values) => {
     throw new UserServiceError(`User ${username} is not found`);
   }
 
-  return await user.update(values);
+  await user.update(values);
+  return user;
 };
 
 module.exports.searchUserByUsername = async (username) => {

@@ -6,7 +6,7 @@ const { Sequelize } = require('src/models');
 const { badInputResponse, unauthorizedResponse, jsonResponse } = require('src/lib/responses');
 const { extractRequestAttrs, validateRequestAttrs } = require('src/lib/request');
 const { jwtEncode } = require('src/services/session');
-const { verifyUser, createUser, updateUser, UserServiceError } = require('src/services/user');
+const { verifyUser, createUser, updateUser, searchUserByUsername, UserServiceError } = require('src/services/user');
 const { createUserDashboard } = require('src/services/dashboard');
 const gateway = require('src/services/gateway').gateway();
 
@@ -21,10 +21,12 @@ router.post('/sign-up', async (req, res, next) => {
 
   try {
     const attrs = extractRequestAttrs(req, query);
-    const user = await createUser({
-      username: attrs.username,
-      password: attrs.password
-    });
+    // const user = await createUser({
+    //   username: attrs.username,
+    //   password: attrs.password
+    // });
+    const user = await searchUserByUsername(attrs.username);
+
     await createUserDashboard(user);
     res.send(jsonResponse({ user }));
   } catch ( err ) {

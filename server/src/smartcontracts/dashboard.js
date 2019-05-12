@@ -19,32 +19,44 @@ module.exports.getMaxItemId = (web3, profileAddress) => {
   return Shelves.methods.lastItemId.call();
 };
 
-module.exports.createUserDashboard = async (web3, { username, profileAddress }) => {
-  const { dashboardUser: dashboardSC } = smartContract;
-  const DashboardArtifact = web3.eth.Contract(dashboardSC.abi, null);
+module.exports.createUser = async (web3, user) => {
+  const { dashboard: dashboardSC } = smartContract;
+  const DashboardInstance = web3.eth.Contract(dashboardSC.abi, dashboardSC.address);
 
-  const DashboardInstance = await web3SendTx(web3, () => {
-    return DashboardArtifact.deploy({
-      arguments: [username, profileAddress],
-      data: dashboardSC.bytecode
-    });
+  await web3SendTx(web3, () => {
+    return DashboardInstance.methods.createUser(user.eth_address, user.username, user.profile_address, '');
   },{
     gas: 1000000
   });
 
-  debug(`DashboardUser SmartContract created at: ${DashboardInstance.options.address}`);
+  debug(`Added user to dashboard SC: ${DashboardInstance.options.address}`);
 
   return DashboardInstance.options.address;
 };
 
-module.exports.stackItem = async (web3, {from, password, address: profileAddress}, { title, description, meta, acl }) => {
+module.exports.grantReadAccess = async (web3, user, itemId, beneficiaryAddress) => {
+  const { dashboard: dashboardSC } = smartContract;
+  await web3SendTx(web3, () => {
+    const Dashboard = web3.eth.Contract(dashboardSC.abi, dashboardSC.address);
+    return Dashboard.methods.grantReadAccess(user.eth_address, itemId, beneficiaryAddress);
+  }, {
+    gas: 60000
+  });
+
+  return {
+    access: 'READ',
+    beneficiary: beneficiaryAddress
+  };
+};
+
+module.exports.stackItem = async (web3, user, password, { title, description, meta, acl }) => {
   const { profile: profileSC } = smartContract;
 
   const txReceipt = await web3SendTx(web3, () => {
-    const Profile = web3.eth.Contract(profileSC.abi, profileAddress);
+    const Profile = web3.eth.Contract(profileSC.abi, user.profile_address);
     return Profile.methods.stackItem(title, description, meta, acl);
   }, {
-    from,
+    from: user.eth_address,
     password,
     gas: '1200000'
   });

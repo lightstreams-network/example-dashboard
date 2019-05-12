@@ -15,8 +15,8 @@ module.exports.address = () => {
 
 module.exports.getMaxItemId = (web3, profileAddress) => {
   const { profile: profileSC } = smartContract;
-  const Shelves = web3.eth.Contract(profileSC.abi, profileAddress);
-  return Shelves.methods.lastItemId.call();
+  const Profile = web3.eth.Contract(profileSC.abi, profileAddress);
+  return Profile.methods.lastItemId.call();
 };
 
 module.exports.createProfile = async (web3, { from, password }) => {
@@ -29,7 +29,7 @@ module.exports.createProfile = async (web3, { from, password }) => {
       arguments: []
     });
   }, {
-    gas: 900000, from, password
+    gas: 2000000, from, password
   });
 
   debug(`Profile SmartContract created at: ${ProfileInstance.options.address}`);
@@ -37,14 +37,14 @@ module.exports.createProfile = async (web3, { from, password }) => {
   return ProfileInstance.options.address;
 };
 
-module.exports.stackItem = async (web3, { from, password }, { title, description, meta, acl, profileAddress }) => {
+module.exports.stackItem = async (web3, user, password, { title, description, meta, acl, profileAddress }) => {
   const { profile: profileSC } = smartContract;
 
   const txReceipt = await web3SendTx(web3, () => {
     const Profile = web3.eth.Contract(profileSC.abi, profileAddress);
     return Profile.methods.stackItem(title, description, meta, acl);
   }, {
-    from,
+    from: user.eth_address,
     password,
     gas: '1200000'
   });
