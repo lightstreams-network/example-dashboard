@@ -26,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
 
 module.exports.TYPE = {
   REQUEST: 'request',
-  ACCEPT: 'accept',
-  DENY: 'deny',
+  GRANTED: 'granted',
+  DENIED: 'denied',
+  REVOKED: 'revoked',
 };

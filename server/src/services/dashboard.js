@@ -110,13 +110,33 @@ module.exports.requestItemAccess = async (user, meta) => {
     payload: {}
   });
 
-  // @TODO: Store on user_id RootIdIPFS
-  // @TODO: Store on meta owner RootIdIPFS
-
-  return await this.getUserEvents(user);
+  return event;
 };
 
-module.exports.getUserEvents = async(user) => {
+module.exports.updateUsersDataFromEvent = async(event) => {
+  // @TODO: Store on user_id RootIdIPFS
+  // @TODO: Store on meta owner RootIdIPFS
+};
+
+module.exports.denyRequestItemAccess = async (user, item_id, { requestId }) => {
+  const item = await this.retrieveRemoteItemInfo(user, item_id);
+  if (!item) {
+    throw new Error(`Item was not found '${item_id}'`);
+  }
+
+  event = await Event.create({
+    user_id: user.id,
+    uuid: item.meta,
+    type: EventType.DENIED,
+    payload: {
+      request_id: requestId
+    }
+  });
+
+  return event;
+};
+
+module.exports.getEvents = async (user) => {
   const items = await this.retrieveRemoteItemList(user);
   const userEvents = await Event.filterByUserId(user.id);
 
@@ -124,12 +144,31 @@ module.exports.getUserEvents = async(user) => {
   const metaEvents = await Event.filterByUuid(itemMetaIds);
 
   return {
-    user: userEvents,
-    items: metaEvents
+    myUser: userEvents,
+    myItems: metaEvents
   };
 };
 
-module.exports.grantReadAccess = async(user, item_id, beneficiaryUserId) => {
+module.exports.grantReadAccess = async (user, item_id, beneficiaryUser) => {
+  const web3 = await Web3();
+  const item = await this.retrieveRemoteItemInfo(user, item_id);
+  if (!item) {
+    throw new Error(`Cannot find item '${item_id}'`);
+  }
+
+  await dashboardSCService.grantReadAccess(web3, user, item_id, beneficiaryUser.eth_address);
+
+  event = await Event.create({
+    user_id: user.id,
+    uuid: item.meta,
+    type: EventType.GRANTED,
+    payload: {}
+  });
+
+  return event;
+};
+
+module.exports.revokeAccess = async (user, item_id, beneficiaryUserId) => {
   const beneficiaryUser = await User.findByPk(beneficiaryUserId);
   if (!beneficiaryUser) {
     throw new Error(`User '${beneficiaryUserId}' not found`)
@@ -137,9 +176,19 @@ module.exports.grantReadAccess = async(user, item_id, beneficiaryUserId) => {
   const web3 = await Web3();
   const item = await this.retrieveRemoteItemInfo(user, item_id);
   if (!item) {
-    throw new Error(`Cannot find item ${meta}`);
+    throw new Error(`Cannot find item '${item_id}'`);
   }
-  return await dashboardSCService.grantReadAccess(web3, user, item_id, beneficiaryUser.eth_address);
+
+  await dashboardSCService.revokeAccess(web3, user, item_id, beneficiaryUser.eth_address);
+
+  event = await Event.create({
+    user_id: user.id,
+    uuid: item.meta,
+    type: EventType.REVOKED,
+    payload: {}
+  });
+
+  return event;
 };
 
 module.exports.syncItems = async () => {

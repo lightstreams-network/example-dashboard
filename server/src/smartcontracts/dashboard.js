@@ -8,11 +8,6 @@ const { smartContract } = require('src/lib/config');
 const { web3SendTx } = require('src/services/web3');
 const debug = require('debug')('app:web3');
 
-module.exports.address = () => {
-  const { shelves: shelvesSC } = smartContract;
-  return shelvesSC.address;
-};
-
 module.exports.getMaxItemId = (web3, profileAddress) => {
   const { profile: profileSC } = smartContract;
   const Shelves = web3.eth.Contract(profileSC.abi, profileAddress);
@@ -42,11 +37,16 @@ module.exports.grantReadAccess = async (web3, user, itemId, beneficiaryAddress) 
   }, {
     gas: 60000
   });
+};
 
-  return {
-    access: 'READ',
-    beneficiary: beneficiaryAddress
-  };
+module.exports.revokeAccess = async (web3, user, itemId, beneficiaryAddress) => {
+  const { dashboard: dashboardSC } = smartContract;
+  await web3SendTx(web3, () => {
+    const Dashboard = web3.eth.Contract(dashboardSC.abi, dashboardSC.address);
+    return Dashboard.methods.revokeAccess(user.eth_address, itemId, beneficiaryAddress);
+  }, {
+    gas: 60000
+  });
 };
 
 module.exports.stackItem = async (web3, user, password, { title, description, meta, acl }) => {
