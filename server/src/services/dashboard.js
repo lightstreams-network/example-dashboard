@@ -168,11 +168,7 @@ module.exports.grantReadAccess = async (user, item_id, beneficiaryUser) => {
   return event;
 };
 
-module.exports.revokeAccess = async (user, item_id, beneficiaryUserId) => {
-  const beneficiaryUser = await User.findByPk(beneficiaryUserId);
-  if (!beneficiaryUser) {
-    throw new Error(`User '${beneficiaryUserId}' not found`)
-  }
+module.exports.revokeAccess = async (user, item_id, beneficiaryUser) => {
   const web3 = await Web3();
   const item = await this.retrieveRemoteItemInfo(user, item_id);
   if (!item) {

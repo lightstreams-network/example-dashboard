@@ -60,7 +60,7 @@ router.post('/deny-request', session.authenticate('jwt', { session: false }), as
 });
 
 router.post('/revoke-access', session.authenticate('jwt', { session: false }), async (req, res, next) => {
-  const query = ['user_id', 'item_id'];
+  const query = ['beneficiary_id', 'item_id'];
   try {
     validateRequestAttrs(req, query);
   } catch ( err ) {
@@ -70,7 +70,11 @@ router.post('/revoke-access', session.authenticate('jwt', { session: false }), a
 
   try {
     const attrs = extractRequestAttrs(req, query);
-    const event = await DashboardService.revokeAccess(req.user, attrs.item_id, attrs.user_id);
+    const beneficiaryUser = await User.findByPk(attrs.beneficiary_id);
+    if (!beneficiaryUser) {
+      throw new Error(`User '${beneficiaryUserId}' not found`)
+    }
+    const event = await DashboardService.revokeAccess(req.user, attrs.item_id, beneficiaryUser);
     await DashboardService.updateUsersDataFromEvent(event);
     res.json(jsonResponse({
       revoked: 'ALL',
