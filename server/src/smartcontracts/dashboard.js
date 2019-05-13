@@ -14,12 +14,12 @@ module.exports.getMaxItemId = (web3, profileAddress) => {
   return Shelves.methods.lastItemId.call();
 };
 
-module.exports.createUser = async (web3, user) => {
+module.exports.createUser = async (web3, {username, ethAddress, profileAddress}) => {
   const { dashboard: dashboardSC } = smartContract;
   const DashboardInstance = web3.eth.Contract(dashboardSC.abi, dashboardSC.address);
 
   await web3SendTx(web3, () => {
-    return DashboardInstance.methods.createUser(user.eth_address, user.username, user.profile_address, '');
+    return DashboardInstance.methods.createUser(ethAddress, username, profileAddress, '');
   },{
     gas: 1000000
   });
@@ -27,6 +27,27 @@ module.exports.createUser = async (web3, user) => {
   debug(`Added user to dashboard SC: ${DashboardInstance.options.address}`);
 
   return DashboardInstance.options.address;
+};
+
+module.exports.retrieveUserInfo = async(web3, ethAddress) => {
+  const { dashboard: dashboardSC } = smartContract;
+  const DashboardInstance = web3.eth.Contract(dashboardSC.abi, dashboardSC.address);
+  const username = await DashboardInstance.methods.findUsername(ethAddress).call();
+  const profileAddress = await DashboardInstance.methods.findProfile(ethAddress).call();
+  const rootIPFS = await DashboardInstance.methods.findRootIPFS(ethAddress).call();
+
+  return {
+    username,
+    ethAddress,
+    profileAddress,
+    rootIPFS
+  }
+};
+
+module.exports.findUserByUsername = async (web3, username) => {
+  const { dashboard: dashboardSC } = smartContract;
+  const DashboardInstance = web3.eth.Contract(dashboardSC.abi, dashboardSC.address);
+  return await DashboardInstance.methods.findUser(username).call();
 };
 
 module.exports.grantReadAccess = async (web3, user, itemId, beneficiaryAddress) => {

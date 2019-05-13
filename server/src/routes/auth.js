@@ -3,11 +3,12 @@ const router = express.Router();
 const _ = require('lodash');
 const debug = require('debug')('app:server');
 const { Sequelize } = require('src/models');
+
 const { badInputResponse, unauthorizedResponse, jsonResponse } = require('src/lib/responses');
 const { extractRequestAttrs, validateRequestAttrs } = require('src/lib/request');
 const { jwtEncode } = require('src/services/session');
-const { verifyUser, createUser, updateUser, searchUserByUsername, UserServiceError } = require('src/services/user');
-const { createUserDashboard } = require('src/services/dashboard');
+const ProfileService = require('src/services/profile');
+const DashboardService = require('src/services/dashboard');
 const gateway = require('src/services/gateway').gateway();
 
 router.post('/sign-up', async (req, res, next) => {
@@ -21,21 +22,20 @@ router.post('/sign-up', async (req, res, next) => {
 
   try {
     const attrs = extractRequestAttrs(req, query);
-    // const user = await createUser({
-    //   username: attrs.username,
-    //   password: attrs.password
-    // });
-    const user = await searchUserByUsername(attrs.username);
-
-    await createUserDashboard(user);
-    res.send(jsonResponse({ user }));
-  } catch ( err ) {
-    if (err instanceof Sequelize.ValidationError) {
-      const sequelizeValidationError = new Error(err.errors[0].message);
-      sequelizeValidationError.status = 400;
-      return next(sequelizeValidationError);
+    const existingUser = await DashboardService.retrieveUserByUsername(attrs.username);
+    if (existingUser) {
+      throw new Error(`User ${attrs.username} already exists`);
     }
-
+    const { account: ethAddress } = await gateway.user.signUp(attrs.password);
+    const profileAddress = await ProfileService.createUser(ethAddress, attrs.password);
+    await DashboardService.createUserDashboard({
+      username: attrs.username,
+      ethAddress,
+      profileAddress
+    });
+    const user = await DashboardService.retrieveUserByUsername(attrs.username);
+    res.send(jsonResponse(user));
+  } catch ( err ) {
     debug(err);
     next(err);
   }
@@ -52,25 +52,13 @@ router.post('/sign-in', async (req, res, next) => {
 
   try {
     const attrs = extractRequestAttrs(req, query);
-    const user = await verifyUser(attrs.username, attrs.password);
-    const { token } = await gateway.user.signIn(user.eth_address, attrs.password);
-    // @TODO: replace by session
-    const nextUser = await updateUser(attrs.username, {
-      leth_token: token
-    });
-    const authToken = jwtEncode({ id: user.id });
-    res.json(jsonResponse({ token: authToken, user: nextUser }));
+    const user = await DashboardService.retrieveUserByUsername(attrs.username);
+    if (!user) {
+      throw new Error(`User ${attrs.username} was not found`);
+    }
+    const { token } = await gateway.user.signIn(user.ethAddress, attrs.password);
+    res.json(jsonResponse({ token, user: user }));
   } catch ( err ) {
-    if (err instanceof UserServiceError) {
-      next(unauthorizedResponse(err.message));
-      return;
-    }
-    if (err instanceof Sequelize.ValidationError) {
-      const sequelizeValidationError = new Error(err.errors[0].message);
-      sequelizeValidationError.status = 400;
-      return next(sequelizeValidationError);
-    }
-
     debug(err);
     next(err);
   }

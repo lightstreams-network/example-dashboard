@@ -36,11 +36,15 @@ contract('Dashboard', (accounts) => {
     const username2 = await dashboardInstance.findUsername(USER_ACCOUNT, {
       from: ROOT_ACCOUNT
     });
+    const userAddress = await dashboardInstance.findUser(newUser.username, {
+      from: ROOT_ACCOUNT
+    });
 
     const owner = await profileInstance.owner();
     assert.equal(owner.toLowerCase(), USER_ACCOUNT.toLowerCase(), 'Invalid expected owner account');
     assert.equal(newUser.username, username);
     assert.equal(newUser.username, username2);
+    assert.equal(USER_ACCOUNT, userAddress);
   });
 
   it('should deploy an permissioned file contract and grant with admin rights to profile SC', async () => {

@@ -4,7 +4,7 @@
  * Copyright 2019 (c) Lightstreams, Granada
  */
 
-const { item: Item, event: Event, user: User } = require('src/models');
+const { item: Item, event: Event } = require('src/models');
 const { TYPE: EventType } = require('src/models/event');
 
 const Web3 = require('src/services/web3');
@@ -17,13 +17,19 @@ const dashboardSCService = require('src/smartcontracts/dashboard');
 const streams = require('memory-streams');
 const debug = require('debug')('app:dashboard');
 
-module.exports.createUserDashboard = async (user) => {
+module.exports.createUserDashboard = async ({ username, ethAddress, profileAddress }) => {
   const web3 = await Web3();
-  const dashboardAddress = await dashboardSCService.createUser(web3, user);
+  return await dashboardSCService.createUser(web3, { username, ethAddress, profileAddress });
+};
 
-  await user.update({
-    dashboard_address: dashboardAddress
-  })
+module.exports.retrieveUserByUsername = async (username) => {
+  const web3 = await Web3();
+  const userEthAddress = await dashboardSCService.findUserByUsername(web3, username); // @TODO Migrate to SC data
+  if (userEthAddress === '0x0000000000000000000000000000000000000000') {
+    return null;
+  }
+
+  return await dashboardSCService.retrieveUserInfo(web3, userEthAddress);
 };
 
 module.exports.uploadNewItem = (user, password, { title, description, file }) => {
@@ -143,6 +149,7 @@ module.exports.getEvents = async (user) => {
   const itemMetaIds = items.map((item) => item.meta).filter((meta) => meta !== "");
   const metaEvents = await Event.filterByUuid(itemMetaIds);
 
+  // @TODO Implement event aggregation by itemId(uuid)
   return {
     myUser: userEvents,
     myItems: metaEvents

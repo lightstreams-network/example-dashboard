@@ -8,6 +8,7 @@ contract Dashboard is Ownable {
     event UpdateRootData(address _holder, string  _nextid);
     event NewUserAdded(address _holder, string  _username);
 
+    mapping(bytes32 => address) public _users;
     mapping(address => string) _usernames;
     mapping(address => Profile) _profiles;
     mapping(address => string) _rootIPFSs;
@@ -16,7 +17,13 @@ contract Dashboard is Ownable {
         _usernames[_holder] = _username;
         _profiles[_holder] = Profile(_profile);
         _rootIPFSs[_holder] = _rootIpfs;
+
+        _users[_stringToBytes32(_username)] = _profiles[_holder].owner();
         emit NewUserAdded(_holder, _username);
+    }
+
+    function findUser(string memory _username) public view returns (address) {
+        return _users[_stringToBytes32(_username)];
     }
 
     function username() public view returns (string memory) {
@@ -53,5 +60,16 @@ contract Dashboard is Ownable {
 
     function revokeAccess(address _holder, int32 itemId, address _beneficiary) onlyOwner public {
         PermissionedFile(_profiles[_holder].itemAcl(itemId)).revokeAccess(_beneficiary);
+    }
+
+    function _stringToBytes32(string memory source) internal view returns (bytes32 result) {
+        bytes memory tempEmptyStringTest = bytes(source);
+        if (tempEmptyStringTest.length == 0) {
+            return 0x0;
+        }
+
+        assembly {
+            result := mload(add(source, 32))
+        }
     }
 }

@@ -24,7 +24,7 @@ contract Profile is Ownable {
         emit StackItem(lastItemId);
     }
 
-    function itemAcl(int32 _itemId) public returns (address) {
+    function itemAcl(int32 _itemId) view public returns (address) {
         return items[_itemId].acl;
     }
 
