@@ -7,6 +7,7 @@
     "start": "NODE_PATH=. ./bin/www",
     "dev": "NODE_PATH=. nodemon --watch src --debug --inspect=0.0.0.0:9230 ./bin/www",
     "deploy-sirius": "truffle deploy --reset --network=sirius",
+    "deploy-standalone": "truffle deploy --reset --network=standalone",
     "test": "truffle test --reset --network=ganache",
     "compile": "rm -rf ./build/contracts/*; truffle compile --all --reset",
     "postinstall": "rm -f node_modules/src; ln -nsf ../src node_modules/src"
@@ -41,6 +42,7 @@
     "passport-jwt": "^4.0.0",
     "sequelize": "^5.8.6",
     "sqlite3": "^4.0.6",
+    "tempfile": "^3.0.0",
     "uuid": "^3.3.2",
     "web3": "^1.0.0-beta.50"
   },

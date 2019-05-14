@@ -44,7 +44,7 @@ module.exports.stackItem = async (web3, user, password, { title, description, me
     const Profile = web3.eth.Contract(profileSC.abi, profileAddress);
     return Profile.methods.stackItem(title, description, meta, acl);
   }, {
-    from: user.eth_address,
+    from: user.ethAddress,
     password,
     gas: '1200000'
   });

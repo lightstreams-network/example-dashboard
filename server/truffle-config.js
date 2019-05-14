@@ -35,6 +35,16 @@ module.exports = {
             // Any network (default: none)
             gasPrice: "500000000000",
             from: "0xd119b8b038d3a67d34ca1d46e1898881626a082b"
+        },
+        standalone: {
+            host: "127.0.0.1",
+            // Localhost (default: none)
+            port: 8645,
+            // Standard Ethereum port (default: none)
+            network_id: "161",
+            // Any network (default: none)
+            gasPrice: "500000000000",
+            from: "0xc916cfe5c83dd4fc3c3b0bf2ec2d4e401782875e"
         }
     },
     // plugins: [

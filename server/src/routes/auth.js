@@ -4,9 +4,9 @@ const _ = require('lodash');
 const debug = require('debug')('app:server');
 const { Sequelize } = require('src/models');
 
-const { badInputResponse, unauthorizedResponse, jsonResponse } = require('src/lib/responses');
+const Session = require('src/services/session');
+const { badInputResponse, jsonResponse } = require('src/lib/responses');
 const { extractRequestAttrs, validateRequestAttrs } = require('src/lib/request');
-const { jwtEncode } = require('src/services/session');
 const ProfileService = require('src/services/profile');
 const DashboardService = require('src/services/dashboard');
 const gateway = require('src/services/gateway').gateway();
@@ -57,7 +57,14 @@ router.post('/sign-in', async (req, res, next) => {
       throw new Error(`User ${attrs.username} was not found`);
     }
     const { token } = await gateway.user.signIn(user.ethAddress, attrs.password);
-    res.json(jsonResponse({ token, user: user }));
+    // user.password = attrs.password; // @TODO Encrypt password based on session token
+    // user.token = token;
+    const authToken = Session.jwtEncode({
+      username: attrs.username,
+      password: attrs.password,
+      token: token
+    });
+    res.json(jsonResponse({ token: authToken, user }))
   } catch ( err ) {
     debug(err);
     next(err);

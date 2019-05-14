@@ -12,13 +12,14 @@ const { extractRequestAttrs, validateRequestAttrs } = require('src/lib/request')
 const { badInputResponse, jsonResponse } = require('src/lib/responses');
 
 const DashboardService = require('src/services/dashboard');
+const ProfileService = require('src/services/profile');
 
 const session = require('src/services/session').passport();
 const gateway = require('src/services/gateway').gateway();
 
 
 router.post('/add', session.authenticate('jwt', { session: false }), async (req, res, next) => {
-  const query = ['file', 'title', 'description', 'password'];
+  const query = ['file', 'title', 'description'];
   try {
     validateRequestAttrs(req, query);
   } catch ( err ) {
@@ -28,12 +29,12 @@ router.post('/add', session.authenticate('jwt', { session: false }), async (req,
 
   try {
     const attrs = extractRequestAttrs(req, query);
-    const itemId = await DashboardService.uploadNewItem(req.user, attrs.password, {
+    const itemId = await ProfileService.uploadNewItem(req.user, req.user.password, {
       title: attrs.title,
       description: attrs.description,
       file: attrs.file
     });
-    const item = await DashboardService.retrieveRemoteItemInfo(req.user, itemId);
+    const item = await ProfileService.retrieveRemoteItem(req.user, itemId);
     res.json(jsonResponse(item));
     res.send();
   } catch ( err ) {
@@ -45,7 +46,7 @@ router.post('/add', session.authenticate('jwt', { session: false }), async (req,
 router.get('/list', session.authenticate('jwt', { session: false }), async (req, res, next) => {
 
   try {
-    const item = await DashboardService.retrieveRemoteItemList(req.user);
+    const item = await ProfileService.retrieveRemoteItemList(req.user);
     res.json(jsonResponse(item));
     res.send();
   } catch ( err ) {

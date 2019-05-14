@@ -4,17 +4,19 @@
  * Copyright 2019 (c) Lightstreams, Granada
  */
 
-const { item: Item, event: Event } = require('src/models');
+// const { item: Item, event: Event } = require('src/models');
 const { TYPE: EventType } = require('src/models/event');
 
 const Web3 = require('src/services/web3');
 const gateway = require('src/services/gateway').gateway();
-const { dashboard: dashboardSC } = require('src/lib/config').smartContract;
-
-const { requestFunding } = require('src/services/faucet');
-const profileSCService = require('src/smartcontracts/profile');
-const dashboardSCService = require('src/smartcontracts/dashboard');
+const { web3Cfg } = require('src/lib/config');
 const streams = require('memory-streams');
+const fs = require('fs');
+const tempfile = require('tempfile');
+
+// const { requestFunding } = require('src/services/faucet');
+// const profileSCService = require('src/smartcontracts/profile');
+const dashboardSCService = require('src/smartcontracts/dashboard');
 const debug = require('debug')('app:dashboard');
 
 module.exports.createUserDashboard = async ({ username, ethAddress, profileAddress }) => {
@@ -32,133 +34,108 @@ module.exports.retrieveUserByUsername = async (username) => {
   return await dashboardSCService.retrieveUserInfo(web3, userEthAddress);
 };
 
-module.exports.uploadNewItem = (user, password, { title, description, file }) => {
-  return new Promise(async (resolve, reject) => {
+// module.exports.requestItemAccess = async (user, meta) => {
+//   event = await Event.create({
+//     user_id: user.id,
+//     uuid: meta,
+//     type: EventType.REQUEST,
+//     payload: {}
+//   });
+//
+//   return event;
+// };
 
-    await requestFunding(user.eth_address, 1);
-    const reqStream = await gateway.storage.addProxy(user.eth_address, password, file);
-    const resStream = new streams.WritableStream();
-
-    resStream.on('finish', async () => {
-      const gwRes = JSON.parse(resStream.toString());
-      debug(`Leth gateway response: ${JSON.stringify(gwRes)}`);
-      if (gwRes.error) {
-        reject(gwRes);
-      }
-
-      try {
-        const itemId = await profileSCService.stackItem(await Web3(), user, password,
-          { title, description, meta: gwRes.meta, acl: gwRes.acl, profileAddress: user.profile_address });
-
-        Item.create({
-          item_id: itemId,
-          user_id: user.id,
-          title: title,
-          description: description,
-          meta: gwRes.meta,
-          acl: gwRes.acl,
-        });
-
-        // Granting admin access to Profile SC of the new file
-        await gateway.acl.grant(gwRes.acl, user.eth_address, password, user.profile_address, 'admin');
-        // Granting admin access to Dashboard SC of the new file
-        await gateway.acl.grant(gwRes.acl, user.eth_address, password, dashboardSC.address, 'admin');
-
-        debug(`File was added correctly. ID: ${itemId}`);
-        resolve(itemId);
-      } catch ( err ) {
-        debug(`ERROR: ${err}`);
-        reject(err);
-      }
-    });
-
-    reqStream.on('uploadProgress', progress => {
-      debug(`Uploaded ${progress.transferred} Bytes`);
-      if (progress.percent === 1) {
-        debug("Upload completed");
-      }
-    }).on('error', err => {
-      debug(`ERROR: ${err}`);
-      reject(err);
-    }).pipe(resStream);
-  });
-};
-
-module.exports.retrieveRemoteItemInfo = async (user, itemId) => {
-  const web3 = await Web3();
-  const item = await profileSCService.retrieveItemById(web3, user.profile_address, itemId);
-  // const permissions = await profileSCService.retrieveItemPermissionsById(web3, item);
-
-  return { ...item, id: itemId };
-};
-
-module.exports.retrieveRemoteItemList = async (user) => {
-  const web3 = await Web3();
-  const remoteMaxItemId = await profileSCService.getMaxItemId(web3, user.profile_address);
-
-  const items = [];
-  for ( let i = 0; i <= remoteMaxItemId; i++ ) {
-    const item = await this.retrieveRemoteItemInfo(user, i);
-    const itemEvents = await Event.filterByUuid(item.meta);
-    items.push({
-      ...item, events: itemEvents
-    });
-  }
-
-  return items;
-};
-
-module.exports.requestItemAccess = async (user, meta) => {
-  event = await Event.create({
-    user_id: user.id,
-    uuid: meta,
-    type: EventType.REQUEST,
-    payload: {}
-  });
-
-  return event;
-};
-
-module.exports.updateUsersDataFromEvent = async(event) => {
-  // @TODO: Store on user_id RootIdIPFS
-  // @TODO: Store on meta owner RootIdIPFS
-};
-
-module.exports.denyRequestItemAccess = async (user, item_id, { requestId }) => {
-  const item = await this.retrieveRemoteItemInfo(user, item_id);
-  if (!item) {
-    throw new Error(`Item was not found '${item_id}'`);
-  }
-
-  event = await Event.create({
-    user_id: user.id,
-    uuid: item.meta,
-    type: EventType.DENIED,
-    payload: {
-      request_id: requestId
+module.exports.setProfilePictureData = async (user, item) => {
+  await this.updateUserRootData(user, {
+    profilePicture: {
+      itemId: item.id,
+      meta: item.meta
     }
-  });
-
-  return event;
+  }); // @TODO Decide how to optimize data stored, one out of both is enough
 };
 
-module.exports.getEvents = async (user) => {
-  const items = await this.retrieveRemoteItemList(user);
-  const userEvents = await Event.filterByUserId(user.id);
+module.exports.getProfilePictureData = async (user) => {
+  const rootData = await this.getUserRootData(user);
+  return rootData.profilePicture || {};
+};
 
-  const itemMetaIds = items.map((item) => item.meta).filter((meta) => meta !== "");
-  const metaEvents = await Event.filterByUuid(itemMetaIds);
+module.exports.getUserRootData = async(user) => {
+  if(!user.rootIPFS || user.rootIPFS === '') {
+    return {}
+  }
 
-  // @TODO Implement event aggregation by itemId(uuid)
-  return {
-    myUser: userEvents,
-    myItems: metaEvents
+  const { token } = await gateway.user.signIn(web3Cfg.from, web3Cfg.password); // @TODO Cache it somewhere
+  const gwResRaw = await gateway.storage.fetch(user.rootIPFS, token);
+  return gwResRaw.body;
+};
+
+module.exports.updateUserRootData = async (user, values) => {
+  const curRootData = this.getUserRootData(user);
+  const nextRootData = {
+    ...curRootData,
+    ...values
   };
+
+  // @TODO Improve to use stream-memory
+  const tmpFile = tempfile('.json');
+  fs.writeFileSync(tmpFile, JSON.stringify(nextRootData));
+  const nextRootDataStream = fs.createReadStream(tmpFile);
+
+  let gwRes;
+  try {
+    const gwResRaw = await gateway.storage.add(web3Cfg.from, web3Cfg.password, nextRootDataStream, { throwHttpErrors: true });
+    gwRes = JSON.parse(gwResRaw.body);
+  } catch(err) {
+    if (err.host) {
+      const gwErr = JSON.parse(err.body);
+      throw new Error(gwErr.error.message);
+    }
+    throw err;
+  }
+  await dashboardSCService.setNextRootDataId(await Web3(), user, gwRes.meta);
+  return nextRootData;
 };
+
+// module.exports.updateUsersDataFromEvent = async(event) => {
+//   // @TODO: Store on user_id RootIdIPFS
+//   // @TODO: Store on meta owner RootIdIPFS
+// };
+
+// module.exports.denyRequestItemAccess = async (user, item_id, { requestId }) => {
+//   const item = await this.retrieveRemoteItemInfo(user, item_id);
+//   if (!item) {
+//     throw new Error(`Item was not found '${item_id}'`);
+//   }
+//
+//   event = await Event.create({
+//     user_id: user.id,
+//     uuid: item.meta,
+//     type: EventType.DENIED,
+//     payload: {
+//       request_id: requestId
+//     }
+//   });
+//
+//   return event;
+// };
+
+// module.exports.getEvents = async (user) => {
+//   const items = await this.retrieveRemoteItemList(user);
+//   const userEvents = await Event.filterByUserId(user.id);
+//
+//   const itemMetaIds = items.map((item) => item.meta).filter((meta) => meta !== "");
+//   const metaEvents = await Event.filterByUuid(itemMetaIds);
+//
+//   // @TODO Implement event aggregation by itemId(uuid)
+//   return {
+//     myUser: userEvents,
+//     myItems: metaEvents
+//   };
+// };
 
 module.exports.grantReadAccess = async (user, item_id, beneficiaryUser) => {
   const web3 = await Web3();
-  const item = await this.retrieveRemoteItemInfo(user, item_id);
+  const item = await this.retrieveRemoteItem(user, item_id);
   if (!item) {
     throw new Error(`Cannot find item '${item_id}'`);
   }
@@ -177,7 +154,7 @@ module.exports.grantReadAccess = async (user, item_id, beneficiaryUser) => {
 
 module.exports.revokeAccess = async (user, item_id, beneficiaryUser) => {
   const web3 = await Web3();
-  const item = await this.retrieveRemoteItemInfo(user, item_id);
+  const item = await this.retrieveRemoteItem(user, item_id);
   if (!item) {
     throw new Error(`Cannot find item '${item_id}'`);
   }
@@ -194,13 +171,13 @@ module.exports.revokeAccess = async (user, item_id, beneficiaryUser) => {
   return event;
 };
 
-module.exports.syncItems = async () => {
-  const web3 = await Web3();
-  const localMaxItemId = (await ShelveItem.getMaxItemId() || 0) + 1;
-  const remoteMaxItemId = await profileSCService.getMaxItemId(web3);
-
-  // @TODO Optimize running in parallel
-  for ( let i = localMaxItemId; i <= remoteMaxItemId; i++ ) {
-    await this.updateRemoteItem(i);
-  }
-};
+// module.exports.syncItems = async () => {
+//   const web3 = await Web3();
+//   const localMaxItemId = (await ShelveItem.getMaxItemId() || 0) + 1;
+//   const remoteMaxItemId = await profileSCService.getMaxItemId(web3);
+//
+//   // @TODO Optimize running in parallel
+//   for ( let i = localMaxItemId; i <= remoteMaxItemId; i++ ) {
+//     await this.updateRemoteItem(i);
+//   }
+// };

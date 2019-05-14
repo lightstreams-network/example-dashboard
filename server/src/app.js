@@ -7,8 +7,8 @@ const formData = require("express-form-data");
 const os = require("os");
 const cors = require('cors');
 
+const Session = require('src/services/session');
 const { notFoundHandler, errorHandler } = require('src/middleware/errors');
-const { syncItems } = require('src/services/dashboard');
 
 const app = express();
 require('http').Server(app);
@@ -38,9 +38,9 @@ app.use(cors({
 //   app.use(sessionHandler);
 // }
 
-const passportSession = require('src/services/session').passport();
+const passportSession = Session.passport();
 app.use(passportSession.initialize());
-app.use(passportSession.session()); //persistent login session
+// app.use(Session.session()); //persistent login session
 
 // parse data with connect-multiparty.
 app.use(formData.parse({

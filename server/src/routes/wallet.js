@@ -14,7 +14,7 @@ const faucetSC = require('src/smartcontracts/faucet');
 
 router.get('/balance', session.authenticate('jwt', { session: false }), async (req, res, next) => {
   try {
-    const { balance } = await gateway.wallet.balance(req.user.eth_address);
+    const { balance } = await gateway.wallet.balance(req.user.ethAddress);
     res.json(jsonResponse({
       pht: weiToPht(balance),
       wei: balance
@@ -35,8 +35,8 @@ router.get('/transfer', session.authenticate('jwt', { session: false }), async (
   }
   try {
     const attrs = extractRequestAttrs(req, query);
-    await gateway.wallet.transfer(req.user.eth_address, attrs.password, attrs.to, phtToWei(attrs.amount));
-    const { balance } = await gateway.wallet.balance(req.user.eth_address);
+    await gateway.wallet.transfer(req.user.ethAddress, attrs.password, attrs.to, phtToWei(attrs.amount));
+    const { balance } = await gateway.wallet.balance(req.user.ethAddress);
     res.json(jsonResponse({
       pht: weiToPht(balance),
       wei: balance
@@ -59,10 +59,10 @@ router.post('/request-top-up', session.authenticate('jwt', { session: false }), 
   try {
     const attrs = extractRequestAttrs(req, query);
     await faucetSC.requestFreeToken(await Web3(), {
-      beneficiary: req.user.eth_address,
+      beneficiary: req.user.ethAddress,
       amountInPht: attrs.amount
     });
-    const { balance } = await gateway.wallet.balance(req.user.eth_address);
+    const { balance } = await gateway.wallet.balance(req.user.ethAddress);
     res.json(jsonResponse({
       pht: weiToPht(balance),
       wei: balance
