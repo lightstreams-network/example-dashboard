@@ -60,4 +60,53 @@ router.get('/profile/get-picture', session.authenticate('jwt', { session: false 
   }
 });
 
+router.get('/profile/get-all', session.authenticate('jwt', { session: false }), async (req, res, next) => {
+  const query = ['username'];
+
+  try {
+    const attrs = extractRequestAttrs(req, query);
+    let user;
+    if (attrs.username) {
+      user = await DashboardService.retrieveUserByUsername(attrs.username);
+    } else {
+      user = req.user;
+    }
+
+    const rootData = await DashboardService.retrieveUserRootData(user);
+    res.json(jsonResponse(rootData));
+    res.send();
+  } catch ( err ) {
+    debug(err);
+    next(err);
+  }
+});
+
+router.get('/profile/request-access', session.authenticate('jwt', { session: false }), async (req, res, next) => {
+  const query = ['username'];
+  try {
+    validateRequestAttrs(req, query);
+  } catch ( err ) {
+    next(badInputResponse(err.message));
+    return;
+  }
+
+  try {
+    const attrs = extractRequestAttrs(req, query);
+    let user = await DashboardService.retrieveUserByUsername(attrs.username);
+    if (!user.username) {
+      throw new Error(`User ${attrs.username} was not found`);
+    }
+    const profilePictureData = await DashboardService.getProfilePictureData(user);
+    if (!profilePictureData.itemId) {
+      throw new Error(`User ${attrs.username} does not have profile`);
+    }
+    const itemRequest = await DashboardService.createNewItemPermissionRequest(req.user, {fromUsername: attrs.username}, profilePictureData.itemId, 'pending');
+    res.json(jsonResponse(itemRequest));
+    res.send();
+  } catch ( err ) {
+    debug(err);
+    next(err);
+  }
+});
+
 module.exports = router;

@@ -47,7 +47,12 @@ router.get('/list', session.authenticate('jwt', { session: false }), async (req,
 
   try {
     const item = await ProfileService.retrieveRemoteItemList(req.user);
-    res.json(jsonResponse(item));
+    const itemRequests = await DashboardService.getItemRequestsData(req.user);
+    const responseData = item.map((item) => {
+      item.requests = itemRequests[item.id];
+      return item;
+    });
+    res.json(jsonResponse(responseData));
     res.send();
   } catch ( err ) {
     debug(err);

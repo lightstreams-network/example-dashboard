@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const _ = require('lodash');
 const debug = require('debug')('app:server');
-const { Sequelize } = require('src/models');
 
 const Session = require('src/services/session');
 const { badInputResponse, jsonResponse } = require('src/lib/responses');
