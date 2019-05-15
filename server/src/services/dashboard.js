@@ -57,8 +57,7 @@ module.exports.retrieveUserRootData = async (user) => {
   }
 
   const { token } = await gateway.user.signIn(web3Cfg.from, web3Cfg.password); // @TODO Cache it somewhere
-  const gwResRaw = await gateway.storage.fetch(user.rootIPFS, token);
-  return gwResRaw.body;
+  return await gateway.storage.fetch(user.rootIPFS, token);
 };
 
 module.exports.updateUserRootData = async (user, values) => {

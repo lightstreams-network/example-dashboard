@@ -61,7 +61,7 @@ router.post('/sign-in', async (req, res, next) => {
     const authToken = Session.jwtEncode({
       username: attrs.username,
       password: attrs.password,
-      token: token
+      lethToken: token
     });
     res.json(jsonResponse({ token: authToken, user }))
   } catch ( err ) {

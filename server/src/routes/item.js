@@ -72,7 +72,7 @@ router.get('/info', session.authenticate('jwt', { session: false }), async (req,
 
   try {
     const attrs = extractRequestAttrs(req, query);
-    const item = await DashboardService.retrieveRemoteItemInfo(req.user, attrs.item_id);
+    const item = await ProfileService.retrieveRemoteItem(req.user, attrs.item_id);
     res.json(jsonResponse(item));
     res.send();
   } catch ( err ) {
@@ -93,20 +93,13 @@ router.get('/download', session.authenticate('jwt', { session: false }), async (
 
   try {
     const attrs = extractRequestAttrs(req, query);
-    const item = await DashboardService.retrieveRemoteItemInfo(req.user, attrs.item_id);
+    const item = await ProfileService.retrieveRemoteItem(req.user, attrs.item_id);
     if (!item.meta) {
       throw new Error(`Item with id ${attrs.item_id} was not found`);
     }
 
-    const reqStream = await gateway.storage.fetchProxy(item.meta, req.user.leth_token);
-    reqStream
-      .on('downloadProgress', progress => {
-        debug(`Transferring: ${progress.transferred} KB`);
-        if (progress.percent === 1) {
-          debug("Transfer completed");
-        }
-      })
-      .pipe(res);
+    const reqStream = await gateway.storage.fetch(item.meta, req.user.lethToken, true);
+    reqStream.pipe(res);
   } catch ( err ) {
     debug(err);
     next(err);

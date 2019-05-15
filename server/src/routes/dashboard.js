@@ -15,8 +15,6 @@ const ProfileService = require('src/services/profile');
 const DashboardService = require('src/services/dashboard');
 
 const session = require('src/services/session').passport();
-const gateway = require('src/services/gateway').gateway();
-
 
 router.post('/profile/set-picture', session.authenticate('jwt', { session: false }), async (req, res, next) => {
   const query = ['item_id'];
