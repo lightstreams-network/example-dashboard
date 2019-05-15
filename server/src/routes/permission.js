@@ -102,15 +102,15 @@ router.post('/grant-access', session.authenticate('jwt', { session: false }), as
   }
 });
 
-router.get('/list', session.authenticate('jwt', { session: false }), async (req, res, next) => {
-  try {
-    const events = await DashboardService.getEvents(req.user);
-    res.json(jsonResponse(events));
-    res.send();
-  } catch ( err ) {
-    debug(err);
-    next(err);
-  }
-});
+// router.get('/list', session.authenticate('jwt', { session: false }), async (req, res, next) => {
+//   try {
+//     const events = await DashboardService.getEvents(req.user);
+//     res.json(jsonResponse(events));
+//     res.send();
+//   } catch ( err ) {
+//     debug(err);
+//     next(err);
+//   }
+// });
 
 module.exports = router;

@@ -34,7 +34,7 @@ module.exports.uploadNewItem = (user, password, { title, description, file }) =>
     await gateway.acl.grant(gwRes.acl, user.ethAddress, password, dashboardSC.address, 'admin');
 
     const item = {
-      item_id: itemId,
+      id: itemId,
       owner: user.ethAddress,
       title: title,
       description: description,
@@ -43,7 +43,7 @@ module.exports.uploadNewItem = (user, password, { title, description, file }) =>
     };
 
     debug(`File was uploaded correctly. ${JSON.stringify(item)}`);
-    resolve(item);
+    resolve(itemId);
   });
 };
 
