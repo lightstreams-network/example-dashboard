@@ -8,7 +8,7 @@ import { AsyncStorage } from 'react-native';
 
 import sessionReducer from './reducers/session';
 import walletReducer from './reducers/wallet';
-import artistReducer from './reducers/artist';
+import profileReducer from './reducers/profile';
 
 const middleware = [thunk];
 if (process.env.NODE_ENV !== 'production') {
@@ -24,7 +24,7 @@ export default function configureStore() {
     let reducer = persistCombineReducers(config, {
         session: sessionReducer,
         wallet: walletReducer,
-        artist: artistReducer,
+        profile: profileReducer,
     });
 
     const enhancer = composeWithDevTools({

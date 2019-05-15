@@ -65,7 +65,13 @@ export default {
     title: {
         fontSize: 14,
         flex: 1,
-        fontWeight: '400',
+        fontWeight: '800',
+        color: palette.DarkGray,
+    },
+    description: {
+        fontSize: 13,
+        flex: 1,
+        fontWeight: '300',
         color: palette.DarkGray,
     },
     price: {

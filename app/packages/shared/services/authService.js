@@ -1,7 +1,7 @@
 export default class AuthService {
 
     static authenticate(username, password) {
-        return fetch(`${GLOBALS.FANBASE_DOMAIN}/auth/authenticate`, {
+        return fetch(`${GLOBALS.SERVER_DOMAIN}/auth/sign-in`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -15,7 +15,7 @@ export default class AuthService {
     }
 
     static createUser(username, password) {
-        return fetch(`${GLOBALS.FANBASE_DOMAIN}/auth/create-user`, {
+        return fetch(`${GLOBALS.SERVER_DOMAIN}/auth/sign-up`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',

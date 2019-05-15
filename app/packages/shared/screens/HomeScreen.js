@@ -19,7 +19,7 @@ import {
 
 import Header, { WalletBadge, LogoutBadge } from '../components/Navigation/Header'
 import Footer, { LightStreamsLogoBadge } from '../components/Navigation/Footer'
-import { ArtistContentList, ArtistProfileCard } from '../components/Artist'
+import { ProfileContentList, ProfileCard } from '../components/Profile'
 
 import ConfirmationOverlay from "../components/Overlay/ConfirmationOverlay";
 import MessageOverlay from "../components/Overlay/MessageOverlay";
@@ -27,15 +27,13 @@ import RequestPasswordOverlay from "../components/Overlay/RequestPasswordOverlay
 import LoadingOverlay from "../components/Overlay/LoadingOverlay";
 
 import { logoutAction } from '../store/actions/session';
-import { getEtherAddress, getLethToken, isSessionInitialized, getSessionArtistToken } from '../store/selectors/session';
-import { getArtistWallet } from '../store/selectors/wallet';
-import { updateWalletAction, updateTokenBalance } from '../store/actions/wallet';
+import { getEtherAddress, isSessionInitialized } from '../store/selectors/session';
+import { updateWalletAction } from '../store/actions/wallet';
 import {
     purchaseContentAction,
     downloadItemAction,
-    loadArtistProfile,
-    loadExclusiveContent
-} from '../store/actions/artist';
+    loadUserProfile
+} from '../store/actions/profile';
 
 import Style from '../styles'
 
@@ -46,7 +44,7 @@ class HomeScreen extends Component {
     static propTypes = {
         navigation: PropTypes.object.isRequired,
         session: PropTypes.object.isRequired,
-        artist: PropTypes.object.isRequired,
+        profile: PropTypes.object.isRequired,
         wallet: PropTypes.object.isRequired,
         dispatch: PropTypes.func.isRequired
     };
@@ -73,9 +71,9 @@ class HomeScreen extends Component {
             this.props.navigation.navigate('Login');
         } else if (!isSessionInitialized(preProps.session)) {
             dispatch(updateWalletAction());
-            dispatch(updateTokenBalance());
-            dispatch(loadArtistProfile());
-            dispatch(loadExclusiveContent());
+            // dispatch(updateTokenBalance());
+            dispatch(loadUserProfile());
+            // dispatch(loadExclusiveContent());
         }
     }
 
@@ -157,9 +155,8 @@ class HomeScreen extends Component {
     }
 
     render() {
-        const { wallet, artist, dispatch, session } = this.props;
+        const { wallet, profile, dispatch, session } = this.props;
         const { requestConfirmation, notificationModal, requestPassword, isLoading } = this.state;
-        const artistWallet = getArtistWallet(wallet, getSessionArtistToken(session));
 
         if (!isSessionInitialized(session)) {
             setTimeout(() => {
@@ -200,23 +197,24 @@ class HomeScreen extends Component {
                 <LoadingOverlay visible={isLoading}/>
 
                 <ScrollView style={rootStyles.mainContainer}>
-                    <ArtistProfileCard
-                        artist={artist}
-                        artistWallet={artistWallet}
+                    <ProfileCard
+                        profile={profile}
+                        wallet={wallet}
                         navigation={this.props.navigation}
                         onWalletClick={() => {
-                            dispatch(updateTokenBalance(artist.tokenSymbol))
+                            //@TODO Upload new profile picture
+                            // dispatch(getEtherAddress(session))
                         }}/>
-                    <ArtistContentList
-                        items={artist.exclusive_content}
-                        isTokenHolder={artistWallet.balance > 0}
-                        purchaseAction={(item) => {
-                            this._requestPassword(
-                                'Insert your password to proceed with the purchase',
-                                password => {
-                                    this.purchaseItem(item, password)
-                                }
-                            )
+                    <ProfileContentList
+                        items={profile.items}
+                        isOwner={true}
+                        requestAccessAction={(item) => {
+                            // this._requestPassword(
+                            //     'Insert your password to proceed with the purchase',
+                            //     password => {
+                            //         this.purchaseItem(item, password)
+                            //     }
+                            // )
                         }}
                         downloadAction={(item) => {
                             this._requestUserConfirmation(
@@ -240,11 +238,11 @@ class HomeScreen extends Component {
 const rootStyles = StyleSheet.create(Style.Root);
 
 const mapStateToProps = (state) => {
-    const { session, artist, wallet } = state;
+    const { session, profile, wallet } = state;
     return {
         session,
-        artist,
-        wallet
+        wallet,
+        profile
     }
 };
 

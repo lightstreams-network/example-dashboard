@@ -2,10 +2,8 @@ import { UPDATE_WALLET, UPDATE_ICO_WALLET } from '../actions/wallet'
 
 const INITIAL_STATE = {
     balance: 0,
-    appTokenSymbol: 'ETH',
-    tokens: [
-        { symbol: 'JB', balance: 0 }
-    ]
+    appTokenSymbol: 'PHT',
+    address: '0x0000000000000000000'
 };
 
 export default function(state = INITIAL_STATE, action) {
@@ -13,7 +11,8 @@ export default function(state = INITIAL_STATE, action) {
         case UPDATE_WALLET:
             return {
                 ...state,
-                balance: parseFloat(action.payload.balance)
+                balance: parseFloat(action.payload.pht),
+                address: action.payload.address
             };
         case UPDATE_ICO_WALLET:
             return {

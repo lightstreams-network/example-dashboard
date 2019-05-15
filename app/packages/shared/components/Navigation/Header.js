@@ -93,9 +93,10 @@ export const WalletBadge = class Wallet extends Component {
                 }}
             >
                 <Text style={[rootStyles.headerText, {
-                    width: 65,
+                    width: 400,
+                    fontSize: 12,
                     textAlign: 'right'
-                }]}>{`${wallet.balance} ${wallet.appTokenSymbol}`}</Text>
+                }]}>{`${wallet.address}`}</Text>
                 <Image style={{
                     width: 30,
                     height: 30,

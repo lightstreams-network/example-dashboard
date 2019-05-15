@@ -127,7 +127,7 @@ class SignUpScreen extends Component {
                                keyboardType="email-address"
                                underlineColorAndroid='transparent'
                                value={this.state.email}
-                               onChangeText={(email) => this.setState({ email })}/>
+                               onChangeText={(email) => this.setState({ email: username })}/>
                 </View>
 
                 <View

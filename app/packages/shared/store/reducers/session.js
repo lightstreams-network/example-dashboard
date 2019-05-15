@@ -2,7 +2,6 @@ import { LOGIN_ACTION, LOGOUT_ACTION, SIGN_UP_ACTION } from '../actions/session'
 
 const INITIAL_STATE = {
     token: null,
-    artistTokenSymbol: 'JB',
     user: {}
 };
 

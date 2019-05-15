@@ -21,7 +21,7 @@ import MessageOverlay from "../components/Overlay/MessageOverlay";
 
 class LoginScreen extends Component {
 
-    state = { email: 'gabriel@lightstreams.io', password: '123456', errMsg: null, infoMsg: null, inputErrors: [''], isLoading: false };
+    state = { username: 'profile1', password: 'test123', errMsg: null, infoMsg: null, inputErrors: [''], isLoading: false };
 
     constructor(props) {
         super(props);
@@ -35,10 +35,10 @@ class LoginScreen extends Component {
             this.props.navigation.navigate('Home');
         }
 
-        if (this.props.session.user && this.props.session.user.email
-            && !this.state.email) {
+        if (this.props.session.user && this.props.session.user.username
+            && !this.state.username) {
             this.setState({
-                email: this.props.session.user.email
+                username: this.props.session.user.username
             })
         }
     }
@@ -51,11 +51,10 @@ class LoginScreen extends Component {
     };
 
     validateLogin = () => {
-        const { email, password } = this.state;
+        const { username, password } = this.state;
         const inputErrors = [];
-        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if (!re.test(String(email).toLowerCase())) {
-            inputErrors.push('email');
+        if (username.length < 6) {
+            inputErrors.push('username');
         }
 
         if (password.length < 6) {
@@ -78,10 +77,10 @@ class LoginScreen extends Component {
         this.setState({
             isLoading: true,
         }, () => {
-            const { email, password } = this.state;
+            const { username, password } = this.state;
             const { dispatch } = this.props;
 
-            dispatch(loginAction(email, password))
+            dispatch(loginAction(username, password))
                 .then(() => {
                     this.setState({
                         isLoading: false,
@@ -110,13 +109,12 @@ class LoginScreen extends Component {
                            source={require('../assets/fanbase_logo_white_simple.png')}/>
                     <View style={inputErrors.indexOf('email') === -1 ? styles.inputContainer : styles.inputContainerError}>
                         <Image style={styles.textIcon}
-                               source={{ uri: 'https://png.icons8.com/message/ultraviolet/50/3498db' }}/>
+                               source={{ uri: 'https://img.icons8.com/color/48/000000/manager.png' }}/>
                         <TextInput style={styles.inputs}
-                                   placeholder="Email"
-                                   keyboardType="email-address"
+                                   placeholder="Username"
                                    underlineColorAndroid='transparent'
-                                   value={this.state.email}
-                                   onChangeText={(email) => this.setState({ email })}/>
+                                   value={this.state.username}
+                                   onChangeText={(username) => this.setState({ username: username })}/>
                     </View>
 
                     <View

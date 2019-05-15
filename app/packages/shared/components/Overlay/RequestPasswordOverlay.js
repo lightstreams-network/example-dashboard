@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     },
     inputs: {
         height: 45,
-        marginLeft: 16,
+        marginLeft: 20,
         borderBottomColor: '#FFFFFF',
         flex: 1,
     },

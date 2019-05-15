@@ -18,7 +18,7 @@ import {
 
 import Style from '../../styles'
 
-class ArtistContentItem extends Component {
+class ProfileContentItem extends Component {
 
     constructor(props) {
         super(props);
@@ -26,8 +26,8 @@ class ArtistContentItem extends Component {
 
     static propTypes = {
         item: PropTypes.object.isRequired,
-        isTokenHolder: PropTypes.bool.isRequired,
-        purchaseAction: PropTypes.func.isRequired,
+        isOwner: PropTypes.bool.isRequired,
+        requestAccessAction: PropTypes.func.isRequired,
         downloadAction: PropTypes.func.isRequired
     };
 
@@ -61,26 +61,26 @@ class ArtistContentItem extends Component {
     }
 
     render() {
-        const { item, isTokenHolder, purchaseAction, downloadAction } = this.props;
+        const { item, isOwner, requestAccessAction, downloadAction } = this.props;
         return (
             <TouchableOpacity
                 style={Platform.OS === "android" ? listStyles.cardAndroid : listStyles.card}
-                onPress={() => item.is_unlock ? downloadAction(item) : purchaseAction(item)}>
+                onPress={() => isOwner ? downloadAction(item) : requestAccessAction(item)}>
                 <View style={listStyles.cardHeader}>
                     <View>
-                        <Text style={listStyles.title}>{item.name}</Text>
+                        <Text style={listStyles.title}>{item.title}</Text>
+                        <Text style={listStyles.description}>{item.description}</Text>
                     </View>
                 </View>
-                <Image style={listStyles.cardImage} source={{ uri: item.image_url }}/>
                 <View style={listStyles.cardFooter}>
-                    {item.is_unlock ? this.renderDownloadOpts(item) : this.renderPurchaseOpts(item)}
+                    {isOwner ? this.renderDownloadOpts(item) : this.renderPurchaseOpts(item)}
                 </View>
             </TouchableOpacity>
         )
     }
 }
 
-export default class ArtistContentList extends Component {
+export default class ProfileContentList extends Component {
 
     constructor(props) {
         super(props);
@@ -88,13 +88,13 @@ export default class ArtistContentList extends Component {
 
     static propTypes = {
         items: PropTypes.array,
-        isTokenHolder: PropTypes.bool.isRequired,
-        purchaseAction: PropTypes.func.isRequired,
+        isOwner: PropTypes.bool.isRequired,
+        requestAccessAction: PropTypes.func.isRequired,
         downloadAction: PropTypes.func.isRequired
     };
 
     render() {
-        const { items, isTokenHolder, purchaseAction, downloadAction } = this.props;
+        const { items, isOwner, requestAccessAction, downloadAction } = this.props;
 
         if(!items) {
             return null;
@@ -102,11 +102,11 @@ export default class ArtistContentList extends Component {
 
         return (
             <View style={listStyles.container}>
-                {items.map((item, index) => <ArtistContentItem
+                {items.map((item, index) => <ProfileContentItem
                     item={item}
                     key={index}
-                    isTokenHolder={isTokenHolder}
-                    purchaseAction={purchaseAction}
+                    isOwner={isOwner}
+                    requestAccessAction={requestAccessAction}
                     downloadAction={downloadAction}
                 />)}
             </View>

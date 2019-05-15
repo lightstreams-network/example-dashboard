@@ -39,7 +39,7 @@ function download(data, filename) {
 
 export default class WebDownloader {
     static fetch(url, options) {
-        return fetch(url)
+        return fetch(url, options)
             .then(r => {
                 const disposition = r.headers.get('Content-Disposition');
                 let filename;

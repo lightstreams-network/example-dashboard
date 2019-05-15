@@ -24,14 +24,14 @@ export default class ArtistCard extends Component {
     }
 
     static propTypes = {
-        artist: PropTypes.object.isRequired,
-        artistWallet: PropTypes.object.isRequired,
+        profile: PropTypes.object.isRequired,
+        wallet: PropTypes.object.isRequired,
         navigation: PropTypes.object.isRequired,
         onWalletClick: PropTypes.func
     };
 
     render() {
-        const { artist, artistWallet, onWalletClick } = this.props;
+        const { profile, wallet, onWalletClick } = this.props;
         return (
             <View style={artistStyles.wrapperArtistProfile}>
                 <View style={{
@@ -48,7 +48,7 @@ export default class ArtistCard extends Component {
                             activeOpacity={0.7}
                             containerStyle={artistStyles.avatar}
                         />
-                        <Text style={artistStyles.artistLabel}>{artist.name}</Text>
+                        <Text style={artistStyles.artistLabel}>{profile.name}</Text>
                     </View>
                     <View style={{
                         flexWrap: "wrap",
@@ -58,12 +58,12 @@ export default class ArtistCard extends Component {
                                 <Image style={artistStyles.walletIcon}
                                        source={{ uri: 'https://img.icons8.com/ultraviolet/96/000000/crowdfunding.png' }}/>
                             </TouchableOpacity>
-                            <Text style={artistStyles.walletText}>{`${artistWallet.balance} ${artistWallet.symbol}`}</Text>
+                            <Text style={artistStyles.walletText}>{`${wallet.balance.toFixed(2)} PHT`}</Text>
                         </View>
                         <Button
                             buttonStyle={artistStyles.primaryButton}
                             onPress={() => this.props.navigation.navigate("Badges")}
-                            title='BUY'
+                            title='Upload'
                         />
                     </View>
                 </View>

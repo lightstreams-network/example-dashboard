@@ -1,6 +1,6 @@
 export default class WalletService {
     static requestFaucetTransfer(token) {
-        return fetch(`${GLOBALS.FANBASE_DOMAIN}/wallet/request-faucet-transfer`, {
+        return fetch(`${GLOBALS.SERVER_DOMAIN}/wallet/request-faucet-transfer`, {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -10,7 +10,7 @@ export default class WalletService {
     }
 
     static getWalletBalance(token) {
-        return fetch(`${GLOBALS.FANBASE_DOMAIN}/wallet/get-balance`, {
+        return fetch(`${GLOBALS.SERVER_DOMAIN}/wallet/balance`, {
             method: 'GET',
             headers: {
                 Accept: 'application/json',

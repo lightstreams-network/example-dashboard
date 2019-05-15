@@ -154,7 +154,7 @@ class BadgesScreen extends Component {
                         price='Free'
                         onButtonPress={() => {
                             this._requestUserConfirmation(
-                                'You are about to be awarded with 0.11 ETH. Remember, this will be available only once',
+                                'You are about to be awarded with 0.11 PHT. Remember, this will be available only once',
                                 (() => this.getFreeFunds()),
                                 (() => {
                                 }),
@@ -186,7 +186,7 @@ const mapStateToProps = (state) => {
     const { session, artist, wallet } = state;
     return {
         session,
-        artist,
+        artist: profile,
         wallet
     }
 };
