@@ -1,4 +1,5 @@
 import { UPDATE_WALLET, UPDATE_ICO_WALLET } from '../actions/wallet'
+import { LOGOUT_ACTION } from "../actions/session";
 
 const INITIAL_STATE = {
     balance: 0,
@@ -24,6 +25,8 @@ export default function(state = INITIAL_STATE, action) {
                     return token;
                 })
             };
+        case LOGOUT_ACTION:
+            return INITIAL_STATE;
         default:
             return state
     }

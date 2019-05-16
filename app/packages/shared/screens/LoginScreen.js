@@ -53,7 +53,7 @@ class LoginScreen extends Component {
     validateLogin = () => {
         const { username, password } = this.state;
         const inputErrors = [];
-        if (username.length < 6) {
+        if (username.length < 4) {
             inputErrors.push('username');
         }
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { LOAD_PROFILE_ITEMS, LOAD_PROFILE_PICTURE } from '../actions/profile'
+import { LOGOUT_ACTION } from "../actions/session";
 
 const INITIAL_STATE = {
     items: [],
@@ -15,6 +16,8 @@ export default function(state = INITIAL_STATE, action) {
         case LOAD_PROFILE_PICTURE: {
             return { ...state, picture: action.payload };
         }
+        case LOGOUT_ACTION:
+            return INITIAL_STATE;
         default:
             return state
     }

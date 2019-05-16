@@ -22,7 +22,7 @@ class SignUpScreen extends Component {
 
     state = {
         fullName: '',
-        email: '',
+        username: '',
         password: '',
         errMsg:  null,
         repeatPassword: '',
@@ -48,11 +48,10 @@ class SignUpScreen extends Component {
     }
 
     validateSignUp = () => {
-        const { email, password, repeatPassword } = this.state;
+        const { username, password, repeatPassword } = this.state;
         const inputErrors = [];
-        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if (!re.test(String(email).toLowerCase())) {
-            inputErrors.push('email');
+        if (username.length < 4) {
+            inputErrors.push('username');
         }
 
         if (password.length < 6) {
@@ -81,8 +80,8 @@ class SignUpScreen extends Component {
             inputErrors: []
         }, () => {
             const { dispatch } = this.props;
-            const { email, password } = this.state;
-            dispatch(signUpAction(email, password))
+            const { username, password } = this.state;
+            dispatch(signUpAction(username, password))
                 .then(() => {
                     this.setState({
                         isLoading: false,
@@ -107,27 +106,15 @@ class SignUpScreen extends Component {
             <View style={styles.container}>
                 <MessageOverlay visible={errMsg !== null} errorMsg={errMsg}
                                     onClose={() => this.setState({ errMsg: null })}/>
-                <View
-                    style={inputErrors.indexOf('fullName') === -1 ? styles.inputContainer : styles.inputContainerError}>
-                    <Image style={styles.textIcon}
-                           source={{ uri: 'https://png.icons8.com/male-user/ultraviolet/50/3498db' }}/>
-                    <TextInput style={styles.inputs}
-                               placeholder="Full name"
-                               keyboardType="email-address"
-                               underlineColorAndroid='transparent'
-                               value={this.state.fullName}
-                               onChangeText={(fullName) => this.setState({ fullName })}/>
-                </View>
 
-                <View style={inputErrors.indexOf('email') === -1 ? styles.inputContainer : styles.inputContainerError}>
+                <View style={inputErrors.indexOf('username') === -1 ? styles.inputContainer : styles.inputContainerError}>
                     <Image style={styles.textIcon}
-                           source={{ uri: 'https://png.icons8.com/message/ultraviolet/50/3498db' }}/>
+                           source={{ uri: 'https://img.icons8.com/color/48/000000/manager.png' }}/>
                     <TextInput style={styles.inputs}
-                               placeholder="Email"
-                               keyboardType="email-address"
+                               placeholder="Username"
                                underlineColorAndroid='transparent'
-                               value={this.state.email}
-                               onChangeText={(email) => this.setState({ email: username })}/>
+                               value={this.state.username}
+                               onChangeText={(username) => this.setState({ username: username })}/>
                 </View>
 
                 <View
@@ -157,11 +144,11 @@ class SignUpScreen extends Component {
                         isLoading
                             ? <ActivityIndicator size="large"/>
                             : [
-                                <TouchableHighlight style={[styles.buttonItem, styles.primaryButton]}
+                                <TouchableHighlight key="sign-up" style={[styles.buttonItem, styles.primaryButton]}
                                                     onPress={() => this.handleSignUp()}>
                                     <Text style={styles.buttonText}>Sign up</Text>
                                 </TouchableHighlight>,
-                                <TouchableHighlight style={styles.buttonItem}
+                                <TouchableHighlight key="already-an-account" style={styles.buttonItem}
                                                     onPress={() => this.props.navigation.navigate('Login')}>
                                     <Text style={styles.primaryLink}>I already have an account</Text>
                                 </TouchableHighlight>

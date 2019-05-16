@@ -71,9 +71,15 @@ class HomeScreen extends Component {
             this.props.navigation.navigate('Login');
         } else if (!isSessionInitialized(preProps.session)) {
             dispatch(updateWalletAction());
-            // dispatch(updateTokenBalance());
             dispatch(loadUserProfile());
-            // dispatch(loadExclusiveContent());
+        }
+    }
+
+    componentDidMount() {
+        const { session, dispatch } = this.props;
+        if (isSessionInitialized(session)) {
+            dispatch(updateWalletAction());
+            dispatch(loadUserProfile());
         }
     }
 
