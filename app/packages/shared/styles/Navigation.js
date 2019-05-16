@@ -16,7 +16,7 @@ export default {
         maxWidth: 980,
     },
     topBar: {
-        backgroundColor: Palette.DarkBlue,
+        backgroundColor: Palette.DarkGray,
         height: 35,
         width: '100%',
     },

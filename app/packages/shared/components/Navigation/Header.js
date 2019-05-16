@@ -94,9 +94,9 @@ export const WalletBadge = class Wallet extends Component {
             >
                 <Text style={[rootStyles.headerText, {
                     width: 400,
-                    fontSize: 12,
+                    fontSize: 14,
                     textAlign: 'right'
-                }]}>{`${wallet.address}`}</Text>
+                }]}>{`${wallet.balance.toFixed(2)} PHT`}</Text>
                 <Image style={{
                     width: 30,
                     height: 30,

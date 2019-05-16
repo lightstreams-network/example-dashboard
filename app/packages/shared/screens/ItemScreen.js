@@ -23,10 +23,11 @@ import { ProfileContentList, ProfileCard } from '../components/Profile'
 
 import ConfirmationOverlay from "../components/Overlay/ConfirmationOverlay";
 import MessageOverlay from "../components/Overlay/MessageOverlay";
+import RequestPasswordOverlay from "../components/Overlay/RequestPasswordOverlay";
 import LoadingOverlay from "../components/Overlay/LoadingOverlay";
 
 import { logoutAction } from '../store/actions/session';
-import { getEtherAddress, isSessionInitialized, getSessionUsername } from '../store/selectors/session';
+import { getEtherAddress, isSessionInitialized } from '../store/selectors/session';
 import { updateWalletAction } from '../store/actions/wallet';
 import {
     purchaseContentAction,
@@ -43,43 +44,21 @@ class HomeScreen extends Component {
     static propTypes = {
         navigation: PropTypes.object.isRequired,
         session: PropTypes.object.isRequired,
-        profiles: PropTypes.object.isRequired,
-        wallet: PropTypes.object.isRequired,
+        profile: PropTypes.object.isRequired,
+        item: PropTypes.object.isRequired,
         dispatch: PropTypes.func.isRequired
     };
 
     constructor(props) {
         super(props);
-        const { navigation } = props;
-        const notificationMsg = _.get(navigation.state, 'params.message', null);
-        if (notificationMsg) {
-            this.state.notificationModal = {
-                infoMsg: notificationMsg,
-                onClose: () => {
-                    this.setState({ notificationModal: null }, () => {
-                        this.props.navigation.navigate('Home');
-                    });
-                }
-            };
-        }
     }
 
     componentDidUpdate(preProps) {
-        const { session, dispatch } = this.props;
-        if (!isSessionInitialized(session)) {
-            this.props.navigation.navigate('Login');
-        } else if (!isSessionInitialized(preProps.session)) {
-            dispatch(updateWalletAction());
-            dispatch(loadUserProfile());
-        }
+
     }
 
     componentDidMount() {
-        const { session, dispatch } = this.props;
-        if (isSessionInitialized(session)) {
-            dispatch(updateWalletAction());
-            dispatch(loadUserProfile());
-        }
+
     }
 
     logout = () => {
@@ -87,7 +66,7 @@ class HomeScreen extends Component {
         dispatch(logoutAction());
     };
 
-    purchaseItem = (item, password) => {
+    requestAccess = (item, password) => {
         const { dispatch } = this.props;
         this.setState({
             isLoading: true
@@ -127,22 +106,6 @@ class HomeScreen extends Component {
         });
     }
 
-    _requestPassword(message, onReady) {
-        this.setState({
-            requestPassword: {
-                message,
-                onPasswordReady: (pwd) => {
-                    this.setState({ requestPassword: null }, () => {
-                        onReady(pwd);
-                    });
-                },
-                onReject: () => {
-                    this.setState({ requestPassword: null });
-                }
-            }
-        });
-    }
-
     _displayNotification(infoMsg, errorMsg, onClose) {
         this.setState({
             notificationModal: {
@@ -160,25 +123,13 @@ class HomeScreen extends Component {
     }
 
     render() {
-        const { wallet, profiles, dispatch, session } = this.props;
-        const { requestConfirmation, notificationModal, isLoading } = this.state;
+        const { wallet, profile, dispatch, session } = this.props;
+        const { requestConfirmation, notificationModal, requestPassword, isLoading } = this.state;
 
         if (!isSessionInitialized(session)) {
             setTimeout(() => {
                 this.forceUpdate();
             }, 1000);
-
-            return <LoadingOverlay visible={true} />
-        }
-
-        const username = getSessionUsername(session);
-        const profile = profiles[username];
-
-        if (!profile) {
-          setTimeout(() => {
-            dispatch(loadUserProfile(username));
-          }, 1000);
-          return <LoadingOverlay visible={true}/>
         }
 
         return (
@@ -253,7 +204,7 @@ const mapStateToProps = (state) => {
     return {
         session,
         wallet,
-        profiles: profile
+        profile
     }
 };
 

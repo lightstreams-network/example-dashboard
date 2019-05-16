@@ -18,7 +18,7 @@ import {
 
 import Style from '../../styles'
 
-export default class ProfileCard extends Component {
+export default class ItemCard extends Component {
     constructor(props) {
         super(props);
     }
@@ -48,6 +48,7 @@ export default class ProfileCard extends Component {
                             activeOpacity={0.7}
                             containerStyle={profileStyles.avatar}
                         />
+                        <Text style={profileStyles.usernameLabel}>{profile.name}</Text>
                     </View>
                     <View style={{
                         flexWrap: "wrap",
@@ -57,7 +58,7 @@ export default class ProfileCard extends Component {
                                 <Image style={profileStyles.walletIcon}
                                        source={{ uri: 'https://img.icons8.com/ultraviolet/96/000000/crowdfunding.png' }}/>
                             </TouchableOpacity>
-                            <Text style={profileStyles.walletText}>{profile.username}</Text>
+                            <Text style={profileStyles.walletText}>{`${wallet.balance.toFixed(2)} PHT`}</Text>
                         </View>
                         <Button
                             buttonStyle={profileStyles.primaryButton}

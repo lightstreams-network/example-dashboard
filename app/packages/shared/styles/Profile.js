@@ -10,7 +10,7 @@ export default {
         width: 150,
         height: 150,
     },
-    artistLabel: {
+    usernameLabel: {
         fontSize: 18,
         textAlign: 'center',
         color: Palette.DarkGray,
