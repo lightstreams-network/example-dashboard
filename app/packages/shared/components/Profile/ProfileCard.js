@@ -25,13 +25,12 @@ export default class ProfileCard extends Component {
 
     static propTypes = {
         profile: PropTypes.object.isRequired,
-        wallet: PropTypes.object.isRequired,
         navigation: PropTypes.object.isRequired,
         onWalletClick: PropTypes.func
     };
 
     render() {
-        const { profile, wallet, onWalletClick } = this.props;
+        const { profile, onWalletClick } = this.props;
         return (
             <View style={profileStyles.wrapperArtistProfile}>
                 <View style={{
@@ -61,7 +60,7 @@ export default class ProfileCard extends Component {
                         </View>
                         <Button
                             buttonStyle={profileStyles.primaryButton}
-                            onPress={() => this.props.navigation.navigate("Badges")}
+                            onPress={onWalletClick || (() => {})}
                             title='Upload'
                         />
                     </View>

@@ -22,6 +22,7 @@ import Footer, { LightStreamsLogoBadge } from '../components/Navigation/Footer'
 import { ProfileContentList, ProfileCard } from '../components/Profile'
 
 import ConfirmationOverlay from "../components/Overlay/ConfirmationOverlay";
+import UploadFileOverlay from "../components/Overlay/UploadFileOverlay";
 import MessageOverlay from "../components/Overlay/MessageOverlay";
 import LoadingOverlay from "../components/Overlay/LoadingOverlay";
 
@@ -38,7 +39,7 @@ import Style from '../styles'
 
 class HomeScreen extends Component {
 
-    state = { requestConfirmation: null, notificationModal: null, requestPassword: null };
+    state = { requestConfirmation: null, notificationModal: null, uploadingFile: null };
 
     static propTypes = {
         navigation: PropTypes.object.isRequired,
@@ -127,17 +128,16 @@ class HomeScreen extends Component {
         });
     }
 
-    _requestPassword(message, onReady) {
+  _uploadingFile(onReady) {
         this.setState({
-            requestPassword: {
-                message,
-                onPasswordReady: (pwd) => {
-                    this.setState({ requestPassword: null }, () => {
+          uploadingFile: {
+                onFileUploaded: (pwd) => {
+                    this.setState({ uploadingFile: null }, () => {
                         onReady(pwd);
                     });
                 },
                 onReject: () => {
-                    this.setState({ requestPassword: null });
+                    this.setState({ uploadingFile: null });
                 }
             }
         });
@@ -161,7 +161,7 @@ class HomeScreen extends Component {
 
     render() {
         const { wallet, profiles, dispatch, session } = this.props;
-        const { requestConfirmation, notificationModal, isLoading } = this.state;
+        const { requestConfirmation, notificationModal, isLoading, uploadingFile } = this.state;
 
         if (!isSessionInitialized(session)) {
             setTimeout(() => {
@@ -205,14 +205,22 @@ class HomeScreen extends Component {
                     onClose={notificationModal && notificationModal.onClose}
                     visible={notificationModal !== null}
                 />
-                <LoadingOverlay visible={isLoading}/>
+                <UploadFileOverlay
+                    visible={uploadingFile !== null}
+                    onReady={uploadingFile && uploadingFile.onFileUploaded}
+                    onClose={uploadingFile && uploadingFile.onReject}
+                />
+
+                <LoadingOverlay visible={isLoading || false}/>
 
                 <ScrollView style={rootStyles.mainContainer}>
                     <ProfileCard
                         profile={profile}
-                        wallet={wallet}
                         navigation={this.props.navigation}
                         onWalletClick={() => {
+                            this._uploadingFile(() => {
+                                console.log("File was uploaded");
+                            })
                             //@TODO Upload new profile picture
                             // dispatch(getEtherAddress(session))
                         }}/>

@@ -6,7 +6,7 @@ const inputContainer = {
     borderRadius: 30,
     borderBottomWidth: 1,
     width: 300,
-    height: 45,
+    height: 445,
     marginBottom: 20,
     flexDirection: 'row',
     alignItems: 'center'
