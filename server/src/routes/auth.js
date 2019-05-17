@@ -57,7 +57,7 @@ router.post('/sign-in', async (req, res, next) => {
     }
     const { token } = await gateway.user.signIn(user.ethAddress, attrs.password);
     // user.password = attrs.password; // @TODO Encrypt password based on session token
-    // user.token = token;
+    user.lethToken = token;
     const authToken = Session.jwtEncode({
       username: attrs.username,
       password: attrs.password,

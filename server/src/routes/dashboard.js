@@ -37,7 +37,7 @@ router.post('/profile/set-picture', session.authenticate('jwt', { session: false
   }
 });
 
-router.get('/profile/get-picture', session.authenticate('jwt', { session: false }), async (req, res, next) => {
+router.get('/profile/get', session.authenticate('jwt', { session: false }), async (req, res, next) => {
   const query = ['username'];
 
   try {
@@ -49,8 +49,20 @@ router.get('/profile/get-picture', session.authenticate('jwt', { session: false 
       user = req.user;
     }
 
+    const items = await ProfileService.retrieveRemoteItemList(user);
+    const itemRequests = await DashboardService.getItemRequestsData(req.user);
+    const fullItems = items.map((item) => {
+      item.events = itemRequests[item.id];
+      item.username = user.username;
+      return item;
+    });
     const profilePictureData = await DashboardService.getProfilePictureData(user);
-    res.json(jsonResponse(profilePictureData));
+    res.json(jsonResponse({
+      profilePicture: profilePictureData,
+      username: user.username,
+      ethAddress: user.ethAddress,
+      items: fullItems
+    }));
     res.send();
   } catch ( err ) {
     debug(err);

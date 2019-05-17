@@ -46,9 +46,9 @@ router.post('/add', session.authenticate('jwt', { session: false }), async (req,
 router.get('/list', session.authenticate('jwt', { session: false }), async (req, res, next) => {
 
   try {
-    const item = await ProfileService.retrieveRemoteItemList(req.user);
+    const items = await ProfileService.retrieveRemoteItemList(req.user);
     const itemRequests = await DashboardService.getItemRequestsData(req.user);
-    const responseData = item.map((item) => {
+    const responseData = items.map((item) => {
       item.requests = itemRequests[item.id];
       return item;
     });
@@ -98,8 +98,10 @@ router.get('/download', session.authenticate('jwt', { session: false }), async (
       throw new Error(`Item with id ${attrs.item_id} was not found`);
     }
 
-    const reqStream = await gateway.storage.fetch(item.meta, req.user.lethToken, true);
-    reqStream.pipe(res);
+    const rawGwRes = await gateway.storage.fetch(item.meta, req.user.lethToken, true);
+    res.setHeader('Content-Disposition', rawGwRes.headers.get('Content-Disposition'));
+    res.setHeader('Content-Type', rawGwRes.headers.get('Content-Type'));
+    rawGwRes.body.pipe(res);
   } catch ( err ) {
     debug(err);
     next(err);
