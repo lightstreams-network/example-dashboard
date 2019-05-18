@@ -4,9 +4,12 @@ import ReactTable from 'react-table';
 const FileList = ({ user, files, showModal, grantAccess}) => {
     const [toAccount, setToAccount] = useState('');
     const columns = [{
-        Header: 'Filename',
-        accessor: 'filename' // String-based value accessors!
+        Header: 'Title',
+        accessor: 'title' // String-based value accessors!
     }, {
+        Header: 'Description',
+        accessor: 'description' // String-based value accessors!
+    },{
         Header: 'Meta',
         accessor: 'meta',
     }, {

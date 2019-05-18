@@ -6,20 +6,16 @@ import Logo from '../components/logo';
 import CopyToClipboard from '../components/copy-to-clipboard';
 import Dropzone from '../components/dropzone';
 import FileList from '../components/file-list';
-import Modal from '../components/modal';
 
 import {
     Container,
     Wrapper,
     StyledLink,
-    H2,
     H3,
-    H4,
     P,
     Flex,
     Box,
     Section,
-    Span
 } from '../components/elements';
 
 const Header = styled.div`
@@ -32,10 +28,6 @@ const Header = styled.div`
     }
 `;
 
-const Intro = styled.div`
-    padding-bottom: 15px;
-`;
-
 const StyledA = styled.a`
     color: var(--pink);
 `;
@@ -43,10 +35,9 @@ const StyledA = styled.a`
 const Dashboard = () => (
     <IfNotAuthRedirectTo route={ROUTE_LOGIN}>
         {({ user, token, balance, files, room, peers, messages, fileDataUrl,
-            clearStorage, fetchWalletBalance, addFiles, broadcastMessage, grantAccess, getFileData
+            clearStorage, fetchWalletBalance, fetchItemList, addFiles, broadcastMessage, grantAccess, getFileData
         }) => {
             const [hasLoadedBefore, setHasLoadedBefore] = useState(false);
-            const [modalShow, setModalShow] = useState(false);
             const [meta, setMeta] = useState('');
 
             const refreshBalance = () => fetchWalletBalance({ token, ethAddress: user.ethAddress});
@@ -55,8 +46,10 @@ const Dashboard = () => (
                 if (!hasLoadedBefore) {
                     setHasLoadedBefore(true);
                     fetchWalletBalance({ token, ethAddress: user.ethAddress });
+                    fetchItemList({ token, ethAddress: user.ethAddress });
                 }
             });
+
             return (
                 <Container>
                     <Wrapper>

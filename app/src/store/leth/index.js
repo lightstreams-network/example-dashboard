@@ -18,6 +18,12 @@ const requestLethWalletBalance = createAction(REQ_LETH_WALLET_BALANCE);
 const RES_LETH_WALLET_BALANCE = 'lsn/leth/RES_LETH_WALLET_BALANCE';
 const responseLethWalletBalance = createAction(RES_LETH_WALLET_BALANCE);
 
+const REQ_LETH_ITEM_LIST = 'lsn/leth/REQ_LETH_ITEM_LIST';
+const requestLethItemList = createAction(REQ_LETH_ITEM_LIST);
+
+const RES_LETH_ITEM_LIST = 'lsn/leth/RES_LETH_ITEM_LIST';
+const responseLethItemList = createAction(RES_LETH_ITEM_LIST);
+
 const REQ_LETH_STORAGE_ADD = 'lsn/leth/REQ_LETH_STORAGE_ADD';
 const requestLethStorageAdd = createAction(REQ_LETH_STORAGE_ADD);
 
@@ -46,6 +52,17 @@ export function lethWalletBalance({token, ethAddress}) {
         return hGet('/wallet/balance', { ethAddress }, {
             token
         }).then(response => dispatch(responseLethWalletBalance(response.data)))
+            .catch(error => dispatch(receiveLethError(error)));
+    };
+}
+
+export function lethItemList({ token, ethAddress }) {
+    return (dispatch) => {
+        dispatch(requestLethItemList());
+
+        return hGet('/item/list', { ethAddress }, {
+            token
+        }).then(response => dispatch(responseLethItemList(response.data)))
             .catch(error => dispatch(receiveLethError(error)));
     };
 }
@@ -185,6 +202,18 @@ export default createReducer({
         balance: payload.wei,
         error: null,
     }),
+    [responseLethItemList]: (state, payload) => {
+        const mappedItems =  [];
+        payload.forEach(item => {
+            mappedItems[item.id] = item;
+        });
+
+        return {
+            ...state,
+            isFetching: false,
+            files: [...state.files, ...mappedItems]
+        };
+    },
     [clearStoredState]: (state) => initialState
 }, initialState);
 

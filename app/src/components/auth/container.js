@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { isAuthenticated, getAuthenticatedUser, getUserToken, clearStoredState } from '../../store/auth';
-import { lethStorageAdd, getWalletBalance, lethWalletBalance, lethAclGrant, getLethFiles, lethStorageFetch, getFileDataUrl } from '../../store/leth';
+import { lethStorageAdd, getWalletBalance, lethWalletBalance, lethItemList, lethAclGrant, getLethFiles, lethStorageFetch, getFileDataUrl } from '../../store/leth';
 import { getIpfsRoom, getIpfsPeers, getIpfsMessages, broadcast } from '../../store/ipfs';
 
 // see https://frontarm.com/james-k-nelson/passing-data-props-children/
@@ -31,6 +31,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         fetchWalletBalance({ethAddress, token}) {
             dispatch(lethWalletBalance({ethAddress, token}));
+        },
+        fetchItemList({ ethAddress, token }) {
+            dispatch(lethItemList({ ethAddress, token }));
         },
         broadcastMessage(room, message) {
             dispatch(broadcast(room, message));
