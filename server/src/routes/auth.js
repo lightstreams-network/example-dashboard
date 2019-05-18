@@ -10,7 +10,7 @@ const ProfileService = require('src/services/profile');
 const DashboardService = require('src/services/dashboard');
 const gateway = require('src/services/gateway').gateway();
 
-router.post('/sign-up', async (req, res, next) => {
+router.post('/signup', async (req, res, next) => {
   const query = ['username', 'password'];
   try {
     validateRequestAttrs(req, query);
@@ -33,14 +33,21 @@ router.post('/sign-up', async (req, res, next) => {
       profileAddress
     });
     const user = await DashboardService.retrieveUserByUsername(attrs.username);
-    res.send(jsonResponse(user));
+    const { token } = await gateway.user.signIn(user.ethAddress, attrs.password);
+    user.lethToken = token;
+    const authToken = Session.jwtEncode({
+      username: attrs.username,
+      password: attrs.password,
+      lethToken: token
+    });
+    res.send(jsonResponse({ token: authToken, user }));
   } catch ( err ) {
     debug(err);
     next(err);
   }
 });
 
-router.post('/sign-in', async (req, res, next) => {
+router.post('/login', async (req, res, next) => {
   const query = ['username', 'password'];
   try {
     validateRequestAttrs(req, query);

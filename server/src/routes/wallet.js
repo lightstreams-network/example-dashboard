@@ -13,8 +13,11 @@ const gateway = require('src/services/gateway').gateway();
 const faucetSC = require('src/smartcontracts/faucet');
 
 router.get('/balance', session.authenticate('jwt', { session: false }), async (req, res, next) => {
+  const query = ['ethAddress'];
   try {
-    const { balance } = await gateway.wallet.balance(req.user.ethAddress);
+    const attrs = extractRequestAttrs(req, query);
+    const ethAddress = attrs.ethAddress || req.user.ethAddress;
+    const { balance } = await gateway.wallet.balance(ethAddress);
     res.json(jsonResponse({
       pht: weiToPht(balance),
       wei: balance
