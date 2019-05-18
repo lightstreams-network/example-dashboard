@@ -1,9 +1,7 @@
-import { initIpfsNode } from '../ipfs';
 import { hGet, hPost } from '../../lib/fetch';
 import  get from 'lodash.get';
-const { ipfs } = require('../../lib/ipfs-node');
+import { PATH_SIGNUP } from '../../constants';
 
-const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 const initialState = {
     user: null,
@@ -39,14 +37,13 @@ export function receiveAuthError(error) {
     };
 }
 
-export function fetchToken({ account, password }) {
+export function login({ username, password }) {
     return (dispatch) => {
-        dispatch(requestToken(account, password));
-
-        return hPost('/user/signin', { account, password })
+        return hPost('/auth/login', { username, password })
         .then((response) => {
-            dispatch(receiveToken(response.token));
-            dispatch(receiveUser({ account, password }));
+            const { user, token } = response.data;
+            dispatch(receiveToken(token));
+            dispatch(receiveUser(user));
             return response.token;
         })
         .catch((error) => {
@@ -104,13 +101,14 @@ export function fetchUserFromToken(token) {
     };
 }
 
-export function createUser({ password }) {
+export function createUser({ username, password }) {
     return (dispatch) => {
         dispatch(requestCreateUser());
-
-        return hPost('/user/signup', { password })
+        return hPost(PATH_SIGNUP, { username, password })
         .then((response) => {
-            dispatch(receiveUser({ password, ...response }));
+            const { user, token } = response.data;
+            dispatch(receiveToken(token));
+            dispatch(receiveUser(user));
             return response;
         })
         .catch((error) => {
@@ -161,10 +159,7 @@ export default function authReducer(state = initialState, action = {}) {
         case RECEIVE_USER:
             return {
                 ...state,
-                user: {
-                    ...state.user,
-                    ...action.payload
-                }
+                user: action.payload
             };
 
         case CLEAR_STORED_STATE:

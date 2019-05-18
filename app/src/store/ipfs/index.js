@@ -66,7 +66,9 @@ export function initIpfsNode() {
             room.on('subscribed', async (message) => {
                 const selfPeer = await ipfs.id();
                 dispatch(setSelfPeer(selfPeer));
-                dispatch(broadcast(room, `Hello from ${selfPeer.id} with account ${getState().auth.user.account}`));
+                if(getState().auth.user) {
+                    dispatch(broadcast(room, `Hello from ${selfPeer.id} with account ${getState().auth.user.ethAddress}`));
+                }
             });
 
             room.on('message', (message) => {

@@ -14,12 +14,12 @@ export function validatePassword(values) {
 
 export function validateAccount(values) {
     const errors = {};
-    if (!values.account) {
+    if (!values.username) {
         errors.account = 'Account address is missing';
     } else if (
-        !isAddress(values.account)
+        values.username.length < 4
     ) {
-        errors.account = 'We need a valid account address';
+        errors.username = 'We need be longer than 4 chars';
     }
     return errors;
 }

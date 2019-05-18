@@ -31,14 +31,19 @@ export const mapUriToBaseUrl = (uri) => getBaseUrl(uri);
 
 export const fetchAndCheck = (url, options) => fetch(url, options).then(checkStatus);
 
-export const request = (method, url, data, options) => {
+export const request = (method, url, data, options = {}) => {
     const settings = {
         method: method.toUpperCase(),
-        'Accept': 'application/json',
-        'Content-Type': options['Content-Type'] || 'application/json',
-        credentials:  'same-origin',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            ...options.headers,
+        }
     };
 
+    if (options.token) {
+        settings.headers.Authorization = `Bearer ${options.token}`;
+    }
     const isGetRequest = settings.method === 'GET';
 
     if (data) {
@@ -47,7 +52,7 @@ export const request = (method, url, data, options) => {
             return fetchAndCheck(mapUriToBaseUrl(finalUrl), { ...settings, ...options }).then(toJson);
         }
 
-        if (settings['Content-Type'].includes('json')) {
+        if (settings.headers['Content-Type'].includes('json')) {
             settings.body = JSON.stringify(data);
         } else {
             settings.body = data;

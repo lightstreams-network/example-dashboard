@@ -2,17 +2,16 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import styled from 'styled-components';
-import { fetchToken, getAuthenticatedUser, getAuthErrors } from '../../store/auth';
+import { login, getAuthenticatedUser, getAuthErrors } from '../../store/auth';
 import { validateAccount, validatePassword } from '../../lib/validators';
 import { Button, Label } from '../elements';
-
-const isLogin = (url) => url.includes('login');
 
 const StyledField = styled(Field)`
     border: 1px solid var(--silver);
     border-radius: 100px;
     padding: 15px 30px;
     width: 100%;
+    margin-bottom: 5px;
     font-size: 21px;
 `;
 const StyledErrorMessage = styled(ErrorMessage)`
@@ -30,13 +29,13 @@ const LoginForm = ({ url, authErrors, handleSubmit }) => {
 
     return (
         <Formik
-            initialValues={{ account: '', password: '' }}
+            initialValues={{ username: '', password: '' }}
             validate={values => ({ ...validateAccount(values), ...validatePassword(values) })}
             onSubmit={(values, { setSubmitting, setErrors }) => {
                 handleSubmit(url, values)
                     .catch(err => {
                         setErrors({
-                            account: err.message
+                            username: err.message
                         });
                     })
                     .finally(() => {
@@ -46,18 +45,16 @@ const LoginForm = ({ url, authErrors, handleSubmit }) => {
         >
             {({ isSubmitting, setFieldValue }) => (
                 <Form>
-                    {isLogin(url) ?
-                        <Label>
-                            <span>Account address</span>
-                            <StyledField
-                                type='text'
-                                name='account'
-                                placeholder='0xBaB8D71E622CB455e6388e20DcE1A8B0F7E13c5A'
-                                onChange={(e) => setFieldValue('account', e.target.value)}
-                            />
-                            <StyledErrorMessage name='account' component='div' />
-                        </Label> : null
-                    }
+                    <Label>
+                        <span>Username</span>
+                        <StyledField
+                            type='text'
+                            name='username'
+                            placeholder='your username'
+                            onChange={(e) => setFieldValue('username', e.target.value)}
+                        />
+                        <StyledErrorMessage name='username' component='div' />
+                    </Label>
                     <Label>
                         <span>Password</span>
                         <StyledField type='password' name='password' placeholder='Your password' />
@@ -83,8 +80,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        handleSubmit(url, { account, password }) {
-            return dispatch(fetchToken({ account, password }));
+        handleSubmit(url, { username, password }) {
+            return dispatch(login({ username, password }));
         }
     };
 };

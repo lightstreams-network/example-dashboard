@@ -29,8 +29,8 @@ const mapDispatchToProps = (dispatch) => {
         addFiles({ account, password, files }) {
             dispatch(lethStorageAdd({ account, password, files }));
         },
-        fetchWalletBalance(account) {
-            dispatch(lethWalletBalance(account));
+        fetchWalletBalance({ethAddress, token}) {
+            dispatch(lethWalletBalance({ethAddress, token}));
         },
         broadcastMessage(room, message) {
             dispatch(broadcast(room, message));

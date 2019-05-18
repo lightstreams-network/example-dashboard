@@ -11,6 +11,7 @@ const StyledField = styled(Field)`
     border-radius: 100px;
     padding: 15px 30px;
     width: 100%;
+    margin-bottom: 5px;
     font-size: 21px;
 `;
 const StyledErrorMessage = styled(ErrorMessage)`
@@ -45,7 +46,12 @@ const RegisterForm = ({ url, authErrors, handleSubmit }) => {
             {({ isSubmitting }) => (
                 <Form>
                     <Label>
-                        <span>We need a password for your account</span>
+                        <span>Your username</span>
+                        <StyledField type='text' name='username' placeholder='Your username'/>
+                        <StyledErrorMessage name='username' component='div'/>
+                    </Label>
+                    <Label>
+                        <span>Your account</span>
                         <StyledField type='password' name='password' placeholder='Your password' />
                         <StyledErrorMessage name='password' component='div' />
                     </Label>
@@ -69,8 +75,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        handleSubmit(url, { password }) {
-            return dispatch(createUser({ password }));
+        handleSubmit(url, { username, password }) {
+            return dispatch(createUser({ username, password }));
         }
     };
 };

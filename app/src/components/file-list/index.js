@@ -20,7 +20,7 @@ const FileList = ({ user, files, showModal, grantAccess}) => {
                 onSubmit={(e) => {
                     const grant = {
                         acl: row.value,
-                        ownerAccount: user.account,
+                        ownerAccount: user.ethAddress,
                         password: user.password,
                         toAccount,
                         permissionType: 'read'

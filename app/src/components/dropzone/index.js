@@ -45,7 +45,7 @@ const Dropzone = ({ user, addFiles }) => {
         };
 
         addFiles({
-            account: user.account,
+            account: user.ethAddress,
             password: user.password,
             files: acceptedFiles
         });

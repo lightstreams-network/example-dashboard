@@ -49,12 +49,12 @@ const Dashboard = () => (
             const [modalShow, setModalShow] = useState(false);
             const [meta, setMeta] = useState('');
 
-            const refreshBalance = () => fetchWalletBalance(user.account);
+            const refreshBalance = () => fetchWalletBalance({ token, ethAddress: user.ethAddress});
 
             useEffect(() => {
                 if (!hasLoadedBefore) {
                     setHasLoadedBefore(true);
-                    fetchWalletBalance(user.account);
+                    fetchWalletBalance({ token, ethAddress: user.ethAddress });
                 }
             });
             return (
@@ -94,7 +94,7 @@ const Dashboard = () => (
 
                             <Section>
                                 <H3>Your Wallet</H3>
-                                <CopyToClipboard initialText={user.account} />
+                                <CopyToClipboard initialText={user.ethAddress} />
                                 <P>Please make sure you have the password for this address, as there is no other way to recover the account.</P>
 
                                 <H3>Your Balance</H3>

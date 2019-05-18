@@ -39,12 +39,13 @@ const responseLethAclGrant = createAction(RES_LETH_ACL_GRANT);
 const RECEIVE_LETH_ERROR = 'lsn/leth/RECEIVE_LETH_ERROR';
 const receiveLethError = createAction(RECEIVE_LETH_ERROR);
 
-export function lethWalletBalance(account) {
+export function lethWalletBalance({token, ethAddress}) {
     return (dispatch) => {
         dispatch(requestLethWalletBalance());
 
-        return hGet('/wallet/balance', { account })
-            .then(response => dispatch(responseLethWalletBalance(response)))
+        return hGet('/wallet/balance', { ethAddress }, {
+            token
+        }).then(response => dispatch(responseLethWalletBalance(response.data)))
             .catch(error => dispatch(receiveLethError(error)));
     };
 }
@@ -101,7 +102,6 @@ export function lethStorageFetch({ meta, token }) {
 
         return hGet('/storage/fetch', { meta, token })
             .then((response) => {
-                debugger;
                 const blob = new Blob([response], { type: 'application/pdf' });
                 const fileDataUrl = URL.createObjectURL(blob);
                 dispatch(responseLethStorageFetch(fileDataUrl));
@@ -182,7 +182,7 @@ export default createReducer({
     [responseLethWalletBalance]: (state, payload) => ({
         ...state,
         isFetching: false,
-        balance: payload.balance,
+        balance: payload.wei,
         error: null,
     }),
     [clearStoredState]: (state) => initialState
