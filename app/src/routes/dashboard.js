@@ -112,7 +112,9 @@ const Dashboard = () => (
                             </Section>
                             <Section>
                                 <H3>Files</H3>
-                                <FileList user={user} grantAccess={grantAccess} files={files} />
+                                <FileList user={user} downloadFile={(itemId) => {
+                                    getFileData({token, itemId, username: user.username });
+                                }} grantAccess={grantAccess} files={files} />
                             </Section>
                             <Section>
                                 <P><span className='em'>Are you a developer?</span> <StyledA href="https://docs.lightstreams.network">Check out the documentation</StyledA></P>

@@ -1,6 +1,6 @@
 import { hGet, hPost } from '../../lib/fetch';
 import  get from 'lodash.get';
-import { PATH_SIGNUP } from '../../constants';
+import { PATH_SIGNUP, PATH_LOGIN } from '../../constants';
 
 
 const initialState = {
@@ -39,7 +39,7 @@ export function receiveAuthError(error) {
 
 export function login({ username, password }) {
     return (dispatch) => {
-        return hPost('/auth/login', { username, password })
+        return hPost(PATH_LOGIN, { username, password })
         .then((response) => {
             const { user, token } = response.data;
             dispatch(receiveToken(token));

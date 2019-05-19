@@ -2,6 +2,8 @@
 export const SERVER_URL = 'http://localhost:3000';
 export const PATH_SIGNUP = '/auth/signup';
 export const PATH_LOGIN = '/auth/login';
+export const PATH_ITEM_LIST = '/item/list';
+export const PATH_ITEM_DOWNLOAD = '/item/download';
 
 export const ROUTE_HOME = '/';
 export const ROUTE_LOGIN = '/login';

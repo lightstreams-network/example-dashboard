@@ -2,12 +2,13 @@ import get from 'lodash.get';
 import { createAction, createReducer } from 'redux-act';
 import lsClient from 'lightstreams-js-sdk';
 import { hGet, hPost } from '../../lib/fetch';
-import { SERVER_URL } from '../../constants';
+import { SERVER_URL, PATH_ITEM_DOWNLOAD, PATH_ITEM_LIST } from '../../constants';
+import { downloadFile } from '../../lib/downloader';
 
 const gateway = lsClient(SERVER_URL);
 
 const initialState = {
-    files: [],
+    files: {},
     balance: null,
     error: null
 };
@@ -45,7 +46,7 @@ const responseLethAclGrant = createAction(RES_LETH_ACL_GRANT);
 const RECEIVE_LETH_ERROR = 'lsn/leth/RECEIVE_LETH_ERROR';
 const receiveLethError = createAction(RECEIVE_LETH_ERROR);
 
-export function lethWalletBalance({token, ethAddress}) {
+export function lethWalletBalance({ token, ethAddress }) {
     return (dispatch) => {
         dispatch(requestLethWalletBalance());
 
@@ -60,7 +61,7 @@ export function lethItemList({ token, ethAddress }) {
     return (dispatch) => {
         dispatch(requestLethItemList());
 
-        return hGet('/item/list', { ethAddress }, {
+        return hGet(PATH_ITEM_LIST, { ethAddress }, {
             token
         }).then(response => dispatch(responseLethItemList(response.data)))
             .catch(error => dispatch(receiveLethError(error)));
@@ -83,7 +84,7 @@ export function lethStorageAdd({ account, password, files }) {
 
         return hPost('/storage/add', formData, { 'Content-Type': 'multipart/form-data' })
             .then((response) => {
-                dispatch(responseLethStorageAdd({ filename, ...response}));
+                dispatch(responseLethStorageAdd({ filename, ...response }));
                 dispatch(lethWalletBalance(account));
                 return response;
             })
@@ -94,40 +95,34 @@ export function lethStorageAdd({ account, password, files }) {
     };
 };
 
-export function lethStorageFetch1({ meta, token }) {
+
+export function lethStorageFetch({ token, itemId, username }) {
     return (dispatch) => {
         dispatch(requestLethStorageFetch());
 
-        return gateway.storage.fetch(meta, token)
-            .then((response) => {
-                debugger;
-                const blob = new Blob([response], { type: 'application/pdf' });
-                const fileDataUrl = URL.createObjectURL(blob);
-                dispatch(responseLethStorageFetch(fileDataUrl));
-                return response;
-            })
-            .catch((error) => {
-                dispatch(receiveLethError(error));
-                throw error;
+        return hGet(PATH_ITEM_DOWNLOAD, { item_id: itemId, username }, {
+            token,
+            headers: {
+                'Accept': 'application/octet-stream'
+            },
+        }).then((response) => {
+            const disposition = response.headers.get('content-disposition');
+            const contentType = response.headers.get('Content-Type');
+            let filename;
+            if (disposition && disposition.indexOf('attachment') !== -1) {
+                const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                const matches = filenameRegex.exec(disposition);
+                if (matches != null && matches[1]) {
+                    filename = matches[1].replace(/['"]/g, '');
+                }
+            }
+            response.blob().then(data => {
+                downloadFile(data, filename, contentType);
             });
-    };
-}
-
-export function lethStorageFetch({ meta, token }) {
-    return (dispatch) => {
-        dispatch(requestLethStorageFetch());
-
-        return hGet('/storage/fetch', { meta, token })
-            .then((response) => {
-                const blob = new Blob([response], { type: 'application/pdf' });
-                const fileDataUrl = URL.createObjectURL(blob);
-                dispatch(responseLethStorageFetch(fileDataUrl));
-                return response;
-            })
-            .catch((error) => {
-                dispatch(receiveLethError(error));
-                throw error;
-            });
+        }).catch((error) => {
+            dispatch(receiveLethError(error));
+            throw error;
+        });
     };
 }
 
@@ -155,7 +150,7 @@ export default createReducer({
         ...state,
         isFetching: true,
         error: null,
-        lastRequestedAt: (new Date()).toISOString(),
+        lastRequestedAt: (new Date()).toISOString()
     }),
     [responseLethStorageAdd]: (state, payload) => {
         const obj = {
@@ -164,21 +159,14 @@ export default createReducer({
             error: null
         };
 
-        if (!state.files) {
-            return {
-                ...obj,
-                files: [{ ...payload }]
-            };
-        }
-
         return {
             ...obj,
-            files: [ ...state.files, { ...payload } ]
+            files: { ...state.files, ...{ [payload.id]: payload } }
         };
     },
     [requestLethStorageFetch]: (state) => ({
         ...state,
-        isFetching: true,
+        isFetching: true
     }),
     [responseLethStorageFetch]: (state, payload) => ({
         ...state,
@@ -194,16 +182,16 @@ export default createReducer({
         ...state,
         isFetching: true,
         error: null,
-        lastRequestedAt: (new Date()).toISOString(),
+        lastRequestedAt: (new Date()).toISOString()
     }),
     [responseLethWalletBalance]: (state, payload) => ({
         ...state,
         isFetching: false,
         balance: payload.wei,
-        error: null,
+        error: null
     }),
     [responseLethItemList]: (state, payload) => {
-        const mappedItems =  [];
+        const mappedItems = {};
         payload.forEach(item => {
             mappedItems[item.id] = item;
         });
@@ -211,7 +199,7 @@ export default createReducer({
         return {
             ...state,
             isFetching: false,
-            files: [...state.files, ...mappedItems]
+            files: { ...mappedItems }
         };
     },
     [clearStoredState]: (state) => initialState

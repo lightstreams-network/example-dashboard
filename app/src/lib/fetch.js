@@ -44,23 +44,26 @@ export const request = (method, url, data, options = {}) => {
     if (options.token) {
         settings.headers.Authorization = `Bearer ${options.token}`;
     }
-    const isGetRequest = settings.method === 'GET';
 
+    let finalUrl = url;
     if (data) {
-        if (isGetRequest) {
-            const finalUrl = `${url}${url.includes('?') ? '&' : '?'}${toQueryParams(data)}`;
-            return fetchAndCheck(mapUriToBaseUrl(finalUrl), { ...settings, ...options }).then(toJson);
-        }
-
-        if (settings.headers['Content-Type'].includes('json')) {
-            settings.body = JSON.stringify(data);
+        if (settings.method === 'GET') {
+            finalUrl = `${url}${url.includes('?') ? '&' : '?'}${toQueryParams(data)}`;
         } else {
-            settings.body = data;
+            if (settings.headers['Content-Type'].includes('json')) {
+                settings.body = JSON.stringify(data);
+            } else {
+                settings.body = data;
+            }
         }
-
     }
 
-    return fetchAndCheck(mapUriToBaseUrl(url), { ...settings, ...options }).then(toJson);
+    const response = fetchAndCheck(mapUriToBaseUrl(finalUrl), settings);
+    if(settings.headers.Accept === 'application/json') {
+        return response.then(toJson);
+    }
+
+    return response;
 };
 
 export const hGet = (url, data, options = {}) => request('GET', url, data, options);

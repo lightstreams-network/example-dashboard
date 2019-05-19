@@ -41,8 +41,8 @@ const mapDispatchToProps = (dispatch) => {
         grantAccess({ acl, ownerAccount, password, toAccount, permissionType }) {
             dispatch(lethAclGrant({ acl, ownerAccount, password, toAccount, permissionType }));
         },
-        getFileData({ meta, token }) {
-            dispatch(lethStorageFetch({ meta, token }));
+        getFileData({ token, itemId, username }) {
+            dispatch(lethStorageFetch({ token, itemId, username }));
         }
     };
 };
