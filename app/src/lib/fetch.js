@@ -49,8 +49,15 @@ export const request = (method, url, data, options = {}) => {
     if (data) {
         if (settings.method === 'GET') {
             finalUrl = `${url}${url.includes('?') ? '&' : '?'}${toQueryParams(data)}`;
-        } else {
-            if (settings.headers['Content-Type'].includes('json')) {
+        }
+
+        if (settings.method === 'POST'){
+            if (data instanceof FormData) {
+                settings.headers = {
+                    Authorization: `Bearer ${options.token}`,
+                };
+                settings.body = data;
+            } else if (settings.headers['Content-Type'].includes('json')) {
                 settings.body = JSON.stringify(data);
             } else {
                 settings.body = data;

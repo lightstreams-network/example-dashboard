@@ -35,7 +35,7 @@ const RegisterForm = ({ url, authErrors, handleSubmit }) => {
                 handleSubmit(url, values)
                     .catch(err => {
                         setErrors({
-                            password: err.message
+                            server: err.message
                         });
                     })
                     .finally(() => {
@@ -51,14 +51,20 @@ const RegisterForm = ({ url, authErrors, handleSubmit }) => {
                         <StyledErrorMessage name='username' component='div'/>
                     </Label>
                     <Label>
-                        <span>Your account</span>
+                        <span>Your Password</span>
                         <StyledField type='password' name='password' placeholder='Your password' />
                         <StyledErrorMessage name='password' component='div' />
+                    </Label>
+                    <Label>
+                        <span>Repeat Password</span>
+                        <StyledField type='password' name='password2' placeholder='Repeat password'/>
+                        <StyledErrorMessage name='password2' component='div'/>
                     </Label>
                     <Actions>
                         <Button type='submit' disabled={ isSubmitting }>
                             {isSubmitting ? buttonTextSubmitting : buttonText}
                         </Button>
+                        <StyledErrorMessage name='server' component='div'/>
                     </Actions>
                 </Form>
             )}

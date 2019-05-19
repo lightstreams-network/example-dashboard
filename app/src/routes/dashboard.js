@@ -16,6 +16,9 @@ import {
     Flex,
     Box,
     Section,
+    Input,
+    Label,
+    Button
 } from '../components/elements';
 
 const Header = styled.div`
@@ -34,13 +37,19 @@ const StyledA = styled.a`
 
 const Dashboard = () => (
     <IfNotAuthRedirectTo route={ROUTE_LOGIN}>
-        {({ user, token, balance, files, room, peers, messages, fileDataUrl,
-            clearStorage, fetchWalletBalance, fetchItemList, addFiles, broadcastMessage, grantAccess, getFileData
+        {({ user, token, balance, files, room, peers, messages,
+            clearStorage, fetchWalletBalance, fetchItemList, uploadFile, broadcastMessage, grantAccess, getFileData
         }) => {
             const [hasLoadedBefore, setHasLoadedBefore] = useState(false);
-            const [meta, setMeta] = useState('');
+            const [title, setTitle] = useState('');
+            const [description, setDescription] = useState('');
+            const [file, setFile] = useState(null);
+            const [isUploading, setIsUploading] = useState(false);
 
-            const refreshBalance = () => fetchWalletBalance({ token, ethAddress: user.ethAddress});
+            const refreshUser = () => {
+                fetchWalletBalance({ token, ethAddress: user.ethAddress});
+                fetchItemList({ token, ethAddress: user.ethAddress });
+            };
 
             useEffect(() => {
                 if (!hasLoadedBefore) {
@@ -91,24 +100,29 @@ const Dashboard = () => (
                                 <P>Please make sure you have the password for this address, as there is no other way to recover the account.</P>
 
                                 <H3>Your Balance</H3>
-                                <P>{parseFloat(balance/1000000000000000000)}</P>
+                                <P>{parseFloat(balance).toFixed(2)} PHT</P>
                             </Section>
                             <Section>
-                                <H3>Download a file</H3>
-                                <form
-                                    onSubmit={(e) => {
-                                        getFileData({ meta, token });
-                                        e.preventDefault();
-                                    }}
-                                >
-                                    <input type='text' onChange={(e) => setMeta(e.target.value)} value={meta} />
-                                    <button type='submit'>Get Download Link</button>
-                                </form>
-                                {fileDataUrl ? <a href={fileDataUrl}>Your file link</a> : null}
-                            </Section>
-                            <Section>
-                                <H3>Upload a file</H3>
-                                <Dropzone user={user} addFiles={addFiles} refreshBalance={refreshBalance} />
+                                <H3>Upload a new file</H3>
+                                <br/>
+                                <Label>Title:
+                                <Input className='w-50' type='text' onChange={(e) => setTitle(e.target.value)} value={title}/>
+                                </Label>
+                                <Label>Description:
+                                <Input className='w-80' type='text' onChange={(e) => setDescription(e.target.value)} value={description}/>
+                                </Label>
+                                <Label>File</Label>
+                                <Dropzone user={user} onAddFile={(fileItem) => setFile(fileItem)} onFinish={refreshUser} />
+                                <br />
+                                <Button onClick={() => {
+                                    setIsUploading(true);
+                                    uploadFile({token, file, description, title}).finally(() => {
+                                        setTitle('');
+                                        setDescription('');
+                                        setFile(null);
+                                        setIsUploading(false);
+                                    });
+                                }} disabled={isUploading}> {isUploading ? 'Uploading' : 'Upload' } </Button>
                             </Section>
                             <Section>
                                 <H3>Files</H3>

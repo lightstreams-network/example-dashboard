@@ -31,25 +31,18 @@ const Container = styled.div`
     transition: border .24s ease-in-out;
 `;
 
-const Dropzone = ({ user, addFiles }) => {
+const Dropzone = ({ user, onAddFile }) => {
     const onDrop = useCallback(acceptedFiles => {
         const reader = new FileReader();
 
-        reader.onabort = () => console.log('file reading was aborted');
-        reader.onerror = () => console.log('file reading has failed');
+        reader.onabort = (err) => console.error(err);
+        reader.onerror = (err) => console.error(err);
         reader.onload = () => {
             // Do whatever you want with the file contents
-            console.log('Loading file')
-            const binaryStr = reader.result;
-            console.log(binaryStr);
+            console.log('File loaded file');
         };
 
-        addFiles({
-            account: user.ethAddress,
-            password: user.password,
-            files: acceptedFiles
-        });
-
+        onAddFile(acceptedFiles[0]);
     }, []);
 
     const {
@@ -73,7 +66,7 @@ const Dropzone = ({ user, addFiles }) => {
             <p>Drag and drop some files here, or click to select files</p>
             <aside>
                 <h4>Files</h4>
-                <ul>{files}</ul>
+                {files[0]}
             </aside>
         </Container>
     );

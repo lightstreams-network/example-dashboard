@@ -26,23 +26,23 @@ const mapDispatchToProps = (dispatch) => {
         clearStorage() {
             dispatch(clearStoredState());
         },
-        addFiles({ account, password, files }) {
-            dispatch(lethStorageAdd({ account, password, files }));
+        uploadFile({ token, title, description, file }) {
+            return dispatch(lethStorageAdd({ token, title, description, file }));
         },
         fetchWalletBalance({ethAddress, token}) {
-            dispatch(lethWalletBalance({ethAddress, token}));
+            return dispatch(lethWalletBalance({ethAddress, token}));
         },
         fetchItemList({ ethAddress, token }) {
-            dispatch(lethItemList({ ethAddress, token }));
+            return dispatch(lethItemList({ ethAddress, token }));
         },
         broadcastMessage(room, message) {
-            dispatch(broadcast(room, message));
+            return dispatch(broadcast(room, message));
         },
         grantAccess({ acl, ownerAccount, password, toAccount, permissionType }) {
-            dispatch(lethAclGrant({ acl, ownerAccount, password, toAccount, permissionType }));
+            return dispatch(lethAclGrant({ acl, ownerAccount, password, toAccount, permissionType }));
         },
         getFileData({ token, itemId, username }) {
-            dispatch(lethStorageFetch({ token, itemId, username }));
+            return dispatch(lethStorageFetch({ token, itemId, username }));
         }
     };
 };

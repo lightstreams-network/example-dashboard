@@ -8,6 +8,10 @@ export function validatePassword(values) {
         values.password.length < 6
     ) {
         errors.password = 'The password needs to be at least 6 characters long';
+    } else if (
+        values.password !== values.password2
+    ) {
+        errors.password2 = 'Password does not match';
     }
     return errors;
 }
