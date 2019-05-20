@@ -18,7 +18,7 @@ const PendingList = ({ user, requests, showModal, onAccept, onReject }) => {
     }, {
         Header: 'Created at',
         accessor: 'createdAt',
-        width: 200,
+        width: 300,
         Cell: (item) => {
             const d = new Date(item.value);
             return d.toISOString();

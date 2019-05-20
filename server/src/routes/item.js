@@ -35,6 +35,7 @@ router.post('/add', session.authenticate('jwt', { session: false }), async (req,
       file: attrs.file
     });
     const item = await ProfileService.retrieveRemoteItem(req.user, itemId);
+    item.events = [];
     res.json(jsonResponse(item));
     res.send();
   } catch ( err ) {
