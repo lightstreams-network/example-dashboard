@@ -20,7 +20,7 @@ app.set('view engine', 'hbs');
 app.use(logger(process.env.NODE_ENV === 'development' ? 'dev' : 'prod'));
 // app.use(bodyParser);
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
+app.use(bodyParser.urlencoded({ extended: false, limit: '10mb' }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors({

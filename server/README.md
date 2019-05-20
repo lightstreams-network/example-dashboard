@@ -84,6 +84,4 @@ Distribution contract deployed! 0xa985cF71d99E83db05f59b53c506262F37CAfD6E
    > Total cost:           0.5155115 ETH
 
 
-
-
 ```

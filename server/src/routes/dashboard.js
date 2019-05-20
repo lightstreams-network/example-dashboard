@@ -29,8 +29,7 @@ router.post('/profile/set-picture', session.authenticate('jwt', { session: false
     const attrs = extractRequestAttrs(req, query);
     const item = await ProfileService.retrieveRemoteItem(req.user, attrs.item_id);
     const nextRootData = await DashboardService.setProfilePictureData(req.user, item);
-    res.json(jsonResponse(nextRootData));
-    res.send();
+    res.send(jsonResponse(nextRootData));
   } catch ( err ) {
     debug(err);
     next(err);
@@ -57,13 +56,12 @@ router.get('/profile/get', session.authenticate('jwt', { session: false }), asyn
       return item;
     });
     const profilePictureData = await DashboardService.getProfilePictureData(user);
-    res.json(jsonResponse({
+    res.send(jsonResponse({
       profilePicture: profilePictureData,
       username: user.username,
       ethAddress: user.ethAddress,
       items: fullItems
     }));
-    res.send();
   } catch ( err ) {
     debug(err);
     next(err);
@@ -83,8 +81,7 @@ router.get('/profile/get-all', session.authenticate('jwt', { session: false }), 
     }
 
     const rootData = await DashboardService.retrieveUserRootData(user);
-    res.json(jsonResponse(rootData));
-    res.send();
+    res.send(jsonResponse(rootData));
   } catch ( err ) {
     debug(err);
     next(err);
@@ -111,8 +108,7 @@ router.get('/profile/request-access', session.authenticate('jwt', { session: fal
       throw new Error(`User ${attrs.username} does not have profile`);
     }
     const itemRequest = await DashboardService.createNewItemPermissionRequest(req.user, {fromUsername: attrs.username}, profilePictureData.itemId, 'pending');
-    res.json(jsonResponse(itemRequest));
-    res.send();
+    res.send(jsonResponse(itemRequest));
   } catch ( err ) {
     debug(err);
     next(err);

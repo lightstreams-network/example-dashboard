@@ -70,7 +70,7 @@ router.post('/login', async (req, res, next) => {
       password: attrs.password,
       lethToken: token
     });
-    res.json(jsonResponse({ token: authToken, user }))
+    res.send(jsonResponse({ token: authToken, user }))
   } catch ( err ) {
     debug(err);
     next(err);

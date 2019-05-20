@@ -60,8 +60,7 @@ router.get('/list', session.authenticate('jwt', { session: false }), async (req,
       item.events = itemRequests[item.id] || [];
       return item;
     });
-    res.json(jsonResponse(responseData));
-    res.send();
+    res.send(jsonResponse(responseData));
   } catch ( err ) {
     debug(err);
     next(err);
@@ -81,8 +80,7 @@ router.get('/info', session.authenticate('jwt', { session: false }), async (req,
   try {
     const attrs = extractRequestAttrs(req, query);
     const item = await ProfileService.retrieveRemoteItem(req.user, attrs.item_id);
-    res.json(jsonResponse(item));
-    res.send();
+    res.send(jsonResponse(item));
   } catch ( err ) {
     debug(err);
     next(err);

@@ -28,8 +28,7 @@ router.post('/request-access', session.authenticate('jwt', { session: false }), 
     const attrs = extractRequestAttrs(req, query);
     const destUser = await DashboardService.retrieveUserByUsername(attrs.username);
     const itemRequest = await DashboardService.createNewItemPermissionRequest(destUser, { fromUsername: req.user.username }, attrs.item_id, 'pending');
-    res.json(jsonResponse(itemRequest));
-    res.send();
+    res.send(jsonResponse(itemRequest));
   } catch ( err ) {
     debug(err);
     next(err);
@@ -48,10 +47,9 @@ router.post('/deny-request', session.authenticate('jwt', { session: false }), as
   try {
     const attrs = extractRequestAttrs(req, query);
     await DashboardService.denyPermissionRequest(req.user, attrs.username, attrs.item_id);
-    res.json(jsonResponse({
+    res.send(jsonResponse({
       denied: true
     }));
-    res.send();
   } catch ( err ) {
     debug(err);
     next(err);
@@ -70,10 +68,9 @@ router.post('/revoke-access', session.authenticate('jwt', { session: false }), a
   try {
     const attrs = extractRequestAttrs(req, query);
     await DashboardService.revokeAccess(req.user, attrs.username, attrs.item_id);
-    res.json(jsonResponse({
+    res.send(jsonResponse({
       revoked: true,
     }));
-    res.send();
   } catch ( err ) {
     debug(err);
     next(err);
@@ -92,10 +89,9 @@ router.post('/grant-access', session.authenticate('jwt', { session: false }), as
   try {
     const attrs = extractRequestAttrs(req, query);
     await DashboardService.grantReadAccess(req.user, attrs.username, attrs.item_id);
-    res.json(jsonResponse({
+    res.send(jsonResponse({
       read: true,
     }));
-    res.send();
   } catch ( err ) {
     debug(err);
     next(err);
