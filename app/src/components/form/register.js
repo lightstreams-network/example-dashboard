@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import styled from 'styled-components';
 import { createUser, getAuthenticatedUser, getAuthErrors } from '../../store/auth';
-import { validatePassword } from '../../lib/validators';
+import { validateAccount, validatePassword } from '../../lib/validators';
 import { Button, Label } from '../elements';
 
 const StyledField = styled(Field)`
@@ -30,7 +30,7 @@ const RegisterForm = ({ url, authErrors, handleSubmit }) => {
     return (
         <Formik
             initialValues={{ password: '' }}
-            validate={values => validatePassword(values)}
+            validate={values => ({ ...validatePassword(values), ...validatePassword2(values) })}
             onSubmit={(values, { setSubmitting, setErrors }) => {
                 handleSubmit(url, values)
                     .catch(err => {

@@ -9,12 +9,32 @@ const FileList = ({ user, files, showModal, grantAccess, downloadFile}) => {
     }, {
         Header: 'Description',
         accessor: 'description' // String-based value accessors!
-    },{
-        Header: 'Meta',
-        accessor: 'meta',
     }, {
-        Header: 'Permissions Contract',
-        accessor: 'acl',
+        Header: 'Granted users',
+        accessor: 'events',
+        Cell: (item) => {
+            const grantedUsers = item.value.reduce((acum, e) => {
+                if(typeof e.to !== 'undefined') {
+                    acum[e.to] = e.status === 'granted';
+                }
+                return acum;
+            }, {});
+            return (
+                <div>
+                    {
+                        Object.keys(grantedUsers).map((username) => {
+                           if(grantedUsers[username]) {
+                               return (
+                                   <span>
+                                       <img src="https://img.icons8.com/bubbles/50/000000/delete-male-user.png" />
+                                       {username}
+                                   </span>)
+                           }
+                        })
+                    }
+                </div>
+            );
+        }
     }, {
         Header: 'Actions',
         accessor: 'id',

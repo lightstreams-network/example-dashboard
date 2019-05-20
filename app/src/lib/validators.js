@@ -1,4 +1,3 @@
-import { isAddress } from './checks';
 
 export function validatePassword(values) {
     const errors = {};
@@ -8,7 +7,14 @@ export function validatePassword(values) {
         values.password.length < 6
     ) {
         errors.password = 'The password needs to be at least 6 characters long';
-    } else if (
+    }
+
+    return errors;
+}
+
+export function validatePassword2(values) {
+    const errors = {};
+    if (
         values.password !== values.password2
     ) {
         errors.password2 = 'Password does not match';
@@ -19,7 +25,7 @@ export function validatePassword(values) {
 export function validateAccount(values) {
     const errors = {};
     if (!values.username) {
-        errors.account = 'Account address is missing';
+        errors.username = 'Account address is missing';
     } else if (
         values.username.length < 4
     ) {

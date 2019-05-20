@@ -105,13 +105,12 @@ const Dashboard = () => (
                             <Section>
                                 <H3>Upload a new file</H3>
                                 <br/>
-                                <Label>Title:
-                                <Input className='w-50' type='text' onChange={(e) => setTitle(e.target.value)} value={title}/>
+                                <Label><span className='w-20'>Title:</span>
+                                <Input className='w-30' type='text' onChange={(e) => setTitle(e.target.value)} value={title}/>
                                 </Label>
-                                <Label>Description:
-                                <Input className='w-80' type='text' onChange={(e) => setDescription(e.target.value)} value={description}/>
+                                <Label><span className='w-20'>Description:</span>
+                                <Input className='w-50' type='text' onChange={(e) => setDescription(e.target.value)} value={description}/>
                                 </Label>
-                                <Label>File</Label>
                                 <Dropzone user={user} onAddFile={(fileItem) => setFile(fileItem)} onFinish={refreshUser} />
                                 <br />
                                 <Button onClick={() => {
