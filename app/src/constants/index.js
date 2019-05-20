@@ -7,6 +7,7 @@ export const PATH_ITEM_LIST = '/item/list';
 export const PATH_ITEM_DOWNLOAD = '/item/download';
 export const PATH_PERMISSION_GRANT = '/permission/grant-access';
 export const PATH_PERMISSION_REVOKE = '/permission/revoke-access';
+export const PATH_PERMISSION_REQUEST = '/permission/request-access';
 
 export const ROUTE_HOME = '/';
 export const ROUTE_LOGIN = '/login';

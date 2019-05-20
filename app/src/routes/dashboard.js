@@ -7,6 +7,7 @@ import CopyToClipboard from '../components/copy-to-clipboard';
 import Dropzone from '../components/dropzone';
 import FileList from '../components/file-list';
 import PendingList from '../components/pending-list';
+import UserFileList from '../components/user-file-list';
 
 import {
     Container,
@@ -41,8 +42,8 @@ const Dashboard = () => (
     <IfNotAuthRedirectTo route={ROUTE_LOGIN}>
         {({
               user, token, balance, files,
-              clearStorage, fetchWalletBalance, fetchItemList, uploadFile, broadcastMessage, grantAccess, revokeAccess,
-              getFileData
+              clearStorage, fetchWalletBalance, fetchItemList, uploadFile, fetchUserItemList, grantAccess, revokeAccess,
+              requestAccess, getFileData
           }) => {
             const [hasLoadedBefore, setHasLoadedBefore] = useState(false);
             const [title, setTitle] = useState('');
@@ -50,9 +51,11 @@ const Dashboard = () => (
             const [file, setFile] = useState(null);
             const [grantUsername, setGrantUsername] = useState('');
             const [fromUsername, setFromUsername] = useState('');
+            const [fromUserFiles, setFromUserFiles] = useState([]);
             const [grantFileId, setGrantFileId] = useState(null);
             const [isUploading, setIsUploading] = useState(false);
             const [isGranting, setIsGranting] = useState(false);
+            const [isFetchingUser, setIsFetchingUser] = useState(false);
 
             const refreshUser = () => {
                 fetchWalletBalance({ token, ethAddress: user.ethAddress });
@@ -155,7 +158,7 @@ const Dashboard = () => (
                                 <H3>Pending requests</H3>
                                 <PendingList
                                     user={user}
-                                    onAccept={({itemId, username}) => {
+                                    onAccept={({ itemId, username }) => {
                                         grantAccess({ token, itemId, toUsername: username });
                                     }}
                                     onReject={({ itemId, username }) => {
@@ -181,6 +184,29 @@ const Dashboard = () => (
                                 }} revokeAccess={({ itemId, username }) => {
                                     revokeAccess({ token, itemId, toUsername: username });
                                 }} files={files}/>
+                            </Section>
+                            <Section>
+                                <H3>Other user files</H3>
+                                <Label>
+                                    <span className='w-20'>Username:</span>
+                                    <Input className='w-30' type='text'
+                                           onChange={(e) => setFromUsername(e.target.value)}
+                                           value={fromUsername}/>
+                                </Label>
+                                <Button onClick={() => {
+                                    setIsFetchingUser(true);
+                                    fetchUserItemList({ token, username: fromUsername })
+                                        .then(res => {
+                                            setFromUserFiles(res.data);
+                                        }).finally(() => {
+                                            setIsFetchingUser(false);
+                                        });
+                                }} disabled={isFetchingUser}> {isFetchingUser ? 'Fetching' : 'Fetch'} </Button>
+                                <UserFileList user={user} downloadFile={(itemId) => {
+                                    getFileData({ token, itemId, username: fromUsername });
+                                }} requestAccess={(itemId) => {
+                                    requestAccess({ token, itemId, toUsername: fromUsername });
+                                }} files={fromUserFiles}/>
                             </Section>
                             <Section>
                                 <P><span className='em'>Are you a developer?</span> <StyledA

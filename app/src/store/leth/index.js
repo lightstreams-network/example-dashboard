@@ -6,7 +6,8 @@ import {
     PATH_ITEM_LIST,
     PATH_ITEM_ADD,
     PATH_PERMISSION_GRANT,
-    PATH_PERMISSION_REVOKE
+    PATH_PERMISSION_REVOKE,
+    PATH_PERMISSION_REQUEST
 } from '../../constants';
 import { downloadFile } from '../../lib/downloader';
 
@@ -50,7 +51,7 @@ const RECEIVE_LETH_ERROR = 'lsn/leth/RECEIVE_LETH_ERROR';
 const receiveLethError = createAction(RECEIVE_LETH_ERROR);
 
 export function lethWalletBalance({ token, ethAddress }) {
-    return (dispatch) => {
+    return (dispatch, getState) => {
         dispatch(requestLethWalletBalance());
 
         return hGet('/wallet/balance', { ethAddress }, {
@@ -60,14 +61,22 @@ export function lethWalletBalance({ token, ethAddress }) {
     };
 }
 
-export function lethItemList({ token, ethAddress }) {
+export function lethItemList({ token }) {
     return (dispatch) => {
         dispatch(requestLethItemList());
 
-        return hGet(PATH_ITEM_LIST, { ethAddress }, {
+        return hGet(PATH_ITEM_LIST, {}, {
             token
         }).then(response => dispatch(responseLethItemList(response.data)))
             .catch(error => dispatch(receiveLethError(error)));
+    };
+}
+
+export function lethUserItemList({ username, token }) {
+    return () => {
+        return hGet(PATH_ITEM_LIST, { username }, {
+            token
+        });
     };
 }
 
@@ -129,7 +138,7 @@ export function lethFileGrant({ token, itemId, toUsername }) {
         dispatch(requestLethAclGrant());
 
         return hPost(PATH_PERMISSION_GRANT, {
-            item_id: itemId,
+            item_id: `${itemId}`,
             username: toUsername
         }, {
             token
@@ -147,6 +156,25 @@ export function lethFileRevoke({ token, itemId, toUsername }) {
         dispatch(requestLethAclGrant());
 
         return hPost(PATH_PERMISSION_REVOKE, {
+            item_id: `${itemId}`,
+            username: toUsername
+        }, {
+            token
+        }).then((res) => {
+            dispatch(lethItemList({ token }));
+        }).catch((error) => {
+            dispatch(receiveLethError(error));
+            throw error;
+        });
+    };
+}
+
+
+export function lethFileRequestAccess({ token, itemId, toUsername }) {
+    return async (dispatch) => {
+        dispatch(requestLethAclGrant());
+
+        return hPost(PATH_PERMISSION_REQUEST, {
             item_id: `${itemId}`,
             username: toUsername
         }, {
