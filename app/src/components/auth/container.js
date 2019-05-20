@@ -2,7 +2,8 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { isAuthenticated, getAuthenticatedUser, getUserToken, clearStoredState } from '../../store/auth';
-import { lethStorageAdd, getWalletBalance, lethWalletBalance, lethItemList, lethAclGrant, getLethFiles, lethStorageFetch, getFileDataUrl } from '../../store/leth';
+import { lethStorageAdd, getWalletBalance, lethWalletBalance, lethItemList, lethFileGrant,
+    lethFileRevoke, getLethFiles, lethStorageFetch, getFileDataUrl } from '../../store/leth';
 import { getIpfsRoom, getIpfsPeers, getIpfsMessages, broadcast } from '../../store/ipfs';
 
 // see https://frontarm.com/james-k-nelson/passing-data-props-children/
@@ -38,8 +39,11 @@ const mapDispatchToProps = (dispatch) => {
         broadcastMessage(room, message) {
             return dispatch(broadcast(room, message));
         },
-        grantAccess({ acl, ownerAccount, password, toAccount, permissionType }) {
-            return dispatch(lethAclGrant({ acl, ownerAccount, password, toAccount, permissionType }));
+        grantAccess({ token, itemId, toUsername }) {
+            return dispatch(lethFileGrant({ token, itemId, toUsername }));
+        },
+        revokeAccess({ token, itemId, toUsername }) {
+            return dispatch(lethFileRevoke({ token, itemId, toUsername }));
         },
         getFileData({ token, itemId, username }) {
             return dispatch(lethStorageFetch({ token, itemId, username }));

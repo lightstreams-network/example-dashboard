@@ -17,6 +17,7 @@ import {
     Box,
     Section,
     Input,
+    Select,
     Label,
     Button
 } from '../components/elements';
@@ -37,14 +38,18 @@ const StyledA = styled.a`
 
 const Dashboard = () => (
     <IfNotAuthRedirectTo route={ROUTE_LOGIN}>
-        {({ user, token, balance, files, room, peers, messages,
-            clearStorage, fetchWalletBalance, fetchItemList, uploadFile, broadcastMessage, grantAccess, getFileData
+        {({ user, token, balance, files,
+            clearStorage, fetchWalletBalance, fetchItemList, uploadFile, broadcastMessage, grantAccess, revokeAccess,
+              getFileData
         }) => {
             const [hasLoadedBefore, setHasLoadedBefore] = useState(false);
             const [title, setTitle] = useState('');
             const [description, setDescription] = useState('');
             const [file, setFile] = useState(null);
+            const [grantUsername, setGrantUsername] = useState('');
+            const [grantFileId, setGrantFileId] = useState(null);
             const [isUploading, setIsUploading] = useState(false);
+            const [isGranting, setIsGranting] = useState(false);
 
             const refreshUser = () => {
                 fetchWalletBalance({ token, ethAddress: user.ethAddress});
@@ -74,26 +79,9 @@ const Dashboard = () => (
                         </Header>
                         <Box>
                             <Section>
-                                <H3>Welcome!</H3>
+                                <H3>Welcome {user.username}!</H3>
                                 <P>This page demonstrates how you can upload file to your smart vault.</P>
                             </Section>
-                            <Section>
-                                <H3>Peers ({peers.length + 1})</H3>
-                                {peers.map(peer => <div key={peer}>{peer}</div>)}
-                            </Section>
-                            <Section>
-                                <H3>Messages</H3>
-                                {messages.map(message => <div key={message}>{message}</div>)}
-                                <button
-                                    type='submit'
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        broadcastMessage(room, (new Date()).toISOString());
-                                    }}
-                                >Broadcast time
-                                </button>
-                            </Section>
-
                             <Section>
                                 <H3>Your Wallet</H3>
                                 <CopyToClipboard initialText={user.ethAddress} />
@@ -101,6 +89,33 @@ const Dashboard = () => (
 
                                 <H3>Your Balance</H3>
                                 <P>{parseFloat(balance).toFixed(2)} PHT</P>
+                            </Section>
+                            <Section>
+                                <H3>Grant Access</H3>
+                                <Label>
+                                    <span className='w-20'>Username:</span>
+                                    <Input className='w-30' type='text' onChange={(e) => setGrantUsername(e.target.value)}
+                                           value={grantUsername}/>
+                                </Label>
+                                <Label>
+                                    <span className='w-20'>File:</span>
+                                    <Select className='w-50' onChange={(e) => setGrantFileId(e.target.value)}>
+                                        <option value=''>Select a file</option>
+                                        {
+                                            Object.values(files).map(fileItem => {
+                                               return <option value={fileItem.id}>{fileItem.id} - {fileItem.title}</option>;
+                                            })
+                                        }
+                                    </Select>
+                                </Label>
+                                <Button onClick={() => {
+                                    setIsGranting(true);
+                                    grantAccess({ token, itemId: grantFileId, toUsername: grantUsername }).finally(() => {
+                                        setGrantUsername('');
+                                        setGrantFileId(null);
+                                        setIsGranting(false);
+                                    });
+                                }} disabled={isGranting}> {isGranting ? 'Granting' : 'Grant'} </Button>
                             </Section>
                             <Section>
                                 <H3>Upload a new file</H3>
@@ -124,10 +139,12 @@ const Dashboard = () => (
                                 }} disabled={isUploading}> {isUploading ? 'Uploading' : 'Upload' } </Button>
                             </Section>
                             <Section>
-                                <H3>Files</H3>
+                                <H3>My Files</H3>
                                 <FileList user={user} downloadFile={(itemId) => {
                                     getFileData({token, itemId, username: user.username });
-                                }} grantAccess={grantAccess} files={files} />
+                                }} revokeAccess={({itemId, username}) => {
+                                    revokeAccess({ token, itemId, toUsername: username });
+                                }} files={files} />
                             </Section>
                             <Section>
                                 <P><span className='em'>Are you a developer?</span> <StyledA href="https://docs.lightstreams.network">Check out the documentation</StyledA></P>

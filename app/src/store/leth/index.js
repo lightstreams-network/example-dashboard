@@ -1,11 +1,14 @@
 import get from 'lodash.get';
 import { createAction, createReducer } from 'redux-act';
-import lsClient from 'lightstreams-js-sdk';
 import { hGet, hPost } from '../../lib/fetch';
-import { SERVER_URL, PATH_ITEM_DOWNLOAD, PATH_ITEM_LIST, PATH_ITEM_ADD } from '../../constants';
+import {
+    PATH_ITEM_DOWNLOAD,
+    PATH_ITEM_LIST,
+    PATH_ITEM_ADD,
+    PATH_PERMISSION_GRANT,
+    PATH_PERMISSION_REVOKE
+} from '../../constants';
 import { downloadFile } from '../../lib/downloader';
-
-const gateway = lsClient(SERVER_URL);
 
 const initialState = {
     files: {},
@@ -78,7 +81,7 @@ export function lethStorageAdd({ token, title, description, file }) {
         formData.append('file', file);
 
         return hPost(PATH_ITEM_ADD, formData, {
-            token,
+            token
         }).then((response) => {
             return response.json();
         }).then((res) => {
@@ -121,19 +124,39 @@ export function lethStorageFetch({ token, itemId, username }) {
     };
 }
 
-export function lethAclGrant({ acl, ownerAccount, password, toAccount, permissionType }) {
+export function lethFileGrant({ token, itemId, toUsername }) {
     return async (dispatch) => {
         dispatch(requestLethAclGrant());
 
-        return gateway.acl.grant(acl, ownerAccount, password, toAccount, permissionType)
-            .then(response => {
-                dispatch(responseLethAclGrant(response));
-                return response;
-            })
-            .catch((error) => {
-                dispatch(receiveLethError(error));
-            });
+        return hPost(PATH_PERMISSION_GRANT, {
+            item_id: itemId,
+            username: toUsername
+        }, {
+            token
+        }).then(() => {
+            dispatch(lethItemList({ token }));
+        }).catch((error) => {
+            dispatch(receiveLethError(error));
+            throw error;
+        });
+    };
+}
 
+export function lethFileRevoke({ token, itemId, toUsername }) {
+    return async (dispatch) => {
+        dispatch(requestLethAclGrant());
+
+        return hPost(PATH_PERMISSION_REVOKE, {
+            item_id: `${itemId}`,
+            username: toUsername
+        }, {
+            token
+        }).then((res) => {
+            dispatch(lethItemList({ token }));
+        }).catch((error) => {
+            dispatch(receiveLethError(error));
+            throw error;
+        });
     };
 }
 

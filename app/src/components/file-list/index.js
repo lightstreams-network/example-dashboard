@@ -1,13 +1,18 @@
 import React, { useState } from 'react';
 import ReactTable from 'react-table';
 
-const FileList = ({ user, files, showModal, grantAccess, downloadFile}) => {
-    const [toAccount, setToAccount] = useState('');
+const FileList = ({ user, files, showModal, revokeAccess, downloadFile, }) => {
     const columns = [{
+        Header: 'Id',
+        width: 25,
+        accessor: 'id' // String-based value accessors!
+    }, {
         Header: 'Title',
+        width: 100,
         accessor: 'title' // String-based value accessors!
     }, {
         Header: 'Description',
+        width: 200,
         accessor: 'description' // String-based value accessors!
     }, {
         Header: 'Granted users',
@@ -25,10 +30,11 @@ const FileList = ({ user, files, showModal, grantAccess, downloadFile}) => {
                         Object.keys(grantedUsers).map((username) => {
                            if(grantedUsers[username]) {
                                return (
-                                   <span>
-                                       <img src="https://img.icons8.com/bubbles/50/000000/delete-male-user.png" />
+                                   <button className='dbi p5' onClick={() => revokeAccess({ itemId: item.row.id, username}) }>
+                                       <img src="https://img.icons8.com/bubbles/50/000000/delete-male-user.png"/>
                                        {username}
-                                   </span>)
+                                   </button>
+                               )
                            }
                         })
                     }
@@ -38,12 +44,15 @@ const FileList = ({ user, files, showModal, grantAccess, downloadFile}) => {
     }, {
         Header: 'Actions',
         accessor: 'id',
+        width: 85,
         Cell: (item) => {
             return (
                 <div>
                     <button type="submit" onClick={() => {
                         downloadFile(item.value);
-                    }}>Download</button>
+                    }}><img src="https://img.icons8.com/ios/64/000000/download-from-cloud.png" />
+                        Download
+                    </button>
                 </div>
             )
         }

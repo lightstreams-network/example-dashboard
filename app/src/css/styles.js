@@ -10,6 +10,9 @@ const globalStyles = css`
         --pink: #ff2855;
     }
 
+    .dbi { display: inline-block; }
+    
+    .p5 { padding: 5px; }
     /* Width Scale */
 
     .w1 {    width: 1rem; }

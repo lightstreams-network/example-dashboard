@@ -145,6 +145,13 @@ export const Section = styled.div`
     }
 `;
 
+export const Select = styled.select`
+    border-bottom: 2px solid #f5f5f5;
+    background-color: white;
+
+    padding: 15px 10px;
+`;
+
 export const Label = styled.label`
     color: var(--dark-purple);
     font-size: 19px;
