@@ -46,8 +46,15 @@ router.post('/add', session.authenticate('jwt', { session: false }), async (req,
 router.get('/list', session.authenticate('jwt', { session: false }), async (req, res, next) => {
 
   try {
-    const items = await ProfileService.retrieveRemoteItemList(req.user);
-    const itemRequests = await DashboardService.getItemRequestsData(req.user);
+    const attrs = extractRequestAttrs(req, ['username']);
+    let user;
+    if(attrs.username) {
+      user = await DashboardService.retrieveUserByUsername(attrs.username);
+    } else {
+      user = req.user;
+    }
+    const items = await ProfileService.retrieveRemoteItemList(user);
+    const itemRequests = await DashboardService.getItemRequestsData(user);
     const responseData = items.map((item) => {
       item.events = itemRequests[item.id] || [];
       return item;
