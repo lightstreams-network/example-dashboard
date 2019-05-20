@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { isAuthenticated, getAuthenticatedUser, getUserToken, clearStoredState } from '../../store/auth';
 import { lethStorageAdd, getWalletBalance, lethWalletBalance, lethItemList, lethFileGrant, lethUserItemList,
     lethFileRevoke, getLethFiles, lethStorageFetch, getFileDataUrl, lethFileRequestAccess } from '../../store/leth';
-import { getIpfsRoom, getIpfsPeers, getIpfsMessages, broadcast } from '../../store/ipfs';
 
 // see https://frontarm.com/james-k-nelson/passing-data-props-children/
 
@@ -15,9 +14,6 @@ const mapStateToProps = (state) => {
         token: getUserToken(state),
         balance: getWalletBalance(state),
         files: getLethFiles(state),
-        room: getIpfsRoom(state),
-        peers: getIpfsPeers(state),
-        messages: getIpfsMessages(state),
         fileDataUrl: getFileDataUrl(state)
     };
 };
@@ -38,9 +34,6 @@ const mapDispatchToProps = (dispatch) => {
         },
         fetchUserItemList({ username, token }) {
             return dispatch(lethUserItemList({ username, token }));
-        },
-        broadcastMessage(room, message) {
-            return dispatch(broadcast(room, message));
         },
         grantAccess({ token, itemId, toUsername }) {
             return dispatch(lethFileGrant({ token, itemId, toUsername }));

@@ -1,4 +1,4 @@
-# transoundify
+# SmartVault Dashboard
 
 A decentralized application running on the Lightstreams Network
 
@@ -21,8 +21,8 @@ This app features the latest tools and best practices for development.
 
 ## Getting started
 
-1. Clone this repo using `https://github.com/lightstreams-network/transoundify.git`
-2. Move to the appropriate directory: `cd transoundify`.<br />
+1. Clone this repo using `https://github.com/lightstreams-network/smartvault-dashboard.git`
+2. Move to the appropriate directory: `cd smartvault-dashboard`.<br />
 3. Run `yarn` or `npm install` to install dependencies.<br />
 4. Run `npm start` to see the example app at `http://localhost:8080`.
 
