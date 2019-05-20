@@ -1,6 +1,11 @@
 import React  from 'react';
 import ReactTable from 'react-table';
 
+import {
+    TableActionButton,
+
+} from '../elements';
+
 const FileList = ({ user, files, showModal, revokeAccess, downloadFile, }) => {
     const columns = [{
         Header: 'Id',
@@ -30,10 +35,10 @@ const FileList = ({ user, files, showModal, revokeAccess, downloadFile, }) => {
                         Object.keys(grantedUsers).map((username) => {
                            if(grantedUsers[username]) {
                                return (
-                                   <button className='dbi p5' onClick={() => revokeAccess({ itemId: item.row.id, username}) }>
+                                   <TableActionButton onClick={() => revokeAccess({ itemId: item.row.id, username}) }>
                                        <img src="https://img.icons8.com/bubbles/50/000000/delete-male-user.png"/>
                                        {username}
-                                   </button>
+                                   </TableActionButton>
                                )
                            }
                         })
@@ -47,13 +52,11 @@ const FileList = ({ user, files, showModal, revokeAccess, downloadFile, }) => {
         width: 85,
         Cell: (item) => {
             return (
-                <div>
-                    <button type="submit" onClick={() => {
-                        downloadFile(item.value);
-                    }}><img src="https://img.icons8.com/ios/64/000000/download-from-cloud.png" />
-                        Download
-                    </button>
-                </div>
+                <TableActionButton type="submit" onClick={() => {
+                    downloadFile(item.value);
+                }}>
+                    <img src="https://img.icons8.com/ios/64/000000/download-from-cloud.png" />
+                </TableActionButton>
             )
         }
     }];

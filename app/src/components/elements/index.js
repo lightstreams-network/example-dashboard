@@ -174,6 +174,20 @@ export const Input = styled.input`
     font-size: 21px;
 `;
 
+export const TableActionButton = styled.button`
+    background-color: transparent;
+    padding: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    text-align: center;
+    border: none;
+    
+    & > img {
+        width: 45px;
+        height: 45px;
+    }
+`;
+
 export const Button = styled.button`
     border: 1px solid var(--green);
     background-color: var(--green);

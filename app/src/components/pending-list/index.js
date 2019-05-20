@@ -1,6 +1,11 @@
 import React  from 'react';
 import ReactTable from 'react-table';
 
+import {
+    TableActionButton,
+
+} from '../elements';
+
 const PendingList = ({ user, requests, showModal, onAccept, onReject }) => {
     const columns = [{
         Header: 'From',
@@ -25,16 +30,16 @@ const PendingList = ({ user, requests, showModal, onAccept, onReject }) => {
         Cell: (item) => {
             return (
                 <div>
-                    <button onClick={() => {
+                    <TableActionButton onClick={() => {
                         onAccept({itemId: item.value, username: item.row.from});
                     }}><img src="https://img.icons8.com/bubbles/50/000000/add-user-male.png" />
                         Accept
-                    </button>
-                    <button onClick={() => {
+                    </TableActionButton>
+                    <TableActionButton onClick={() => {
                         onReject({ itemId: item.value, username: item.row.from });
                     }}><img src="https://img.icons8.com/bubbles/50/000000/delete-male-user.png"/>
                         Reject
-                    </button>
+                    </TableActionButton>
                 </div>
             )
         }

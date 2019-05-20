@@ -1,6 +1,10 @@
 import React from 'react';
 import ReactTable from 'react-table';
 
+import {
+    TableActionButton,
+} from '../elements';
+
 const UserFileList = ({ user, files, showModal, requestAccess, downloadFile }) => {
     const columns = [{
         Header: 'Id',
@@ -27,19 +31,17 @@ const UserFileList = ({ user, files, showModal, requestAccess, downloadFile }) =
             }, false);
 
             return (
-                <div> {hasAccess
-                    ? <button type="submit" onClick={() => {
+                <div>
+                { hasAccess
+                    ? <TableActionButton type="submit" onClick={() => {
                         downloadFile(item.row.id);
                     }}><img src="https://img.icons8.com/ios/64/000000/download-from-cloud.png"/>
-                        Download
-                    </button>
-                    : <button type="submit" onClick={() => {
+                    </TableActionButton>
+                    : <TableActionButton type="submit" onClick={() => {
                         requestAccess(item.row.id);
                     }}><img src="https://img.icons8.com/wired/64/000000/unlock.png"/>
-                        Request Access
-                    </button>
-                }
-                </div>
+                    </TableActionButton>
+                }</div>
             );
         }
     }];
