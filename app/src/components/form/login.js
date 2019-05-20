@@ -29,13 +29,13 @@ const LoginForm = ({ url, authErrors, handleSubmit }) => {
 
     return (
         <Formik
-            initialValues={{ username: '', password: '' }}
+            initialValues={{ username: '', password: '', server: '' }}
             validate={values => ({ ...validateAccount(values), ...validatePassword(values) })}
             onSubmit={(values, { setSubmitting, setErrors }) => {
                 handleSubmit(url, values)
                     .catch(err => {
                         setErrors({
-                            username: err.message
+                            server: err.message
                         });
                     })
                     .finally(() => {
@@ -64,6 +64,7 @@ const LoginForm = ({ url, authErrors, handleSubmit }) => {
                         <Button type='submit' disabled={ isSubmitting }>
                             {isSubmitting ? buttonTextSubmitting : buttonText}
                         </Button>
+                        <StyledErrorMessage name='server' component='div'/>
                     </Actions>
                 </Form>
             )}

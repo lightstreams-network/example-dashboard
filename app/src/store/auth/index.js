@@ -76,48 +76,52 @@ export function clearStoredState() {
 
 export function createUser({ username, password }) {
     return (dispatch) => {
-        dispatch(requestCreateUser());
-        return hPost(PATH_SIGNUP, { username, password })
-            .then((response) => {
-                const { user, token } = response.data;
-                dispatch(receiveToken(token));
-                dispatch(receiveUser(user));
-                return response;
-            })
-            .catch((error) => {
-                if (error.response && typeof error.response.json === 'function') {
-                    error.response.json().then(err => {
-                        dispatch(receiveAuthError(err));
-                        throw new Error(err.message);
-                    });
-                } else {
-                    dispatch(receiveAuthError(error));
-                    throw error;
-                }
-            });
+        return new Promise((resolve, reject) => {
+            dispatch(requestCreateUser());
+            hPost(PATH_SIGNUP, { username, password })
+                .then((response) => {
+                    const { user, token } = response.data;
+                    dispatch(receiveToken(token));
+                    dispatch(receiveUser(user));
+                    resolve(response);
+                })
+                .catch((error) => {
+                    if (error.response && typeof error.response.json === 'function') {
+                        error.response.json().then(err => {
+                            dispatch(receiveAuthError(err));
+                            reject(new Error(err.message));
+                        });
+                    } else {
+                        dispatch(receiveAuthError(error));
+                        reject(error);
+                    }
+                });
+        });
     };
 }
 
 export function login({ username, password }) {
     return (dispatch) => {
-        return hPost(PATH_LOGIN, { username, password })
-            .then((response) => {
-                const { user, token } = response.data;
-                dispatch(receiveToken(token));
-                dispatch(receiveUser(user));
-                return response.token;
-            })
-            .catch((error) => {
-                if (error.response && typeof error.response.json === 'function') {
-                    error.response.json().then(err => {
-                        dispatch(receiveAuthError(err));
-                        throw new Error(err.message);
-                    });
-                } else {
-                    dispatch(receiveAuthError(error));
-                    throw error;
-                }
-            });
+        return new Promise((resolve, reject) => {
+            hPost(PATH_LOGIN, { username, password })
+                .then((response) => {
+                    const { user, token } = response.data;
+                    dispatch(receiveToken(token));
+                    dispatch(receiveUser(user));
+                    resolve(response.token);
+                })
+                .catch((error) => {
+                    if (error.response && typeof error.response.json === 'function') {
+                        error.response.json().then(err => {
+                            dispatch(receiveAuthError(err));
+                            reject(new Error(err.message));
+                        });
+                    } else {
+                        dispatch(receiveAuthError(error));
+                        reject(error);
+                    }
+                });
+        });
     };
 }
 
