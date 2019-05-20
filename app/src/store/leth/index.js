@@ -50,11 +50,11 @@ const responseLethAclGrant = createAction(RES_LETH_ACL_GRANT);
 const RECEIVE_LETH_ERROR = 'lsn/leth/RECEIVE_LETH_ERROR';
 const receiveLethError = createAction(RECEIVE_LETH_ERROR);
 
-export function lethWalletBalance({ token, ethAddress }) {
+export function lethWalletBalance({ token }) {
     return (dispatch, getState) => {
         dispatch(requestLethWalletBalance());
 
-        return hGet('/wallet/balance', { ethAddress }, {
+        return hGet('/wallet/balance', { }, {
             token
         }).then(response => dispatch(responseLethWalletBalance(response.data)))
             .catch(error => dispatch(receiveLethError(error)));

@@ -58,14 +58,14 @@ const Dashboard = () => (
             const [isFetchingUser, setIsFetchingUser] = useState(false);
 
             const refreshUser = () => {
-                fetchWalletBalance({ token, ethAddress: user.ethAddress });
-                fetchItemList({ token, ethAddress: user.ethAddress });
+                fetchWalletBalance({ token });
+                fetchItemList({ token });
             };
 
             useEffect(() => {
                 if (!hasLoadedBefore) {
                     setHasLoadedBefore(true);
-                    fetchWalletBalance({ token, ethAddress: user.ethAddress });
+                    fetchWalletBalance({ token });
                     fetchItemList({ token, ethAddress: user.ethAddress });
                 }
             });
