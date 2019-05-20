@@ -71,20 +71,19 @@ module.exports.updateUserRootData = async (user, values) => {
   const tmpFile = tempfile('.json');
   fs.writeFileSync(tmpFile, JSON.stringify(nextRootData));
   const nextRootDataStream = fs.createReadStream(tmpFile);
-
-  let gwRes;
   try {
-    const gwResRaw = await gateway.storage.add(web3Cfg.from, web3Cfg.password, nextRootDataStream, { throwHttpErrors: true });
-    gwRes = JSON.parse(gwResRaw.body);
+    const gwRes = await gateway.storage.add(web3Cfg.from, web3Cfg.password, nextRootDataStream, { throwHttpErrors: true });
+    fs.unlinkSync(tmpFile);
+    await DashboardSCService.setNextRootDataId(await Web3(), user, gwRes.meta);
+    return nextRootData;
   } catch ( err ) {
+    fs.unlinkSync(tmpFile);
     if (err.host) {
       const gwErr = JSON.parse(err.body);
       throw new Error(gwErr.error.message);
     }
     throw err;
   }
-  await DashboardSCService.setNextRootDataId(await Web3(), user, gwRes.meta);
-  return nextRootData;
 };
 
 module.exports.createNewItemPermissionRequest = async (user, { fromUsername, toUsername }, itemId, status) => {
