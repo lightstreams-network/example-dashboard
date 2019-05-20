@@ -6,6 +6,7 @@ import Logo from '../components/logo';
 import CopyToClipboard from '../components/copy-to-clipboard';
 import Dropzone from '../components/dropzone';
 import FileList from '../components/file-list';
+import PendingList from '../components/pending-list';
 
 import {
     Container,
@@ -38,21 +39,23 @@ const StyledA = styled.a`
 
 const Dashboard = () => (
     <IfNotAuthRedirectTo route={ROUTE_LOGIN}>
-        {({ user, token, balance, files,
-            clearStorage, fetchWalletBalance, fetchItemList, uploadFile, broadcastMessage, grantAccess, revokeAccess,
+        {({
+              user, token, balance, files,
+              clearStorage, fetchWalletBalance, fetchItemList, uploadFile, broadcastMessage, grantAccess, revokeAccess,
               getFileData
-        }) => {
+          }) => {
             const [hasLoadedBefore, setHasLoadedBefore] = useState(false);
             const [title, setTitle] = useState('');
             const [description, setDescription] = useState('');
             const [file, setFile] = useState(null);
             const [grantUsername, setGrantUsername] = useState('');
+            const [fromUsername, setFromUsername] = useState('');
             const [grantFileId, setGrantFileId] = useState(null);
             const [isUploading, setIsUploading] = useState(false);
             const [isGranting, setIsGranting] = useState(false);
 
             const refreshUser = () => {
-                fetchWalletBalance({ token, ethAddress: user.ethAddress});
+                fetchWalletBalance({ token, ethAddress: user.ethAddress });
                 fetchItemList({ token, ethAddress: user.ethAddress });
             };
 
@@ -68,7 +71,7 @@ const Dashboard = () => (
                 <Container>
                     <Wrapper>
                         <Header className='w-100'>
-                            <Logo className='big' url='/' />
+                            <Logo className='big' url='/'/>
                             <Flex>
                                 <StyledLink onClick={(e) => {
                                     e.preventDefault();
@@ -84,8 +87,9 @@ const Dashboard = () => (
                             </Section>
                             <Section>
                                 <H3>Your Wallet</H3>
-                                <CopyToClipboard initialText={user.ethAddress} />
-                                <P>Please make sure you have the password for this address, as there is no other way to recover the account.</P>
+                                <CopyToClipboard initialText={user.ethAddress}/>
+                                <P>Please make sure you have the password for this address, as there is no other way to
+                                    recover the account.</P>
 
                                 <H3>Your Balance</H3>
                                 <P>{parseFloat(balance).toFixed(2)} PHT</P>
@@ -94,7 +98,8 @@ const Dashboard = () => (
                                 <H3>Grant Access</H3>
                                 <Label>
                                     <span className='w-20'>Username:</span>
-                                    <Input className='w-30' type='text' onChange={(e) => setGrantUsername(e.target.value)}
+                                    <Input className='w-30' type='text'
+                                           onChange={(e) => setGrantUsername(e.target.value)}
                                            value={grantUsername}/>
                                 </Label>
                                 <Label>
@@ -103,14 +108,19 @@ const Dashboard = () => (
                                         <option value=''>Select a file</option>
                                         {
                                             Object.values(files).map(fileItem => {
-                                               return <option value={fileItem.id}>{fileItem.id} - {fileItem.title}</option>;
+                                                return <option
+                                                    value={fileItem.id}>{fileItem.id} - {fileItem.title}</option>;
                                             })
                                         }
                                     </Select>
                                 </Label>
                                 <Button onClick={() => {
                                     setIsGranting(true);
-                                    grantAccess({ token, itemId: grantFileId, toUsername: grantUsername }).finally(() => {
+                                    grantAccess({
+                                        token,
+                                        itemId: grantFileId,
+                                        toUsername: grantUsername
+                                    }).finally(() => {
                                         setGrantUsername('');
                                         setGrantFileId(null);
                                         setIsGranting(false);
@@ -121,33 +131,60 @@ const Dashboard = () => (
                                 <H3>Upload a new file</H3>
                                 <br/>
                                 <Label><span className='w-20'>Title:</span>
-                                <Input className='w-30' type='text' onChange={(e) => setTitle(e.target.value)} value={title}/>
+                                    <Input className='w-30' type='text' onChange={(e) => setTitle(e.target.value)}
+                                           value={title}/>
                                 </Label>
                                 <Label><span className='w-20'>Description:</span>
-                                <Input className='w-50' type='text' onChange={(e) => setDescription(e.target.value)} value={description}/>
+                                    <Input className='w-50' type='text' onChange={(e) => setDescription(e.target.value)}
+                                           value={description}/>
                                 </Label>
-                                <Dropzone user={user} onAddFile={(fileItem) => setFile(fileItem)} onFinish={refreshUser} />
-                                <br />
+                                <Dropzone user={user} onAddFile={(fileItem) => setFile(fileItem)}
+                                          onFinish={refreshUser}/>
+                                <br/>
                                 <Button onClick={() => {
                                     setIsUploading(true);
-                                    uploadFile({token, file, description, title}).finally(() => {
+                                    uploadFile({ token, file, description, title }).finally(() => {
                                         setTitle('');
                                         setDescription('');
                                         setFile(null);
                                         setIsUploading(false);
                                     });
-                                }} disabled={isUploading}> {isUploading ? 'Uploading' : 'Upload' } </Button>
+                                }} disabled={isUploading}> {isUploading ? 'Uploading' : 'Upload'} </Button>
+                            </Section>
+                            <Section>
+                                <H3>Pending requests</H3>
+                                <PendingList
+                                    user={user}
+                                    onAccept={({itemId, username}) => {
+                                        grantAccess({ token, itemId, toUsername: username });
+                                    }}
+                                    onReject={({ itemId, username }) => {
+                                        revokeAccess({ token, itemId, toUsername: username });
+                                    }}
+                                    requests={Object.values(files).reduce((acum, fileItem) => {
+                                        const pendingPerUser = fileItem.events.reduce((acum2, e) => {
+                                            if (e.status === 'pending') {
+                                                acum2[e.from] = e;
+                                                acum2[e.from].item_id = fileItem.id;
+                                            } else if (typeof acum2[e.to] !== 'undefined') {
+                                                delete acum2[e.to];
+                                            }
+                                            return acum2;
+                                        }, {});
+                                        return acum.concat(Object.values(pendingPerUser));
+                                    }, [])}/>
                             </Section>
                             <Section>
                                 <H3>My Files</H3>
                                 <FileList user={user} downloadFile={(itemId) => {
-                                    getFileData({token, itemId, username: user.username });
-                                }} revokeAccess={({itemId, username}) => {
+                                    getFileData({ token, itemId, username: user.username });
+                                }} revokeAccess={({ itemId, username }) => {
                                     revokeAccess({ token, itemId, toUsername: username });
-                                }} files={files} />
+                                }} files={files}/>
                             </Section>
                             <Section>
-                                <P><span className='em'>Are you a developer?</span> <StyledA href="https://docs.lightstreams.network">Check out the documentation</StyledA></P>
+                                <P><span className='em'>Are you a developer?</span> <StyledA
+                                    href="https://docs.lightstreams.network">Check out the documentation</StyledA></P>
                             </Section>
                         </Box>
 

@@ -87,7 +87,7 @@ export const H2 = styled.h2`
 export const H3 = styled.h3`
     font-size: 21px;
     color: var(--dark-purple);
-
+    margin-bottom: 20px; 
     &.fw4 {
         font-weight: 400;
     }

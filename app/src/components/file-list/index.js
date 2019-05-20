@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React  from 'react';
 import ReactTable from 'react-table';
 
 const FileList = ({ user, files, showModal, revokeAccess, downloadFile, }) => {
