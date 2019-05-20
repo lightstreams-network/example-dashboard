@@ -49,7 +49,7 @@ router.get('/list', session.authenticate('jwt', { session: false }), async (req,
     const items = await ProfileService.retrieveRemoteItemList(req.user);
     const itemRequests = await DashboardService.getItemRequestsData(req.user);
     const responseData = items.map((item) => {
-      item.requests = itemRequests[item.id];
+      item.events = itemRequests[item.id] || [];
       return item;
     });
     res.json(jsonResponse(responseData));
@@ -92,8 +92,16 @@ router.get('/download', session.authenticate('jwt', { session: false }), async (
   }
 
   try {
-    const attrs = extractRequestAttrs(req, query);
-    const item = await ProfileService.retrieveRemoteItem(req.user, attrs.item_id);
+    const attrs = extractRequestAttrs(req, [...query, 'username']);
+
+    let user;
+    if (attrs.username && attrs.username !== req.user.username) {
+      user = await DashboardService.retrieveUserByUsername(attrs.username);
+    } else {
+      user = req.user;
+    }
+
+    const item = await ProfileService.retrieveRemoteItem(user, attrs.item_id);
     if (!item.meta) {
       throw new Error(`Item with id ${attrs.item_id} was not found`);
     }
@@ -101,6 +109,7 @@ router.get('/download', session.authenticate('jwt', { session: false }), async (
     const rawGwRes = await gateway.storage.fetch(item.meta, req.user.lethToken, true);
     res.setHeader('Content-Disposition', rawGwRes.headers.get('Content-Disposition'));
     res.setHeader('Content-Type', rawGwRes.headers.get('Content-Type'));
+    res.setHeader('Access-Control-Expose-Headers', 'Content-Disposition');
     rawGwRes.body.pipe(res);
   } catch ( err ) {
     debug(err);
