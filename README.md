@@ -76,3 +76,4 @@ servers for a better decentralisation:
 - [UI](/app/README.md) React application connected to Dashboard server.
 
 
+## [MIT LICENSE]/LICENSE

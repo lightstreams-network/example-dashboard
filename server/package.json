@@ -1,7 +1,5 @@
 {
-  "name": "lightstreams-demo",
-  "version": "1.0.0",
-  "description": "",
+  "name": "smartvault-dashboard-server",
   "main": "bin/www",
   "scripts": {
     "start": "NODE_PATH=. ./bin/www",
@@ -12,16 +10,6 @@
     "compile": "rm -rf ./build/contracts/*; truffle compile --all --reset",
     "postinstall": "rm -f node_modules/src; ln -nsf ../src node_modules/src"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/lightstreams-network/lightstreams-demo.git"
-  },
-  "author": "Gabriel Garrido",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/lightstreams-network/lightstreams-demo/issues"
-  },
-  "homepage": "https://github.com/lightstreams-network/lightstreams-demo#readme",
   "dependencies": {
     "bcrypt": "^3.0.5",
     "bignumber.js": "^8.1.1",

@@ -1,0 +1,24 @@
+{
+  "name": "smartvault-dashboard-server",
+  "version": "0.9.0",
+  "description": "A decentralized Smart Vault dashboard running on the Lightstreams Network Server",
+  "author": "Gabriel Garrido",
+  "license": "MIT",
+  "homepage": "https://github.com/lightstreams-network/example-nodejs#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lightstreams-network/example-nodejs.git"
+  },
+  "keywords": [
+    "react",
+    "nodejs",
+    "express",
+    "redux",
+    "webpack",
+    "jest",
+    "styled-components",
+    "lightstreams",
+    "lightstreams-network",
+    "smart-vault"
+  ]
+}

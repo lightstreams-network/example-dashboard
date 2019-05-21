@@ -44,7 +44,7 @@ And replace the value in `.env`:
 SMARTCONTRACT_DASHBOARD_ADDRESS="0x8484d16daBb428aed04481FA9C6f8F3dE213fe7e"
 ```
 
-### Run server
+### Getting started
 
 Once we completed all the installation steps the latest step is to run the server:
 ```
