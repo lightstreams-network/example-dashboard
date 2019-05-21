@@ -28,17 +28,6 @@ app.use(cors({
     credentials: true,
 }));
 
-// if (process.env.USE_SESSION) {
-//   app.set('trust proxy', 1); // trust first proxy
-//   app.use(session({
-//     secret: process.env.JWT_SECRET,
-//     resave: true,
-//     saveUninitialized: true,
-//     cookie: { }
-//   }));
-//   app.use(sessionHandler);
-// }
-
 const passportSession = Session.passport();
 app.use(passportSession.initialize());
 // app.use(Session.session()); //persistent login session

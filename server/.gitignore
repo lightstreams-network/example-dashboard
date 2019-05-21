@@ -3,6 +3,5 @@
 node_modules
 *.swp
 .database/*
-build/**/**
 
 !**/**/.gitkeep.idea
