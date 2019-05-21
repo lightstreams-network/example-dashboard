@@ -1,8 +1,11 @@
 import webpack from 'webpack';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 
+const Dotenv = require('dotenv-webpack');
+
 import paths from './paths';
 import rules from './rules';
+
 
 module.exports = {
     entry: paths.entryPath,
@@ -25,6 +28,9 @@ module.exports = {
                 removeComments: true,
                 removeAttributeQuotes: true
             }
-        })
+        }),
+      new Dotenv({
+        path: process.env.PWD + '/.env', // load this now instead of the ones in '.env'
+      })
     ]
 };

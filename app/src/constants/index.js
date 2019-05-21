@@ -1,5 +1,5 @@
 
-export const SERVER_URL = 'http://localhost:3000';
+export const SERVER_URL = process.env.SERVER_URL;
 export const PATH_SIGNUP = '/auth/signup';
 export const PATH_LOGIN = '/auth/login';
 export const PATH_ITEM_ADD = '/item/add';

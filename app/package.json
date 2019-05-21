@@ -73,6 +73,7 @@
     "dependencies": {
         "copy-to-clipboard": "^3.0.8",
         "cross-env": "^5.2.0",
+        "dotenv-webpack": "^1.7.0",
         "formik": "^1.5.1",
         "lightstreams-js-sdk": "git+ssh://git@github.com/lightstreams-network/lightstreams-js-sdk.git#master",
         "lodash.get": "^4.4.2",
