@@ -64,30 +64,4 @@ contract('Dashboard', (accounts) => {
     const hasAccess = await permissionedFileInstance.hasAdmin(dashboardInstance.address);
     assert.equal(hasAccess, true, 'Access was not granted successfully');
   });
-
-  it('should grant user with read access to file', async () => {
-    const dashboardInstance = await Dashboard.deployed();
-
-    const itemId = await profileInstance.lastItemId.call();
-    await dashboardInstance.grantReadAccess(USER_ACCOUNT, itemId, USER2_ACCOUNT, {
-      from: ROOT_ACCOUNT,
-      gas: '1000000'
-    });
-
-    const hasAccess = await permissionedFileInstance.hasRead(USER2_ACCOUNT);
-    assert.equal(hasAccess, true, 'Access was not granted successfully');
-  });
-
-  it('should revoke user access to file', async () => {
-    const dashboardInstance = await Dashboard.deployed();
-
-    const itemId = await profileInstance.lastItemId.call();
-    await dashboardInstance.revokeAccess(USER_ACCOUNT, itemId, USER2_ACCOUNT, {
-      from: ROOT_ACCOUNT,
-      gas: '1000000'
-    });
-
-    const hasAccess = await permissionedFileInstance.hasRead(USER2_ACCOUNT);
-    assert.equal(hasAccess, false, 'Access was not revoked successfully');
-  });
 });

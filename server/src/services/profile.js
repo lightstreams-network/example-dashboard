@@ -10,28 +10,31 @@ module.exports.UserServiceError = class UserServiceError extends Error {};
 
 module.exports.createUser = async (ethAddress, password) => {
   const web3 = await Web3();
+  const user = {
+    ethAddress,
+    password
+  };
 
-  await requestFunding(ethAddress, 1);
-  return await profileSCService.createProfile(web3, { from: ethAddress, password });
+  return await profileSCService.createProfile(web3, user);
 };
 
-module.exports.uploadNewItem = (user, password, { title, description, file }) => {
+module.exports.uploadNewItem = (user, { title, description, file }) => {
   return new Promise(async (resolve, reject) => {
 
-    await requestFunding(user.ethAddress, 1);
-    const gwRes = await gateway.storage.add(user.ethAddress, password, file);
+    await requestFunding(user, 1);
+    const gwRes = await gateway.storage.add(user.ethAddress, user.password, file);
     debug(`Leth gateway response: ${JSON.stringify(gwRes)}`);
     if (gwRes.error) {
       reject(gwRes);
     }
 
-    const itemId = await profileSCService.stackItem(await Web3(), user, password,
+    const itemId = await profileSCService.stackItem(await Web3(), user,
       { title, description, meta: gwRes.meta, acl: gwRes.acl, profileAddress: user.profileAddress });
 
     // Granting admin access to Profile SC of the new file
-    await gateway.acl.grant(gwRes.acl, user.ethAddress, password, user.profileAddress, 'admin');
+    await gateway.acl.grant(gwRes.acl, user.ethAddress, user.password, user.profileAddress, 'admin');
     // Granting admin access to Dashboard SC of the new file
-    await gateway.acl.grant(gwRes.acl, user.ethAddress, password, dashboardSC.address, 'admin');
+    await gateway.acl.grant(gwRes.acl, user.ethAddress, user.password, dashboardSC.address, 'admin');
 
     const item = {
       id: itemId,

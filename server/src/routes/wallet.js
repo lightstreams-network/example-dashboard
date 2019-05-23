@@ -6,11 +6,8 @@ const { weiToPht, phtToWei } = require('src/lib/ethereum');
 const { extractRequestAttrs, validateRequestAttrs } = require('src/lib/request');
 const { badInputResponse, jsonResponse } = require('src/lib/responses');
 
-const Web3 = require('src/services/web3');
-
 const session = require('src/services/session').passport();
 const gateway = require('src/services/gateway').gateway();
-const faucetSC = require('src/smartcontracts/faucet');
 
 router.get('/balance', session.authenticate('jwt', { session: false }), async (req, res, next) => {
   const query = ['ethAddress'];
@@ -61,10 +58,7 @@ router.post('/request-top-up', session.authenticate('jwt', { session: false }), 
 
   try {
     const attrs = extractRequestAttrs(req, query);
-    await faucetSC.requestFreeToken(await Web3(), {
-      beneficiary: req.user.ethAddress,
-      amountInPht: attrs.amount
-    });
+
     const { balance } = await gateway.wallet.balance(req.user.ethAddress);
     res.json(jsonResponse({
       pht: weiToPht(balance),

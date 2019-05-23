@@ -210,14 +210,14 @@
     "absolutePath": "/home/ggarrido/lightstreams/workspace/lightstreams-demo/server/contracts/Profile.sol",
     "exportedSymbols": {
       "Profile": [
-        562
+        531
       ]
     },
-    "id": 563,
+    "id": 532,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 440,
+        "id": 409,
         "literals": [
           "solidity",
           "^",
@@ -230,10 +230,10 @@
       {
         "absolutePath": "/home/ggarrido/lightstreams/workspace/lightstreams-demo/server/contracts/utils/Ownable.sol",
         "file": "./utils/Ownable.sol",
-        "id": 441,
+        "id": 410,
         "nodeType": "ImportDirective",
-        "scope": 563,
-        "sourceUnit": 855,
+        "scope": 532,
+        "sourceUnit": 824,
         "src": "25:29:3",
         "symbolAliases": [],
         "unitAlias": ""
@@ -241,10 +241,10 @@
       {
         "absolutePath": "/home/ggarrido/lightstreams/workspace/lightstreams-demo/server/contracts/leth/permissioned_file.sol",
         "file": "./leth/permissioned_file.sol",
-        "id": 442,
+        "id": 411,
         "nodeType": "ImportDirective",
-        "scope": 563,
-        "sourceUnit": 765,
+        "scope": 532,
+        "sourceUnit": 734,
         "src": "55:38:3",
         "symbolAliases": [],
         "unitAlias": ""
@@ -255,31 +255,31 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 443,
+              "id": 412,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 854,
+              "referencedDeclaration": 823,
               "src": "115:7:3",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$854",
+                "typeIdentifier": "t_contract$_Ownable_$823",
                 "typeString": "contract Ownable"
               }
             },
-            "id": 444,
+            "id": 413,
             "nodeType": "InheritanceSpecifier",
             "src": "115:7:3"
           }
         ],
         "contractDependencies": [
-          854
+          823
         ],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 562,
+        "id": 531,
         "linearizedBaseContracts": [
-          562,
-          854
+          531,
+          823
         ],
         "name": "Profile",
         "nodeType": "ContractDefinition",
@@ -287,20 +287,20 @@
           {
             "anonymous": false,
             "documentation": null,
-            "id": 448,
+            "id": 417,
             "name": "StackItem",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 447,
+              "id": 416,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 446,
+                  "id": 415,
                   "indexed": false,
                   "name": "_itemId",
                   "nodeType": "VariableDeclaration",
-                  "scope": 448,
+                  "scope": 417,
                   "src": "146:13:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -309,7 +309,7 @@
                     "typeString": "int32"
                   },
                   "typeName": {
-                    "id": 445,
+                    "id": 414,
                     "name": "int32",
                     "nodeType": "ElementaryTypeName",
                     "src": "146:5:3",
@@ -328,14 +328,14 @@
           },
           {
             "canonicalName": "Profile.Content",
-            "id": 457,
+            "id": 426,
             "members": [
               {
                 "constant": false,
-                "id": 450,
+                "id": 419,
                 "name": "title",
                 "nodeType": "VariableDeclaration",
-                "scope": 457,
+                "scope": 426,
                 "src": "192:12:3",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -344,7 +344,7 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 449,
+                  "id": 418,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
                   "src": "192:6:3",
@@ -358,10 +358,10 @@
               },
               {
                 "constant": false,
-                "id": 452,
+                "id": 421,
                 "name": "description",
                 "nodeType": "VariableDeclaration",
-                "scope": 457,
+                "scope": 426,
                 "src": "214:18:3",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -370,7 +370,7 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 451,
+                  "id": 420,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
                   "src": "214:6:3",
@@ -384,10 +384,10 @@
               },
               {
                 "constant": false,
-                "id": 454,
+                "id": 423,
                 "name": "meta",
                 "nodeType": "VariableDeclaration",
-                "scope": 457,
+                "scope": 426,
                 "src": "242:11:3",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -396,7 +396,7 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 453,
+                  "id": 422,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
                   "src": "242:6:3",
@@ -410,10 +410,10 @@
               },
               {
                 "constant": false,
-                "id": 456,
+                "id": 425,
                 "name": "acl",
                 "nodeType": "VariableDeclaration",
-                "scope": 457,
+                "scope": 426,
                 "src": "263:11:3",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -422,7 +422,7 @@
                   "typeString": "address"
                 },
                 "typeName": {
-                  "id": 455,
+                  "id": 424,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
                   "src": "263:7:3",
@@ -438,27 +438,27 @@
             ],
             "name": "Content",
             "nodeType": "StructDefinition",
-            "scope": 562,
+            "scope": 531,
             "src": "167:114:3",
             "visibility": "public"
           },
           {
             "constant": false,
-            "id": 461,
+            "id": 430,
             "name": "items",
             "nodeType": "VariableDeclaration",
-            "scope": 562,
+            "scope": 531,
             "src": "287:38:3",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_mapping$_t_int32_$_t_struct$_Content_$457_storage_$",
+              "typeIdentifier": "t_mapping$_t_int32_$_t_struct$_Content_$426_storage_$",
               "typeString": "mapping(int32 => struct Profile.Content)"
             },
             "typeName": {
-              "id": 460,
+              "id": 429,
               "keyType": {
-                "id": 458,
+                "id": 427,
                 "name": "int32",
                 "nodeType": "ElementaryTypeName",
                 "src": "295:5:3",
@@ -470,18 +470,18 @@
               "nodeType": "Mapping",
               "src": "287:25:3",
               "typeDescriptions": {
-                "typeIdentifier": "t_mapping$_t_int32_$_t_struct$_Content_$457_storage_$",
+                "typeIdentifier": "t_mapping$_t_int32_$_t_struct$_Content_$426_storage_$",
                 "typeString": "mapping(int32 => struct Profile.Content)"
               },
               "valueType": {
                 "contractScope": null,
-                "id": 459,
+                "id": 428,
                 "name": "Content",
                 "nodeType": "UserDefinedTypeName",
-                "referencedDeclaration": 457,
+                "referencedDeclaration": 426,
                 "src": "304:7:3",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_Content_$457_storage_ptr",
+                  "typeIdentifier": "t_struct$_Content_$426_storage_ptr",
                   "typeString": "struct Profile.Content"
                 }
               }
@@ -491,10 +491,10 @@
           },
           {
             "constant": false,
-            "id": 465,
+            "id": 434,
             "name": "lastItemId",
             "nodeType": "VariableDeclaration",
-            "scope": 562,
+            "scope": 531,
             "src": "354:28:3",
             "stateVariable": true,
             "storageLocation": "default",
@@ -503,7 +503,7 @@
               "typeString": "int32"
             },
             "typeName": {
-              "id": 462,
+              "id": 431,
               "name": "int32",
               "nodeType": "ElementaryTypeName",
               "src": "354:5:3",
@@ -514,7 +514,7 @@
             },
             "value": {
               "argumentTypes": null,
-              "id": 464,
+              "id": 433,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -526,7 +526,7 @@
               "subExpression": {
                 "argumentTypes": null,
                 "hexValue": "31",
-                "id": 463,
+                "id": 432,
                 "isConstant": false,
                 "isLValue": false,
                 "isPure": true,
@@ -550,25 +550,25 @@
           },
           {
             "body": {
-              "id": 503,
+              "id": 472,
               "nodeType": "Block",
               "src": "506:190:3",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 482,
+                    "id": 451,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 478,
+                      "id": 447,
                       "name": "lastItemId",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 465,
+                      "referencedDeclaration": 434,
                       "src": "516:10:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_int32",
@@ -583,18 +583,18 @@
                         "typeIdentifier": "t_int32",
                         "typeString": "int32"
                       },
-                      "id": 481,
+                      "id": 450,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "leftExpression": {
                         "argumentTypes": null,
-                        "id": 479,
+                        "id": 448,
                         "name": "lastItemId",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 465,
+                        "referencedDeclaration": 434,
                         "src": "529:10:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_int32",
@@ -606,7 +606,7 @@
                       "rightExpression": {
                         "argumentTypes": null,
                         "hexValue": "31",
-                        "id": 480,
+                        "id": 449,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -633,37 +633,37 @@
                       "typeString": "int32"
                     }
                   },
-                  "id": 483,
+                  "id": 452,
                   "nodeType": "ExpressionStatement",
                   "src": "516:27:3"
                 },
                 {
                   "assignments": [
-                    485
+                    454
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 485,
+                      "id": 454,
                       "name": "newItem",
                       "nodeType": "VariableDeclaration",
-                      "scope": 503,
+                      "scope": 472,
                       "src": "553:22:3",
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Content_$457_memory_ptr",
+                        "typeIdentifier": "t_struct$_Content_$426_memory_ptr",
                         "typeString": "struct Profile.Content"
                       },
                       "typeName": {
                         "contractScope": null,
-                        "id": 484,
+                        "id": 453,
                         "name": "Content",
                         "nodeType": "UserDefinedTypeName",
-                        "referencedDeclaration": 457,
+                        "referencedDeclaration": 426,
                         "src": "553:7:3",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Content_$457_storage_ptr",
+                          "typeIdentifier": "t_struct$_Content_$426_storage_ptr",
                           "typeString": "struct Profile.Content"
                         }
                       },
@@ -671,17 +671,17 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 492,
+                  "id": 461,
                   "initialValue": {
                     "argumentTypes": null,
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 487,
+                        "id": 456,
                         "name": "title",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 467,
+                        "referencedDeclaration": 436,
                         "src": "586:5:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_string_memory_ptr",
@@ -690,11 +690,11 @@
                       },
                       {
                         "argumentTypes": null,
-                        "id": 488,
+                        "id": 457,
                         "name": "description",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 469,
+                        "referencedDeclaration": 438,
                         "src": "593:11:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_string_memory_ptr",
@@ -703,11 +703,11 @@
                       },
                       {
                         "argumentTypes": null,
-                        "id": 489,
+                        "id": 458,
                         "name": "meta",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 471,
+                        "referencedDeclaration": 440,
                         "src": "606:4:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_string_memory_ptr",
@@ -716,11 +716,11 @@
                       },
                       {
                         "argumentTypes": null,
-                        "id": 490,
+                        "id": 459,
                         "name": "acl",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 473,
+                        "referencedDeclaration": 442,
                         "src": "612:3:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -747,18 +747,18 @@
                           "typeString": "address"
                         }
                       ],
-                      "id": 486,
+                      "id": 455,
                       "name": "Content",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 457,
+                      "referencedDeclaration": 426,
                       "src": "578:7:3",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_struct$_Content_$457_storage_ptr_$",
+                        "typeIdentifier": "t_type$_t_struct$_Content_$426_storage_ptr_$",
                         "typeString": "type(struct Profile.Content storage pointer)"
                       }
                     },
-                    "id": 491,
+                    "id": 460,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -768,7 +768,7 @@
                     "nodeType": "FunctionCall",
                     "src": "578:38:3",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Content_$457_memory",
+                      "typeIdentifier": "t_struct$_Content_$426_memory",
                       "typeString": "struct Profile.Content memory"
                     }
                   },
@@ -778,7 +778,7 @@
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 497,
+                    "id": 466,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -787,25 +787,25 @@
                       "argumentTypes": null,
                       "baseExpression": {
                         "argumentTypes": null,
-                        "id": 493,
+                        "id": 462,
                         "name": "items",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 461,
+                        "referencedDeclaration": 430,
                         "src": "626:5:3",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_mapping$_t_int32_$_t_struct$_Content_$457_storage_$",
+                          "typeIdentifier": "t_mapping$_t_int32_$_t_struct$_Content_$426_storage_$",
                           "typeString": "mapping(int32 => struct Profile.Content storage ref)"
                         }
                       },
-                      "id": 495,
+                      "id": 464,
                       "indexExpression": {
                         "argumentTypes": null,
-                        "id": 494,
+                        "id": 463,
                         "name": "lastItemId",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 465,
+                        "referencedDeclaration": 434,
                         "src": "632:10:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_int32",
@@ -819,7 +819,7 @@
                       "nodeType": "IndexAccess",
                       "src": "626:17:3",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Content_$457_storage",
+                        "typeIdentifier": "t_struct$_Content_$426_storage",
                         "typeString": "struct Profile.Content storage ref"
                       }
                     },
@@ -827,24 +827,24 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 496,
+                      "id": 465,
                       "name": "newItem",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 485,
+                      "referencedDeclaration": 454,
                       "src": "646:7:3",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Content_$457_memory_ptr",
+                        "typeIdentifier": "t_struct$_Content_$426_memory_ptr",
                         "typeString": "struct Profile.Content memory"
                       }
                     },
                     "src": "626:27:3",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Content_$457_storage",
+                      "typeIdentifier": "t_struct$_Content_$426_storage",
                       "typeString": "struct Profile.Content storage ref"
                     }
                   },
-                  "id": 498,
+                  "id": 467,
                   "nodeType": "ExpressionStatement",
                   "src": "626:27:3"
                 },
@@ -854,11 +854,11 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 500,
+                        "id": 469,
                         "name": "lastItemId",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 465,
+                        "referencedDeclaration": 434,
                         "src": "678:10:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_int32",
@@ -873,18 +873,18 @@
                           "typeString": "int32"
                         }
                       ],
-                      "id": 499,
+                      "id": 468,
                       "name": "StackItem",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 448,
+                      "referencedDeclaration": 417,
                       "src": "668:9:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_int32_$returns$__$",
                         "typeString": "function (int32)"
                       }
                     },
-                    "id": 501,
+                    "id": 470,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -898,27 +898,27 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 502,
+                  "id": 471,
                   "nodeType": "EmitStatement",
                   "src": "663:26:3"
                 }
               ]
             },
             "documentation": null,
-            "id": 504,
+            "id": 473,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
                 "arguments": null,
-                "id": 476,
+                "id": 445,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 475,
+                  "id": 444,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 807,
+                  "referencedDeclaration": 776,
                   "src": "489:9:3",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -932,15 +932,15 @@
             "name": "stackItem",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 474,
+              "id": 443,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 467,
+                  "id": 436,
                   "name": "title",
                   "nodeType": "VariableDeclaration",
-                  "scope": 504,
+                  "scope": 473,
                   "src": "408:19:3",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -949,7 +949,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 466,
+                    "id": 435,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "408:6:3",
@@ -963,10 +963,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 469,
+                  "id": 438,
                   "name": "description",
                   "nodeType": "VariableDeclaration",
-                  "scope": 504,
+                  "scope": 473,
                   "src": "429:25:3",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -975,7 +975,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 468,
+                    "id": 437,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "429:6:3",
@@ -989,10 +989,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 471,
+                  "id": 440,
                   "name": "meta",
                   "nodeType": "VariableDeclaration",
-                  "scope": 504,
+                  "scope": 473,
                   "src": "456:18:3",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -1001,7 +1001,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 470,
+                    "id": 439,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "456:6:3",
@@ -1015,10 +1015,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 473,
+                  "id": 442,
                   "name": "acl",
                   "nodeType": "VariableDeclaration",
-                  "scope": 504,
+                  "scope": 473,
                   "src": "476:11:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1027,7 +1027,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 472,
+                    "id": 441,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "476:7:3",
@@ -1044,12 +1044,12 @@
               "src": "407:81:3"
             },
             "returnParameters": {
-              "id": 477,
+              "id": 446,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "506:0:3"
             },
-            "scope": 562,
+            "scope": 531,
             "src": "389:307:3",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -1057,7 +1057,7 @@
           },
           {
             "body": {
-              "id": 516,
+              "id": 485,
               "nodeType": "Block",
               "src": "764:42:3",
               "statements": [
@@ -1068,25 +1068,25 @@
                       "argumentTypes": null,
                       "baseExpression": {
                         "argumentTypes": null,
-                        "id": 511,
+                        "id": 480,
                         "name": "items",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 461,
+                        "referencedDeclaration": 430,
                         "src": "781:5:3",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_mapping$_t_int32_$_t_struct$_Content_$457_storage_$",
+                          "typeIdentifier": "t_mapping$_t_int32_$_t_struct$_Content_$426_storage_$",
                           "typeString": "mapping(int32 => struct Profile.Content storage ref)"
                         }
                       },
-                      "id": 513,
+                      "id": 482,
                       "indexExpression": {
                         "argumentTypes": null,
-                        "id": 512,
+                        "id": 481,
                         "name": "_itemId",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 506,
+                        "referencedDeclaration": 475,
                         "src": "787:7:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_int32",
@@ -1100,48 +1100,48 @@
                       "nodeType": "IndexAccess",
                       "src": "781:14:3",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Content_$457_storage",
+                        "typeIdentifier": "t_struct$_Content_$426_storage",
                         "typeString": "struct Profile.Content storage ref"
                       }
                     },
-                    "id": 514,
+                    "id": 483,
                     "isConstant": false,
                     "isLValue": true,
                     "isPure": false,
                     "lValueRequested": false,
                     "memberName": "acl",
                     "nodeType": "MemberAccess",
-                    "referencedDeclaration": 456,
+                    "referencedDeclaration": 425,
                     "src": "781:18:3",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
                     }
                   },
-                  "functionReturnParameters": 510,
-                  "id": 515,
+                  "functionReturnParameters": 479,
+                  "id": 484,
                   "nodeType": "Return",
                   "src": "774:25:3"
                 }
               ]
             },
             "documentation": null,
-            "id": 517,
+            "id": 486,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "itemAcl",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 507,
+              "id": 476,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 506,
+                  "id": 475,
                   "name": "_itemId",
                   "nodeType": "VariableDeclaration",
-                  "scope": 517,
+                  "scope": 486,
                   "src": "719:13:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1150,7 +1150,7 @@
                     "typeString": "int32"
                   },
                   "typeName": {
-                    "id": 505,
+                    "id": 474,
                     "name": "int32",
                     "nodeType": "ElementaryTypeName",
                     "src": "719:5:3",
@@ -1166,15 +1166,15 @@
               "src": "718:15:3"
             },
             "returnParameters": {
-              "id": 510,
+              "id": 479,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 509,
+                  "id": 478,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 517,
+                  "scope": 486,
                   "src": "755:7:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1183,7 +1183,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 508,
+                    "id": 477,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "755:7:3",
@@ -1199,7 +1199,7 @@
               ],
               "src": "754:9:3"
             },
-            "scope": 562,
+            "scope": 531,
             "src": "702:104:3",
             "stateMutability": "view",
             "superFunction": null,
@@ -1207,7 +1207,7 @@
           },
           {
             "body": {
-              "id": 538,
+              "id": 507,
               "nodeType": "Block",
               "src": "890:85:3",
               "statements": [
@@ -1217,11 +1217,11 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 535,
+                        "id": 504,
                         "name": "_beneficiary",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 521,
+                        "referencedDeclaration": 490,
                         "src": "955:12:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -1248,25 +1248,25 @@
                                   "argumentTypes": null,
                                   "baseExpression": {
                                     "argumentTypes": null,
-                                    "id": 528,
+                                    "id": 497,
                                     "name": "items",
                                     "nodeType": "Identifier",
                                     "overloadedDeclarations": [],
-                                    "referencedDeclaration": 461,
+                                    "referencedDeclaration": 430,
                                     "src": "925:5:3",
                                     "typeDescriptions": {
-                                      "typeIdentifier": "t_mapping$_t_int32_$_t_struct$_Content_$457_storage_$",
+                                      "typeIdentifier": "t_mapping$_t_int32_$_t_struct$_Content_$426_storage_$",
                                       "typeString": "mapping(int32 => struct Profile.Content storage ref)"
                                     }
                                   },
-                                  "id": 530,
+                                  "id": 499,
                                   "indexExpression": {
                                     "argumentTypes": null,
-                                    "id": 529,
+                                    "id": 498,
                                     "name": "itemId",
                                     "nodeType": "Identifier",
                                     "overloadedDeclarations": [],
-                                    "referencedDeclaration": 519,
+                                    "referencedDeclaration": 488,
                                     "src": "931:6:3",
                                     "typeDescriptions": {
                                       "typeIdentifier": "t_int32",
@@ -1280,18 +1280,18 @@
                                   "nodeType": "IndexAccess",
                                   "src": "925:13:3",
                                   "typeDescriptions": {
-                                    "typeIdentifier": "t_struct$_Content_$457_storage",
+                                    "typeIdentifier": "t_struct$_Content_$426_storage",
                                     "typeString": "struct Profile.Content storage ref"
                                   }
                                 },
-                                "id": 531,
+                                "id": 500,
                                 "isConstant": false,
                                 "isLValue": true,
                                 "isPure": false,
                                 "lValueRequested": false,
                                 "memberName": "acl",
                                 "nodeType": "MemberAccess",
-                                "referencedDeclaration": 456,
+                                "referencedDeclaration": 425,
                                 "src": "925:17:3",
                                 "typeDescriptions": {
                                   "typeIdentifier": "t_address",
@@ -1306,7 +1306,7 @@
                                   "typeString": "address"
                                 }
                               ],
-                              "id": 527,
+                              "id": 496,
                               "isConstant": false,
                               "isLValue": false,
                               "isPure": true,
@@ -1319,7 +1319,7 @@
                               },
                               "typeName": "address"
                             },
-                            "id": 532,
+                            "id": 501,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
@@ -1341,18 +1341,18 @@
                               "typeString": "address"
                             }
                           ],
-                          "id": 526,
+                          "id": 495,
                           "name": "PermissionedFile",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 764,
+                          "referencedDeclaration": 733,
                           "src": "900:16:3",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_PermissionedFile_$764_$",
+                            "typeIdentifier": "t_type$_t_contract$_PermissionedFile_$733_$",
                             "typeString": "type(contract PermissionedFile)"
                           }
                         },
-                        "id": 533,
+                        "id": 502,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -1362,25 +1362,25 @@
                         "nodeType": "FunctionCall",
                         "src": "900:44:3",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_PermissionedFile_$764",
+                          "typeIdentifier": "t_contract$_PermissionedFile_$733",
                           "typeString": "contract PermissionedFile"
                         }
                       },
-                      "id": 534,
+                      "id": 503,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "grantRead",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 665,
+                      "referencedDeclaration": 634,
                       "src": "900:54:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address) external"
                       }
                     },
-                    "id": 536,
+                    "id": 505,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1394,27 +1394,27 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 537,
+                  "id": 506,
                   "nodeType": "ExpressionStatement",
                   "src": "900:68:3"
                 }
               ]
             },
             "documentation": null,
-            "id": 539,
+            "id": 508,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
                 "arguments": null,
-                "id": 524,
+                "id": 493,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 523,
+                  "id": 492,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 807,
+                  "referencedDeclaration": 776,
                   "src": "873:9:3",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -1428,15 +1428,15 @@
             "name": "grantReadAccess",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 522,
+              "id": 491,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 519,
+                  "id": 488,
                   "name": "itemId",
                   "nodeType": "VariableDeclaration",
-                  "scope": 539,
+                  "scope": 508,
                   "src": "837:12:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1445,7 +1445,7 @@
                     "typeString": "int32"
                   },
                   "typeName": {
-                    "id": 518,
+                    "id": 487,
                     "name": "int32",
                     "nodeType": "ElementaryTypeName",
                     "src": "837:5:3",
@@ -1459,10 +1459,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 521,
+                  "id": 490,
                   "name": "_beneficiary",
                   "nodeType": "VariableDeclaration",
-                  "scope": 539,
+                  "scope": 508,
                   "src": "851:20:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1471,7 +1471,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 520,
+                    "id": 489,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "851:7:3",
@@ -1488,12 +1488,12 @@
               "src": "836:36:3"
             },
             "returnParameters": {
-              "id": 525,
+              "id": 494,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "890:0:3"
             },
-            "scope": 562,
+            "scope": 531,
             "src": "812:163:3",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -1501,7 +1501,7 @@
           },
           {
             "body": {
-              "id": 560,
+              "id": 529,
               "nodeType": "Block",
               "src": "1056:88:3",
               "statements": [
@@ -1511,11 +1511,11 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 557,
+                        "id": 526,
                         "name": "_beneficiary",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 543,
+                        "referencedDeclaration": 512,
                         "src": "1124:12:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -1542,25 +1542,25 @@
                                   "argumentTypes": null,
                                   "baseExpression": {
                                     "argumentTypes": null,
-                                    "id": 550,
+                                    "id": 519,
                                     "name": "items",
                                     "nodeType": "Identifier",
                                     "overloadedDeclarations": [],
-                                    "referencedDeclaration": 461,
+                                    "referencedDeclaration": 430,
                                     "src": "1091:5:3",
                                     "typeDescriptions": {
-                                      "typeIdentifier": "t_mapping$_t_int32_$_t_struct$_Content_$457_storage_$",
+                                      "typeIdentifier": "t_mapping$_t_int32_$_t_struct$_Content_$426_storage_$",
                                       "typeString": "mapping(int32 => struct Profile.Content storage ref)"
                                     }
                                   },
-                                  "id": 552,
+                                  "id": 521,
                                   "indexExpression": {
                                     "argumentTypes": null,
-                                    "id": 551,
+                                    "id": 520,
                                     "name": "itemId",
                                     "nodeType": "Identifier",
                                     "overloadedDeclarations": [],
-                                    "referencedDeclaration": 541,
+                                    "referencedDeclaration": 510,
                                     "src": "1097:6:3",
                                     "typeDescriptions": {
                                       "typeIdentifier": "t_int32",
@@ -1574,18 +1574,18 @@
                                   "nodeType": "IndexAccess",
                                   "src": "1091:13:3",
                                   "typeDescriptions": {
-                                    "typeIdentifier": "t_struct$_Content_$457_storage",
+                                    "typeIdentifier": "t_struct$_Content_$426_storage",
                                     "typeString": "struct Profile.Content storage ref"
                                   }
                                 },
-                                "id": 553,
+                                "id": 522,
                                 "isConstant": false,
                                 "isLValue": true,
                                 "isPure": false,
                                 "lValueRequested": false,
                                 "memberName": "acl",
                                 "nodeType": "MemberAccess",
-                                "referencedDeclaration": 456,
+                                "referencedDeclaration": 425,
                                 "src": "1091:17:3",
                                 "typeDescriptions": {
                                   "typeIdentifier": "t_address",
@@ -1600,7 +1600,7 @@
                                   "typeString": "address"
                                 }
                               ],
-                              "id": 549,
+                              "id": 518,
                               "isConstant": false,
                               "isLValue": false,
                               "isPure": true,
@@ -1613,7 +1613,7 @@
                               },
                               "typeName": "address"
                             },
-                            "id": 554,
+                            "id": 523,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
@@ -1635,18 +1635,18 @@
                               "typeString": "address"
                             }
                           ],
-                          "id": 548,
+                          "id": 517,
                           "name": "PermissionedFile",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 764,
+                          "referencedDeclaration": 733,
                           "src": "1066:16:3",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_PermissionedFile_$764_$",
+                            "typeIdentifier": "t_type$_t_contract$_PermissionedFile_$733_$",
                             "typeString": "type(contract PermissionedFile)"
                           }
                         },
-                        "id": 555,
+                        "id": 524,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -1656,25 +1656,25 @@
                         "nodeType": "FunctionCall",
                         "src": "1066:44:3",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_PermissionedFile_$764",
+                          "typeIdentifier": "t_contract$_PermissionedFile_$733",
                           "typeString": "contract PermissionedFile"
                         }
                       },
-                      "id": 556,
+                      "id": 525,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "revokeAccess",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 642,
+                      "referencedDeclaration": 611,
                       "src": "1066:57:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address) external"
                       }
                     },
-                    "id": 558,
+                    "id": 527,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1688,27 +1688,27 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 559,
+                  "id": 528,
                   "nodeType": "ExpressionStatement",
                   "src": "1066:71:3"
                 }
               ]
             },
             "documentation": null,
-            "id": 561,
+            "id": 530,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
                 "arguments": null,
-                "id": 546,
+                "id": 515,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 545,
+                  "id": 514,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 807,
+                  "referencedDeclaration": 776,
                   "src": "1039:9:3",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -1722,15 +1722,15 @@
             "name": "revokeAccess",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 544,
+              "id": 513,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 541,
+                  "id": 510,
                   "name": "itemId",
                   "nodeType": "VariableDeclaration",
-                  "scope": 561,
+                  "scope": 530,
                   "src": "1003:12:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1739,7 +1739,7 @@
                     "typeString": "int32"
                   },
                   "typeName": {
-                    "id": 540,
+                    "id": 509,
                     "name": "int32",
                     "nodeType": "ElementaryTypeName",
                     "src": "1003:5:3",
@@ -1753,10 +1753,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 543,
+                  "id": 512,
                   "name": "_beneficiary",
                   "nodeType": "VariableDeclaration",
-                  "scope": 561,
+                  "scope": 530,
                   "src": "1017:20:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1765,7 +1765,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 542,
+                    "id": 511,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1017:7:3",
@@ -1782,19 +1782,19 @@
               "src": "1002:36:3"
             },
             "returnParameters": {
-              "id": 547,
+              "id": 516,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1056:0:3"
             },
-            "scope": 562,
+            "scope": 531,
             "src": "981:163:3",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 563,
+        "scope": 532,
         "src": "95:1051:3"
       }
     ],
@@ -1804,14 +1804,14 @@
     "absolutePath": "/home/ggarrido/lightstreams/workspace/lightstreams-demo/server/contracts/Profile.sol",
     "exportedSymbols": {
       "Profile": [
-        562
+        531
       ]
     },
-    "id": 563,
+    "id": 532,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 440,
+        "id": 409,
         "literals": [
           "solidity",
           "^",
@@ -1824,10 +1824,10 @@
       {
         "absolutePath": "/home/ggarrido/lightstreams/workspace/lightstreams-demo/server/contracts/utils/Ownable.sol",
         "file": "./utils/Ownable.sol",
-        "id": 441,
+        "id": 410,
         "nodeType": "ImportDirective",
-        "scope": 563,
-        "sourceUnit": 855,
+        "scope": 532,
+        "sourceUnit": 824,
         "src": "25:29:3",
         "symbolAliases": [],
         "unitAlias": ""
@@ -1835,10 +1835,10 @@
       {
         "absolutePath": "/home/ggarrido/lightstreams/workspace/lightstreams-demo/server/contracts/leth/permissioned_file.sol",
         "file": "./leth/permissioned_file.sol",
-        "id": 442,
+        "id": 411,
         "nodeType": "ImportDirective",
-        "scope": 563,
-        "sourceUnit": 765,
+        "scope": 532,
+        "sourceUnit": 734,
         "src": "55:38:3",
         "symbolAliases": [],
         "unitAlias": ""
@@ -1849,31 +1849,31 @@
             "arguments": null,
             "baseName": {
               "contractScope": null,
-              "id": 443,
+              "id": 412,
               "name": "Ownable",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 854,
+              "referencedDeclaration": 823,
               "src": "115:7:3",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Ownable_$854",
+                "typeIdentifier": "t_contract$_Ownable_$823",
                 "typeString": "contract Ownable"
               }
             },
-            "id": 444,
+            "id": 413,
             "nodeType": "InheritanceSpecifier",
             "src": "115:7:3"
           }
         ],
         "contractDependencies": [
-          854
+          823
         ],
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 562,
+        "id": 531,
         "linearizedBaseContracts": [
-          562,
-          854
+          531,
+          823
         ],
         "name": "Profile",
         "nodeType": "ContractDefinition",
@@ -1881,20 +1881,20 @@
           {
             "anonymous": false,
             "documentation": null,
-            "id": 448,
+            "id": 417,
             "name": "StackItem",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 447,
+              "id": 416,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 446,
+                  "id": 415,
                   "indexed": false,
                   "name": "_itemId",
                   "nodeType": "VariableDeclaration",
-                  "scope": 448,
+                  "scope": 417,
                   "src": "146:13:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -1903,7 +1903,7 @@
                     "typeString": "int32"
                   },
                   "typeName": {
-                    "id": 445,
+                    "id": 414,
                     "name": "int32",
                     "nodeType": "ElementaryTypeName",
                     "src": "146:5:3",
@@ -1922,14 +1922,14 @@
           },
           {
             "canonicalName": "Profile.Content",
-            "id": 457,
+            "id": 426,
             "members": [
               {
                 "constant": false,
-                "id": 450,
+                "id": 419,
                 "name": "title",
                 "nodeType": "VariableDeclaration",
-                "scope": 457,
+                "scope": 426,
                 "src": "192:12:3",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -1938,7 +1938,7 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 449,
+                  "id": 418,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
                   "src": "192:6:3",
@@ -1952,10 +1952,10 @@
               },
               {
                 "constant": false,
-                "id": 452,
+                "id": 421,
                 "name": "description",
                 "nodeType": "VariableDeclaration",
-                "scope": 457,
+                "scope": 426,
                 "src": "214:18:3",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -1964,7 +1964,7 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 451,
+                  "id": 420,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
                   "src": "214:6:3",
@@ -1978,10 +1978,10 @@
               },
               {
                 "constant": false,
-                "id": 454,
+                "id": 423,
                 "name": "meta",
                 "nodeType": "VariableDeclaration",
-                "scope": 457,
+                "scope": 426,
                 "src": "242:11:3",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -1990,7 +1990,7 @@
                   "typeString": "string"
                 },
                 "typeName": {
-                  "id": 453,
+                  "id": 422,
                   "name": "string",
                   "nodeType": "ElementaryTypeName",
                   "src": "242:6:3",
@@ -2004,10 +2004,10 @@
               },
               {
                 "constant": false,
-                "id": 456,
+                "id": 425,
                 "name": "acl",
                 "nodeType": "VariableDeclaration",
-                "scope": 457,
+                "scope": 426,
                 "src": "263:11:3",
                 "stateVariable": false,
                 "storageLocation": "default",
@@ -2016,7 +2016,7 @@
                   "typeString": "address"
                 },
                 "typeName": {
-                  "id": 455,
+                  "id": 424,
                   "name": "address",
                   "nodeType": "ElementaryTypeName",
                   "src": "263:7:3",
@@ -2032,27 +2032,27 @@
             ],
             "name": "Content",
             "nodeType": "StructDefinition",
-            "scope": 562,
+            "scope": 531,
             "src": "167:114:3",
             "visibility": "public"
           },
           {
             "constant": false,
-            "id": 461,
+            "id": 430,
             "name": "items",
             "nodeType": "VariableDeclaration",
-            "scope": 562,
+            "scope": 531,
             "src": "287:38:3",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_mapping$_t_int32_$_t_struct$_Content_$457_storage_$",
+              "typeIdentifier": "t_mapping$_t_int32_$_t_struct$_Content_$426_storage_$",
               "typeString": "mapping(int32 => struct Profile.Content)"
             },
             "typeName": {
-              "id": 460,
+              "id": 429,
               "keyType": {
-                "id": 458,
+                "id": 427,
                 "name": "int32",
                 "nodeType": "ElementaryTypeName",
                 "src": "295:5:3",
@@ -2064,18 +2064,18 @@
               "nodeType": "Mapping",
               "src": "287:25:3",
               "typeDescriptions": {
-                "typeIdentifier": "t_mapping$_t_int32_$_t_struct$_Content_$457_storage_$",
+                "typeIdentifier": "t_mapping$_t_int32_$_t_struct$_Content_$426_storage_$",
                 "typeString": "mapping(int32 => struct Profile.Content)"
               },
               "valueType": {
                 "contractScope": null,
-                "id": 459,
+                "id": 428,
                 "name": "Content",
                 "nodeType": "UserDefinedTypeName",
-                "referencedDeclaration": 457,
+                "referencedDeclaration": 426,
                 "src": "304:7:3",
                 "typeDescriptions": {
-                  "typeIdentifier": "t_struct$_Content_$457_storage_ptr",
+                  "typeIdentifier": "t_struct$_Content_$426_storage_ptr",
                   "typeString": "struct Profile.Content"
                 }
               }
@@ -2085,10 +2085,10 @@
           },
           {
             "constant": false,
-            "id": 465,
+            "id": 434,
             "name": "lastItemId",
             "nodeType": "VariableDeclaration",
-            "scope": 562,
+            "scope": 531,
             "src": "354:28:3",
             "stateVariable": true,
             "storageLocation": "default",
@@ -2097,7 +2097,7 @@
               "typeString": "int32"
             },
             "typeName": {
-              "id": 462,
+              "id": 431,
               "name": "int32",
               "nodeType": "ElementaryTypeName",
               "src": "354:5:3",
@@ -2108,7 +2108,7 @@
             },
             "value": {
               "argumentTypes": null,
-              "id": 464,
+              "id": 433,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
@@ -2120,7 +2120,7 @@
               "subExpression": {
                 "argumentTypes": null,
                 "hexValue": "31",
-                "id": 463,
+                "id": 432,
                 "isConstant": false,
                 "isLValue": false,
                 "isPure": true,
@@ -2144,25 +2144,25 @@
           },
           {
             "body": {
-              "id": 503,
+              "id": 472,
               "nodeType": "Block",
               "src": "506:190:3",
               "statements": [
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 482,
+                    "id": 451,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
                     "lValueRequested": false,
                     "leftHandSide": {
                       "argumentTypes": null,
-                      "id": 478,
+                      "id": 447,
                       "name": "lastItemId",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 465,
+                      "referencedDeclaration": 434,
                       "src": "516:10:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_int32",
@@ -2177,18 +2177,18 @@
                         "typeIdentifier": "t_int32",
                         "typeString": "int32"
                       },
-                      "id": 481,
+                      "id": 450,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "leftExpression": {
                         "argumentTypes": null,
-                        "id": 479,
+                        "id": 448,
                         "name": "lastItemId",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 465,
+                        "referencedDeclaration": 434,
                         "src": "529:10:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_int32",
@@ -2200,7 +2200,7 @@
                       "rightExpression": {
                         "argumentTypes": null,
                         "hexValue": "31",
-                        "id": 480,
+                        "id": 449,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
@@ -2227,37 +2227,37 @@
                       "typeString": "int32"
                     }
                   },
-                  "id": 483,
+                  "id": 452,
                   "nodeType": "ExpressionStatement",
                   "src": "516:27:3"
                 },
                 {
                   "assignments": [
-                    485
+                    454
                   ],
                   "declarations": [
                     {
                       "constant": false,
-                      "id": 485,
+                      "id": 454,
                       "name": "newItem",
                       "nodeType": "VariableDeclaration",
-                      "scope": 503,
+                      "scope": 472,
                       "src": "553:22:3",
                       "stateVariable": false,
                       "storageLocation": "memory",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Content_$457_memory_ptr",
+                        "typeIdentifier": "t_struct$_Content_$426_memory_ptr",
                         "typeString": "struct Profile.Content"
                       },
                       "typeName": {
                         "contractScope": null,
-                        "id": 484,
+                        "id": 453,
                         "name": "Content",
                         "nodeType": "UserDefinedTypeName",
-                        "referencedDeclaration": 457,
+                        "referencedDeclaration": 426,
                         "src": "553:7:3",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Content_$457_storage_ptr",
+                          "typeIdentifier": "t_struct$_Content_$426_storage_ptr",
                           "typeString": "struct Profile.Content"
                         }
                       },
@@ -2265,17 +2265,17 @@
                       "visibility": "internal"
                     }
                   ],
-                  "id": 492,
+                  "id": 461,
                   "initialValue": {
                     "argumentTypes": null,
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 487,
+                        "id": 456,
                         "name": "title",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 467,
+                        "referencedDeclaration": 436,
                         "src": "586:5:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_string_memory_ptr",
@@ -2284,11 +2284,11 @@
                       },
                       {
                         "argumentTypes": null,
-                        "id": 488,
+                        "id": 457,
                         "name": "description",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 469,
+                        "referencedDeclaration": 438,
                         "src": "593:11:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_string_memory_ptr",
@@ -2297,11 +2297,11 @@
                       },
                       {
                         "argumentTypes": null,
-                        "id": 489,
+                        "id": 458,
                         "name": "meta",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 471,
+                        "referencedDeclaration": 440,
                         "src": "606:4:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_string_memory_ptr",
@@ -2310,11 +2310,11 @@
                       },
                       {
                         "argumentTypes": null,
-                        "id": 490,
+                        "id": 459,
                         "name": "acl",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 473,
+                        "referencedDeclaration": 442,
                         "src": "612:3:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -2341,18 +2341,18 @@
                           "typeString": "address"
                         }
                       ],
-                      "id": 486,
+                      "id": 455,
                       "name": "Content",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 457,
+                      "referencedDeclaration": 426,
                       "src": "578:7:3",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_type$_t_struct$_Content_$457_storage_ptr_$",
+                        "typeIdentifier": "t_type$_t_struct$_Content_$426_storage_ptr_$",
                         "typeString": "type(struct Profile.Content storage pointer)"
                       }
                     },
-                    "id": 491,
+                    "id": 460,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2362,7 +2362,7 @@
                     "nodeType": "FunctionCall",
                     "src": "578:38:3",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Content_$457_memory",
+                      "typeIdentifier": "t_struct$_Content_$426_memory",
                       "typeString": "struct Profile.Content memory"
                     }
                   },
@@ -2372,7 +2372,7 @@
                 {
                   "expression": {
                     "argumentTypes": null,
-                    "id": 497,
+                    "id": 466,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2381,25 +2381,25 @@
                       "argumentTypes": null,
                       "baseExpression": {
                         "argumentTypes": null,
-                        "id": 493,
+                        "id": 462,
                         "name": "items",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 461,
+                        "referencedDeclaration": 430,
                         "src": "626:5:3",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_mapping$_t_int32_$_t_struct$_Content_$457_storage_$",
+                          "typeIdentifier": "t_mapping$_t_int32_$_t_struct$_Content_$426_storage_$",
                           "typeString": "mapping(int32 => struct Profile.Content storage ref)"
                         }
                       },
-                      "id": 495,
+                      "id": 464,
                       "indexExpression": {
                         "argumentTypes": null,
-                        "id": 494,
+                        "id": 463,
                         "name": "lastItemId",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 465,
+                        "referencedDeclaration": 434,
                         "src": "632:10:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_int32",
@@ -2413,7 +2413,7 @@
                       "nodeType": "IndexAccess",
                       "src": "626:17:3",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Content_$457_storage",
+                        "typeIdentifier": "t_struct$_Content_$426_storage",
                         "typeString": "struct Profile.Content storage ref"
                       }
                     },
@@ -2421,24 +2421,24 @@
                     "operator": "=",
                     "rightHandSide": {
                       "argumentTypes": null,
-                      "id": 496,
+                      "id": 465,
                       "name": "newItem",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 485,
+                      "referencedDeclaration": 454,
                       "src": "646:7:3",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Content_$457_memory_ptr",
+                        "typeIdentifier": "t_struct$_Content_$426_memory_ptr",
                         "typeString": "struct Profile.Content memory"
                       }
                     },
                     "src": "626:27:3",
                     "typeDescriptions": {
-                      "typeIdentifier": "t_struct$_Content_$457_storage",
+                      "typeIdentifier": "t_struct$_Content_$426_storage",
                       "typeString": "struct Profile.Content storage ref"
                     }
                   },
-                  "id": 498,
+                  "id": 467,
                   "nodeType": "ExpressionStatement",
                   "src": "626:27:3"
                 },
@@ -2448,11 +2448,11 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 500,
+                        "id": 469,
                         "name": "lastItemId",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 465,
+                        "referencedDeclaration": 434,
                         "src": "678:10:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_int32",
@@ -2467,18 +2467,18 @@
                           "typeString": "int32"
                         }
                       ],
-                      "id": 499,
+                      "id": 468,
                       "name": "StackItem",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 448,
+                      "referencedDeclaration": 417,
                       "src": "668:9:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_int32_$returns$__$",
                         "typeString": "function (int32)"
                       }
                     },
-                    "id": 501,
+                    "id": 470,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2492,27 +2492,27 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 502,
+                  "id": 471,
                   "nodeType": "EmitStatement",
                   "src": "663:26:3"
                 }
               ]
             },
             "documentation": null,
-            "id": 504,
+            "id": 473,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
                 "arguments": null,
-                "id": 476,
+                "id": 445,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 475,
+                  "id": 444,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 807,
+                  "referencedDeclaration": 776,
                   "src": "489:9:3",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -2526,15 +2526,15 @@
             "name": "stackItem",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 474,
+              "id": 443,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 467,
+                  "id": 436,
                   "name": "title",
                   "nodeType": "VariableDeclaration",
-                  "scope": 504,
+                  "scope": 473,
                   "src": "408:19:3",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -2543,7 +2543,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 466,
+                    "id": 435,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "408:6:3",
@@ -2557,10 +2557,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 469,
+                  "id": 438,
                   "name": "description",
                   "nodeType": "VariableDeclaration",
-                  "scope": 504,
+                  "scope": 473,
                   "src": "429:25:3",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -2569,7 +2569,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 468,
+                    "id": 437,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "429:6:3",
@@ -2583,10 +2583,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 471,
+                  "id": 440,
                   "name": "meta",
                   "nodeType": "VariableDeclaration",
-                  "scope": 504,
+                  "scope": 473,
                   "src": "456:18:3",
                   "stateVariable": false,
                   "storageLocation": "memory",
@@ -2595,7 +2595,7 @@
                     "typeString": "string"
                   },
                   "typeName": {
-                    "id": 470,
+                    "id": 439,
                     "name": "string",
                     "nodeType": "ElementaryTypeName",
                     "src": "456:6:3",
@@ -2609,10 +2609,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 473,
+                  "id": 442,
                   "name": "acl",
                   "nodeType": "VariableDeclaration",
-                  "scope": 504,
+                  "scope": 473,
                   "src": "476:11:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2621,7 +2621,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 472,
+                    "id": 441,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "476:7:3",
@@ -2638,12 +2638,12 @@
               "src": "407:81:3"
             },
             "returnParameters": {
-              "id": 477,
+              "id": 446,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "506:0:3"
             },
-            "scope": 562,
+            "scope": 531,
             "src": "389:307:3",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -2651,7 +2651,7 @@
           },
           {
             "body": {
-              "id": 516,
+              "id": 485,
               "nodeType": "Block",
               "src": "764:42:3",
               "statements": [
@@ -2662,25 +2662,25 @@
                       "argumentTypes": null,
                       "baseExpression": {
                         "argumentTypes": null,
-                        "id": 511,
+                        "id": 480,
                         "name": "items",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 461,
+                        "referencedDeclaration": 430,
                         "src": "781:5:3",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_mapping$_t_int32_$_t_struct$_Content_$457_storage_$",
+                          "typeIdentifier": "t_mapping$_t_int32_$_t_struct$_Content_$426_storage_$",
                           "typeString": "mapping(int32 => struct Profile.Content storage ref)"
                         }
                       },
-                      "id": 513,
+                      "id": 482,
                       "indexExpression": {
                         "argumentTypes": null,
-                        "id": 512,
+                        "id": 481,
                         "name": "_itemId",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 506,
+                        "referencedDeclaration": 475,
                         "src": "787:7:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_int32",
@@ -2694,48 +2694,48 @@
                       "nodeType": "IndexAccess",
                       "src": "781:14:3",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_struct$_Content_$457_storage",
+                        "typeIdentifier": "t_struct$_Content_$426_storage",
                         "typeString": "struct Profile.Content storage ref"
                       }
                     },
-                    "id": 514,
+                    "id": 483,
                     "isConstant": false,
                     "isLValue": true,
                     "isPure": false,
                     "lValueRequested": false,
                     "memberName": "acl",
                     "nodeType": "MemberAccess",
-                    "referencedDeclaration": 456,
+                    "referencedDeclaration": 425,
                     "src": "781:18:3",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
                     }
                   },
-                  "functionReturnParameters": 510,
-                  "id": 515,
+                  "functionReturnParameters": 479,
+                  "id": 484,
                   "nodeType": "Return",
                   "src": "774:25:3"
                 }
               ]
             },
             "documentation": null,
-            "id": 517,
+            "id": 486,
             "implemented": true,
             "kind": "function",
             "modifiers": [],
             "name": "itemAcl",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 507,
+              "id": 476,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 506,
+                  "id": 475,
                   "name": "_itemId",
                   "nodeType": "VariableDeclaration",
-                  "scope": 517,
+                  "scope": 486,
                   "src": "719:13:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2744,7 +2744,7 @@
                     "typeString": "int32"
                   },
                   "typeName": {
-                    "id": 505,
+                    "id": 474,
                     "name": "int32",
                     "nodeType": "ElementaryTypeName",
                     "src": "719:5:3",
@@ -2760,15 +2760,15 @@
               "src": "718:15:3"
             },
             "returnParameters": {
-              "id": 510,
+              "id": 479,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 509,
+                  "id": 478,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 517,
+                  "scope": 486,
                   "src": "755:7:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -2777,7 +2777,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 508,
+                    "id": 477,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "755:7:3",
@@ -2793,7 +2793,7 @@
               ],
               "src": "754:9:3"
             },
-            "scope": 562,
+            "scope": 531,
             "src": "702:104:3",
             "stateMutability": "view",
             "superFunction": null,
@@ -2801,7 +2801,7 @@
           },
           {
             "body": {
-              "id": 538,
+              "id": 507,
               "nodeType": "Block",
               "src": "890:85:3",
               "statements": [
@@ -2811,11 +2811,11 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 535,
+                        "id": 504,
                         "name": "_beneficiary",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 521,
+                        "referencedDeclaration": 490,
                         "src": "955:12:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -2842,25 +2842,25 @@
                                   "argumentTypes": null,
                                   "baseExpression": {
                                     "argumentTypes": null,
-                                    "id": 528,
+                                    "id": 497,
                                     "name": "items",
                                     "nodeType": "Identifier",
                                     "overloadedDeclarations": [],
-                                    "referencedDeclaration": 461,
+                                    "referencedDeclaration": 430,
                                     "src": "925:5:3",
                                     "typeDescriptions": {
-                                      "typeIdentifier": "t_mapping$_t_int32_$_t_struct$_Content_$457_storage_$",
+                                      "typeIdentifier": "t_mapping$_t_int32_$_t_struct$_Content_$426_storage_$",
                                       "typeString": "mapping(int32 => struct Profile.Content storage ref)"
                                     }
                                   },
-                                  "id": 530,
+                                  "id": 499,
                                   "indexExpression": {
                                     "argumentTypes": null,
-                                    "id": 529,
+                                    "id": 498,
                                     "name": "itemId",
                                     "nodeType": "Identifier",
                                     "overloadedDeclarations": [],
-                                    "referencedDeclaration": 519,
+                                    "referencedDeclaration": 488,
                                     "src": "931:6:3",
                                     "typeDescriptions": {
                                       "typeIdentifier": "t_int32",
@@ -2874,18 +2874,18 @@
                                   "nodeType": "IndexAccess",
                                   "src": "925:13:3",
                                   "typeDescriptions": {
-                                    "typeIdentifier": "t_struct$_Content_$457_storage",
+                                    "typeIdentifier": "t_struct$_Content_$426_storage",
                                     "typeString": "struct Profile.Content storage ref"
                                   }
                                 },
-                                "id": 531,
+                                "id": 500,
                                 "isConstant": false,
                                 "isLValue": true,
                                 "isPure": false,
                                 "lValueRequested": false,
                                 "memberName": "acl",
                                 "nodeType": "MemberAccess",
-                                "referencedDeclaration": 456,
+                                "referencedDeclaration": 425,
                                 "src": "925:17:3",
                                 "typeDescriptions": {
                                   "typeIdentifier": "t_address",
@@ -2900,7 +2900,7 @@
                                   "typeString": "address"
                                 }
                               ],
-                              "id": 527,
+                              "id": 496,
                               "isConstant": false,
                               "isLValue": false,
                               "isPure": true,
@@ -2913,7 +2913,7 @@
                               },
                               "typeName": "address"
                             },
-                            "id": 532,
+                            "id": 501,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
@@ -2935,18 +2935,18 @@
                               "typeString": "address"
                             }
                           ],
-                          "id": 526,
+                          "id": 495,
                           "name": "PermissionedFile",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 764,
+                          "referencedDeclaration": 733,
                           "src": "900:16:3",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_PermissionedFile_$764_$",
+                            "typeIdentifier": "t_type$_t_contract$_PermissionedFile_$733_$",
                             "typeString": "type(contract PermissionedFile)"
                           }
                         },
-                        "id": 533,
+                        "id": 502,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -2956,25 +2956,25 @@
                         "nodeType": "FunctionCall",
                         "src": "900:44:3",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_PermissionedFile_$764",
+                          "typeIdentifier": "t_contract$_PermissionedFile_$733",
                           "typeString": "contract PermissionedFile"
                         }
                       },
-                      "id": 534,
+                      "id": 503,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "grantRead",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 665,
+                      "referencedDeclaration": 634,
                       "src": "900:54:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address) external"
                       }
                     },
-                    "id": 536,
+                    "id": 505,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2988,27 +2988,27 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 537,
+                  "id": 506,
                   "nodeType": "ExpressionStatement",
                   "src": "900:68:3"
                 }
               ]
             },
             "documentation": null,
-            "id": 539,
+            "id": 508,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
                 "arguments": null,
-                "id": 524,
+                "id": 493,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 523,
+                  "id": 492,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 807,
+                  "referencedDeclaration": 776,
                   "src": "873:9:3",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -3022,15 +3022,15 @@
             "name": "grantReadAccess",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 522,
+              "id": 491,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 519,
+                  "id": 488,
                   "name": "itemId",
                   "nodeType": "VariableDeclaration",
-                  "scope": 539,
+                  "scope": 508,
                   "src": "837:12:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3039,7 +3039,7 @@
                     "typeString": "int32"
                   },
                   "typeName": {
-                    "id": 518,
+                    "id": 487,
                     "name": "int32",
                     "nodeType": "ElementaryTypeName",
                     "src": "837:5:3",
@@ -3053,10 +3053,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 521,
+                  "id": 490,
                   "name": "_beneficiary",
                   "nodeType": "VariableDeclaration",
-                  "scope": 539,
+                  "scope": 508,
                   "src": "851:20:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3065,7 +3065,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 520,
+                    "id": 489,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "851:7:3",
@@ -3082,12 +3082,12 @@
               "src": "836:36:3"
             },
             "returnParameters": {
-              "id": 525,
+              "id": 494,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "890:0:3"
             },
-            "scope": 562,
+            "scope": 531,
             "src": "812:163:3",
             "stateMutability": "nonpayable",
             "superFunction": null,
@@ -3095,7 +3095,7 @@
           },
           {
             "body": {
-              "id": 560,
+              "id": 529,
               "nodeType": "Block",
               "src": "1056:88:3",
               "statements": [
@@ -3105,11 +3105,11 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 557,
+                        "id": 526,
                         "name": "_beneficiary",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 543,
+                        "referencedDeclaration": 512,
                         "src": "1124:12:3",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
@@ -3136,25 +3136,25 @@
                                   "argumentTypes": null,
                                   "baseExpression": {
                                     "argumentTypes": null,
-                                    "id": 550,
+                                    "id": 519,
                                     "name": "items",
                                     "nodeType": "Identifier",
                                     "overloadedDeclarations": [],
-                                    "referencedDeclaration": 461,
+                                    "referencedDeclaration": 430,
                                     "src": "1091:5:3",
                                     "typeDescriptions": {
-                                      "typeIdentifier": "t_mapping$_t_int32_$_t_struct$_Content_$457_storage_$",
+                                      "typeIdentifier": "t_mapping$_t_int32_$_t_struct$_Content_$426_storage_$",
                                       "typeString": "mapping(int32 => struct Profile.Content storage ref)"
                                     }
                                   },
-                                  "id": 552,
+                                  "id": 521,
                                   "indexExpression": {
                                     "argumentTypes": null,
-                                    "id": 551,
+                                    "id": 520,
                                     "name": "itemId",
                                     "nodeType": "Identifier",
                                     "overloadedDeclarations": [],
-                                    "referencedDeclaration": 541,
+                                    "referencedDeclaration": 510,
                                     "src": "1097:6:3",
                                     "typeDescriptions": {
                                       "typeIdentifier": "t_int32",
@@ -3168,18 +3168,18 @@
                                   "nodeType": "IndexAccess",
                                   "src": "1091:13:3",
                                   "typeDescriptions": {
-                                    "typeIdentifier": "t_struct$_Content_$457_storage",
+                                    "typeIdentifier": "t_struct$_Content_$426_storage",
                                     "typeString": "struct Profile.Content storage ref"
                                   }
                                 },
-                                "id": 553,
+                                "id": 522,
                                 "isConstant": false,
                                 "isLValue": true,
                                 "isPure": false,
                                 "lValueRequested": false,
                                 "memberName": "acl",
                                 "nodeType": "MemberAccess",
-                                "referencedDeclaration": 456,
+                                "referencedDeclaration": 425,
                                 "src": "1091:17:3",
                                 "typeDescriptions": {
                                   "typeIdentifier": "t_address",
@@ -3194,7 +3194,7 @@
                                   "typeString": "address"
                                 }
                               ],
-                              "id": 549,
+                              "id": 518,
                               "isConstant": false,
                               "isLValue": false,
                               "isPure": true,
@@ -3207,7 +3207,7 @@
                               },
                               "typeName": "address"
                             },
-                            "id": 554,
+                            "id": 523,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
@@ -3229,18 +3229,18 @@
                               "typeString": "address"
                             }
                           ],
-                          "id": 548,
+                          "id": 517,
                           "name": "PermissionedFile",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 764,
+                          "referencedDeclaration": 733,
                           "src": "1066:16:3",
                           "typeDescriptions": {
-                            "typeIdentifier": "t_type$_t_contract$_PermissionedFile_$764_$",
+                            "typeIdentifier": "t_type$_t_contract$_PermissionedFile_$733_$",
                             "typeString": "type(contract PermissionedFile)"
                           }
                         },
-                        "id": 555,
+                        "id": 524,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -3250,25 +3250,25 @@
                         "nodeType": "FunctionCall",
                         "src": "1066:44:3",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_contract$_PermissionedFile_$764",
+                          "typeIdentifier": "t_contract$_PermissionedFile_$733",
                           "typeString": "contract PermissionedFile"
                         }
                       },
-                      "id": 556,
+                      "id": 525,
                       "isConstant": false,
                       "isLValue": false,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "revokeAccess",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 642,
+                      "referencedDeclaration": 611,
                       "src": "1066:57:3",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_external_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address) external"
                       }
                     },
-                    "id": 558,
+                    "id": 527,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -3282,27 +3282,27 @@
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 559,
+                  "id": 528,
                   "nodeType": "ExpressionStatement",
                   "src": "1066:71:3"
                 }
               ]
             },
             "documentation": null,
-            "id": 561,
+            "id": 530,
             "implemented": true,
             "kind": "function",
             "modifiers": [
               {
                 "arguments": null,
-                "id": 546,
+                "id": 515,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 545,
+                  "id": 514,
                   "name": "onlyOwner",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 807,
+                  "referencedDeclaration": 776,
                   "src": "1039:9:3",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
@@ -3316,15 +3316,15 @@
             "name": "revokeAccess",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 544,
+              "id": 513,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 541,
+                  "id": 510,
                   "name": "itemId",
                   "nodeType": "VariableDeclaration",
-                  "scope": 561,
+                  "scope": 530,
                   "src": "1003:12:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3333,7 +3333,7 @@
                     "typeString": "int32"
                   },
                   "typeName": {
-                    "id": 540,
+                    "id": 509,
                     "name": "int32",
                     "nodeType": "ElementaryTypeName",
                     "src": "1003:5:3",
@@ -3347,10 +3347,10 @@
                 },
                 {
                   "constant": false,
-                  "id": 543,
+                  "id": 512,
                   "name": "_beneficiary",
                   "nodeType": "VariableDeclaration",
-                  "scope": 561,
+                  "scope": 530,
                   "src": "1017:20:3",
                   "stateVariable": false,
                   "storageLocation": "default",
@@ -3359,7 +3359,7 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 542,
+                    "id": 511,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
                     "src": "1017:7:3",
@@ -3376,19 +3376,19 @@
               "src": "1002:36:3"
             },
             "returnParameters": {
-              "id": 547,
+              "id": 516,
               "nodeType": "ParameterList",
               "parameters": [],
               "src": "1056:0:3"
             },
-            "scope": 562,
+            "scope": 531,
             "src": "981:163:3",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 563,
+        "scope": 532,
         "src": "95:1051:3"
       }
     ],
@@ -3400,7 +3400,7 @@
   },
   "networks": {},
   "schemaVersion": "3.0.6",
-  "updatedAt": "2019-05-13T19:05:36.375Z",
+  "updatedAt": "2019-05-22T10:23:21.594Z",
   "devdoc": {
     "methods": {
       "isOwner()": {

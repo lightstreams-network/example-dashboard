@@ -7,6 +7,7 @@ const Session = require('src/services/session');
 const { badInputResponse, jsonResponse } = require('src/lib/responses');
 const { extractRequestAttrs, validateRequestAttrs } = require('src/lib/request');
 const ProfileService = require('src/services/profile');
+const { requestFundingFromHolder } = require('src/services/faucet');
 const DashboardService = require('src/services/dashboard');
 const gateway = require('src/services/gateway').gateway();
 
@@ -26,10 +27,13 @@ router.post('/signup', async (req, res, next) => {
       throw new Error(`User ${attrs.username} already exists`);
     }
     const { account: ethAddress } = await gateway.user.signUp(attrs.password);
+    await requestFundingFromHolder(ethAddress, 1.5);
     const profileAddress = await ProfileService.createUser(ethAddress, attrs.password);
     await DashboardService.createUserDashboard({
-      username: attrs.username,
       ethAddress,
+      password: attrs.password
+    }, {
+      username: attrs.username,
       profileAddress
     });
     const user = await DashboardService.retrieveUserByUsername(attrs.username);

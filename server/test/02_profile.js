@@ -13,11 +13,6 @@ const PermissionedFile = artifacts.require("PermissionedFile");
 const { web3Cfg } = require('src/lib/config');
 
 const {
-  timeTravel,
-  wei2pht,
-  pht2wei,
-  toBN,
-  calculateGasCost,
   ItemAttr
 } = require('./utils');
 

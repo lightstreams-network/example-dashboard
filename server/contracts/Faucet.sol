@@ -8,10 +8,10 @@ contract Faucet is Ownable {
 
     uint256 private constant decimalFactor = 10 ** uint256(18);
 
-    uint public topUpLimit = 2 * decimalFactor;
-    uint public minTopUp = 1 * decimalFactor;
-    mapping(address => uint) public topUpRecords;
-    uint public balance;
+    uint256 public topUpLimit = 10 * decimalFactor;
+    uint256 public minTopUp = 1 * decimalFactor;
+    mapping(address => uint256) public topUpRecords;
+    uint256 public balance;
 
     constructor() public {
     }
@@ -32,5 +32,9 @@ contract Faucet is Ownable {
         topUpRecords[_beneficiary] = _requestAmount.add(topUpRecords[_beneficiary]);
         balance = balance.sub(_requestAmount);
         _beneficiary.transfer(_requestAmount);
+    }
+
+    function remainingAmount(address _beneficiary) public view returns (uint256) {
+        return topUpLimit.sub(topUpRecords[_beneficiary]);
     }
 }

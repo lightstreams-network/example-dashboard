@@ -29,7 +29,7 @@ router.post('/add', session.authenticate('jwt', { session: false }), async (req,
 
   try {
     const attrs = extractRequestAttrs(req, query);
-    const itemId = await ProfileService.uploadNewItem(req.user, req.user.password, {
+    const itemId = await ProfileService.uploadNewItem(req.user, {
       title: attrs.title,
       description: attrs.description,
       file: attrs.file

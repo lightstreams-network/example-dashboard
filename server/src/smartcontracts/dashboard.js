@@ -9,12 +9,12 @@ const { web3SendTx } = require('src/services/web3');
 const debug = require('debug')('app:web3');
 
 
-module.exports.createUser = async (web3, {username, ethAddress, profileAddress}) => {
+module.exports.createUser = async (web3, user, { username, profileAddress }) => {
   const { dashboard: dashboardSC } = smartContract;
   const DashboardInstance = web3.eth.Contract(dashboardSC.abi, dashboardSC.address);
 
-  await web3SendTx(web3, () => {
-    return DashboardInstance.methods.createUser(ethAddress, username, profileAddress, '');
+  await web3SendTx(web3, {from: user.ethAddress, password: user.password }, () => {
+    return DashboardInstance.methods.createUser(user.ethAddress, username, profileAddress, '');
   },{
     gas: 1000000
   });
@@ -41,7 +41,7 @@ module.exports.retrieveUserInfo = async(web3, ethAddress) => {
 
 module.exports.setNextRootDataId = async(web3, user, nextRootDataId) => {
   const { dashboard: dashboardSC } = smartContract;
-  await web3SendTx(web3, () => {
+  await web3SendTx(web3, { from: user.ethAddress, password: user.password }, () => {
     const Dashboard = web3.eth.Contract(dashboardSC.abi, dashboardSC.address);
     return Dashboard.methods.updateRootIPFS(user.ethAddress, nextRootDataId);
   }, {
@@ -55,22 +55,3 @@ module.exports.findUserByUsername = async (web3, username) => {
   return await DashboardInstance.methods.findUser(username).call();
 };
 
-module.exports.grantReadAccess = async (web3, user, itemId, beneficiaryAddress) => {
-  const { dashboard: dashboardSC } = smartContract;
-  await web3SendTx(web3, () => {
-    const Dashboard = web3.eth.Contract(dashboardSC.abi, dashboardSC.address);
-    return Dashboard.methods.grantReadAccess(user.ethAddress, itemId, beneficiaryAddress);
-  }, {
-    gas: 60000
-  });
-};
-
-module.exports.revokeAccess = async (web3, user, itemId, beneficiaryAddress) => {
-  const { dashboard: dashboardSC } = smartContract;
-  await web3SendTx(web3, () => {
-    const Dashboard = web3.eth.Contract(dashboardSC.abi, dashboardSC.address);
-    return Dashboard.methods.revokeAccess(user.ethAddress, itemId, beneficiaryAddress);
-  }, {
-    gas: 60000
-  });
-};

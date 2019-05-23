@@ -19,7 +19,7 @@ module.exports.web3Cfg = {
   provider: process.env.WEB3_PROVIDER,
   gasPrice: process.env.WEB3_GAS_PRICE,
   defaultGas: 300000,
-  from: process.env.STAKEHOLDER_ADDRESS,
+  holder: process.env.STAKEHOLDER_ADDRESS,
   password: process.env.STAKEHOLDER_ADDRESS_PWD,
 };
 

@@ -11,7 +11,7 @@ module.exports = (deployer) => {
     }
 
     console.log(web3Cfg);
-    return web3.eth.personal.unlockAccount(web3Cfg.from, web3Cfg.password, 1000)
+    return web3.eth.personal.unlockAccount(web3Cfg.holder, web3Cfg.password, 1000)
       .then(console.log('Root Account unlocked!'))
       .catch((err) => {
         console.log(err);

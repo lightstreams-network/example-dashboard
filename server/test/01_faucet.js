@@ -12,12 +12,8 @@ const Faucet = artifacts.require("Faucet");
 const { web3Cfg } = require('src/lib/config');
 
 const {
-  timeTravel,
-  wei2pht,
   pht2wei,
-  toBN,
-  calculateGasCost,
-  VI
+  toBN
 } = require('./utils');
 
 contract('Faucet', (accounts) => {
