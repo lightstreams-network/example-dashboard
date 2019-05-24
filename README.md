@@ -9,71 +9,64 @@ node and manage the its distribution and acceptability. In addition you will be 
 to also request access to other users files and manage the pending request to your own content made by
 other users.
 
-## Requirements
+## Features
 
-### Smart Vault
+**Create an account**
+![Signup](docs/imgs/signup.png?raw=true)
 
-In order to make this application to work you will require to have a local node
-of Lightstreams Smart Vault. Follow [this guide](https://docs.lightstreams.network/getting-started/install/)
-for the installation steps.
+**Login**
+![Login](docs/imgs/login.png?raw=true)
 
-Once you complete the installation of the required software you will need to run
-a node of of the smart vault which exposes the `http` API for our Dashboard server to
-connect to. Firstly, we initialize the smart vault node:
-```
-leth init --nodeid=1 --network=sirius --force
-```
+**Your user wallet**
+![Signup](docs/imgs/wallet.png?raw=true)
 
-Then, run the node:
-```
-leth run --nodeid=1 --network=sirius --https
-```
+**Upload file**
+![Upload file](docs/imgs/upload_file.png?raw=true)
 
-It will require few minutes to synchronize with [sirius network](https://explorer.sirius.lightstreams.io)
-, once synchronization is completed you will have the following exposed ports:
-- `9091`: [Smart Vault API](https://docs.lightstreams.network/api-docs/)
-- `8545`: [Lightchain](https://github.com/lightstreams-network/lightchain) RPC
+**My files**
+![My Files](docs/imgs/my_files.png?raw=true)
+You can see the list of files you uploaded and which users have access to them. By clicking
+on one of the little icon you can revoke the access to the users at anytime.
 
-### Create an application Faucet account
+Also you can download the content of the files you uploaded.
 
-Your application will require to have an lightstreams account owner which acts
-as a faucet account for your application users.
+**Grant access to file**
+![Grant access to file](docs/imgs/grant_access.png?raw=true)
+Grant access to other users to your content without waiting for a access request.
 
-In meanwhile you have your smart vault node running you can use the expose HTTP API
-for that using following command:
+**Request access to other user file**
+![Pending request](docs/imgs/pending_requests.png?raw=true)
+Insert the username of other user and load the list of available items of this user.
+By clicking on the locker icon you will send a access request to the file owner. In case
+you already got access to the file it will display the download action.
 
-```
-curl -X POST \
-  'http://localhost:9091/user/signup?=' \
-  -H 'Content-Type: application/json' \
-  -H 'cache-control: no-cache' \
-  -d '{"password": "{YOUR_PASSWORD"}'
-```
+**Request access to other user file**
+![Request file access](docs/imgs/request_file_access.png?raw=true)
+On this section it will listed the pending access requests from other users to your files.
 
-In the response you obtain your Lightstreams wallet address such as follow:
-```
-{"account":"0x7994c47Dd04DEB53992EB244e997E73A63660249"}
-```
 
-Now you will need to request funds to that account, you can contact Lightstreams Dev Team
+## Freemium Model
+
+This project implements a simple freemium model to fund users activity within the
+platform. The source for this funding come from two different sources.
+
+The first of them is what it was called stake holder account. This account
+ is linked to every instance of the server application and it is funding the creation
+ of new users through its own endpoints.
+
+ The second funding source is an Faucet smart contract which will fund
+ the activity of users up to 10 PHTs. This smart contract can be top up by every entity
+ interested in the growth of the project [0xdf81615E44b34C7015bF148De30526A4863c0DcD](https://explorer.sirius.lightstreams.io/addr/0xdf81615e44b34c7015bf148de30526a4863c0dcd).
+
+After that users can request more tokens for their accounts contacting Lightstreams Dev Team
 either [Telegram](https://t.me/LightstreamsDevelopers) or on the [Discuss forum](https://discuss.lightstreams.network/c/dev)
 
-***You cannot wait...Use `--standalone`)***
+## Getting started
 
-In case you do not want to connect to Lightstreams decentralize network, `sirius`, we also provide
-the alternative of running an isolate network, `standalone`. For that you only
-need to replace on above commands `--sirius` by `--standalone`.
-
-This network is created with a genesis account `0xc916cfe5c83dd4fc3c3b0bf2ec2d4e401782875e`
-holding 3M tokens and its password is `WelcomeToSirius`.
-
-
-## Launching the DApp
-
-This application is split into two independent parts which could be launched on different
-servers for a better decentralisation:
+This application is split into two independent parts:
 - [Server](/server/README.md) NodeJS express server connected to Lightstreams node
 - [UI](/app/README.md) React application connected to Dashboard server.
 
 
-## [MIT LICENSE]/LICENSE
+### License
+[MIT LICENSE](/LICENSE)

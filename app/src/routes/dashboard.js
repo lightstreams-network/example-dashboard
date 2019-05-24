@@ -186,7 +186,7 @@ const Dashboard = () => (
                                     }, [])}/>
                             </Section>
                             <Section>
-                                <H3>Other user files</H3>
+                                <H3>Request file access</H3>
                                 <Label>
                                     <span className='w-20'>Username:</span>
                                     <Input className='w-30' type='text'

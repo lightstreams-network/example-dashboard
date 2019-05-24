@@ -25,7 +25,7 @@ export function validatePassword2(values) {
 export function validateAccount(values) {
     const errors = {};
     if (!values.username) {
-        errors.username = 'Account address is missing';
+        errors.username = 'Username is missing';
     } else if (
         values.username.length < 4
     ) {
