@@ -14,7 +14,16 @@ Create environment file `.env`
 $> cp .env.sample .env
 ```
 
-Define the a value for `SERVER_URL`, by default is `http://localhost:3000`.
+## Configure server
+At `.env` file you can define the `SERVER_URL` which is going to act as the server
+side of your application.
+
+### Alternative 1: Remote server
+Lightstreams team provides its own server: `https://demo.dashboard.lightstreams.io`
+
+### Alternative 2: Local Server
+
+In case you want to run a local alternative [follow this.](/server/README.md).
 
 ## Getting started
 

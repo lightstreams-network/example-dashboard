@@ -98,40 +98,7 @@ const Dashboard = () => (
                                 <P>{parseFloat(balance).toFixed(2)} PHT</P>
                             </Section>
                             <Section>
-                                <H3>Grant Access</H3>
-                                <Label>
-                                    <span className='w-20'>Username:</span>
-                                    <Input className='w-30' type='text'
-                                           onChange={(e) => setGrantUsername(e.target.value)}
-                                           value={grantUsername}/>
-                                </Label>
-                                <Label>
-                                    <span className='w-20'>File:</span>
-                                    <Select className='w-50' onChange={(e) => setGrantFileId(e.target.value)}>
-                                        <option value=''>Select a file</option>
-                                        {
-                                            Object.values(files).map(fileItem => {
-                                                return <option
-                                                    value={fileItem.id}>{fileItem.id} - {fileItem.title}</option>;
-                                            })
-                                        }
-                                    </Select>
-                                </Label>
-                                <Button onClick={() => {
-                                    setIsGranting(true);
-                                    grantAccess({
-                                        token,
-                                        itemId: grantFileId,
-                                        toUsername: grantUsername
-                                    }).finally(() => {
-                                        setGrantUsername('');
-                                        setGrantFileId(null);
-                                        setIsGranting(false);
-                                    });
-                                }} disabled={isGranting}> {isGranting ? 'Granting' : 'Grant'} </Button>
-                            </Section>
-                            <Section>
-                                <H3>Upload a new file</H3>
+                                <H3>Upload file</H3>
                                 <br/>
                                 <Label><span className='w-20'>Title:</span>
                                     <Input className='w-30' type='text' onChange={(e) => setTitle(e.target.value)}
@@ -162,6 +129,39 @@ const Dashboard = () => (
                                     revokeAccess({ token, itemId, toUsername: username });
                                 }} files={files}/>
                             </Section>
+                          <Section>
+                            <H3>Grant Access</H3>
+                            <Label>
+                              <span className='w-20'>Username:</span>
+                              <Input className='w-30' type='text'
+                                     onChange={(e) => setGrantUsername(e.target.value)}
+                                     value={grantUsername}/>
+                            </Label>
+                            <Label>
+                              <span className='w-20'>File:</span>
+                              <Select className='w-50' onChange={(e) => setGrantFileId(e.target.value)}>
+                                <option value=''>Select a file</option>
+                                {
+                                  Object.values(files).map(fileItem => {
+                                    return <option
+                                      value={fileItem.id}>{fileItem.id} - {fileItem.title}</option>;
+                                  })
+                                }
+                              </Select>
+                            </Label>
+                            <Button onClick={() => {
+                              setIsGranting(true);
+                              grantAccess({
+                                token,
+                                itemId: grantFileId,
+                                toUsername: grantUsername
+                              }).finally(() => {
+                                setGrantUsername('');
+                                setGrantFileId(null);
+                                setIsGranting(false);
+                              });
+                            }} disabled={isGranting}> {isGranting ? 'Granting' : 'Grant'} </Button>
+                          </Section>
                             <Section>
                                 <H3>Pending requests</H3>
                                 <PendingList
