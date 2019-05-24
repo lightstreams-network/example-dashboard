@@ -2,7 +2,7 @@ const Web3 = require('src/services/web3');
 const debug = require('debug')('app:profile');
 
 const gateway = require('src/services/gateway').gateway();
-const { requestFunding } = require('src/services/faucet');
+const { requestFundingFromFaucet } = require('src/services/faucet');
 const profileSCService = require('src/smartcontracts/profile');
 const { dashboard: dashboardSC } = require('src/lib/config').smartContract;
 
@@ -21,7 +21,7 @@ module.exports.createUser = async (ethAddress, password) => {
 module.exports.uploadNewItem = (user, { title, description, file }) => {
   return new Promise(async (resolve, reject) => {
 
-    await requestFunding(user, 1);
+    await requestFundingFromFaucet(user, 1);
     const gwRes = await gateway.storage.add(user.ethAddress, user.password, file);
     debug(`Leth gateway response: ${JSON.stringify(gwRes)}`);
     if (gwRes.error) {

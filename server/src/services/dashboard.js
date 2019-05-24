@@ -8,14 +8,16 @@
 const Web3 = require('src/services/web3');
 const gateway = require('src/services/gateway').gateway();
 const fs = require('fs');
+const { web3Cfg } = require('src/lib/config');
 const tempfile = require('tempfile');
+const debug = require('debug')('app:dashboard');
 
 const ProfileService = require('src/services/profile');
 const DashboardSCService = require('src/smartcontracts/dashboard');
 
-module.exports.createUserDashboard = async (user, { username, profileAddress }) => {
+module.exports.createUserDashboard = async ({ ethAddress, username, profileAddress }) => {
   const web3 = await Web3();
-  return await DashboardSCService.createUser(web3, user, { username, profileAddress });
+  return await DashboardSCService.createUser(web3, { ethAddress, username, profileAddress });
 };
 
 module.exports.retrieveUserByUsername = async (username) => {
@@ -52,7 +54,8 @@ module.exports.retrieveUserRootData = async (user) => {
     return {}
   }
 
-  return await gateway.storage.fetch(user.rootIPFS, user.lethToken);
+  const { token } = await gateway.user.signIn(web3Cfg.holder, web3Cfg.password); // @TODO Cache it somewhere
+  return await gateway.storage.fetch(user.rootIPFS, token);
 };
 
 module.exports.updateUserRootData = async (user, values) => {
@@ -66,10 +69,14 @@ module.exports.updateUserRootData = async (user, values) => {
   fs.writeFileSync(tmpFile, JSON.stringify(nextRootData));
   const nextRootDataStream = fs.createReadStream(tmpFile);
   try {
-    const gwRes = await gateway.storage.add(user.ethAddress, user.password, nextRootDataStream, { throwHttpErrors: true });
-    await gateway.storage.grantPublic(gwRes.acl, user.ethAddress, user.password);
-    fs.unlinkSync(tmpFile);
+    const gwRes = await gateway.storage.add(web3Cfg.holder, web3Cfg.password, nextRootDataStream, { throwHttpErrors: true });
+    debug(`Created new root data for user ${user.username}: ${JSON.stringify(gwRes)}`);
+    const { is_granted } = await gateway.acl.grantPublic(gwRes.acl, web3Cfg.holder, web3Cfg.password);
+    if (!is_granted) {
+      throw new Error(`Failed to grant public access to: ${JSON.stringify(gwRes)}`);
+    }
     await DashboardSCService.setNextRootDataId(await Web3(), user, gwRes.meta);
+    fs.unlinkSync(tmpFile);
     return nextRootData;
   } catch ( err ) {
     fs.unlinkSync(tmpFile);
@@ -129,8 +136,7 @@ module.exports.grantReadAccess = async (user, toUsername, itemId) => {
   if (!beneficiaryUser) {
     throw new Error(`Cannot find username '${toUsername}'`);
   }
-  await gateway.acl.grant(item.acl, user.ethAddress, user.password, beneficiaryUser.ethAddress, "NO_ACCESS");
-  await DashboardSCService.grantReadAccess(web3, user, itemId, beneficiaryUser.ethAddress);
+  await gateway.acl.grant(item.acl, user.ethAddress, user.password, beneficiaryUser.ethAddress, "read");
 
   return await this.createNewItemPermissionRequest(user, { toUsername: toUsername }, itemId, 'granted');
 };
@@ -146,19 +152,8 @@ module.exports.revokeAccess = async (user, toUsername, itemId) => {
   if (!beneficiaryUser) {
     throw new Error(`Cannot find username '${toUsername}'`);
   }
-  await DashboardSCService.revokeAccess(web3, user, itemId, beneficiaryUser.ethAddress);
+  await gateway.acl.revoke(item.acl, user.ethAddress, user.password, beneficiaryUser.ethAddress);
 
   // await this.updatePendingRequestItemAccess(user, toUsername, itemId, 'denied');
   return await this.createNewItemPermissionRequest(user, { toUsername: toUsername }, itemId, 'revoked');
 };
-
-// module.exports.syncItems = async () => {
-//   const web3 = await Web3();
-//   const localMaxItemId = (await ShelveItem.getMaxItemId() || 0) + 1;
-//   const remoteMaxItemId = await profileSCService.getMaxItemId(web3);
-//
-//   // @TODO Optimize running in parallel
-//   for ( let i = localMaxItemId; i <= remoteMaxItemId; i++ ) {
-//     await this.updateRemoteItem(i);
-//   }
-// };

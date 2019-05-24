@@ -8,13 +8,12 @@ const { smartContract } = require('src/lib/config');
 const { web3SendTx } = require('src/services/web3');
 const debug = require('debug')('app:web3');
 
-
-module.exports.createUser = async (web3, user, { username, profileAddress }) => {
+module.exports.createUser = async (web3, { ethAddress, username, profileAddress }) => {
   const { dashboard: dashboardSC } = smartContract;
   const DashboardInstance = web3.eth.Contract(dashboardSC.abi, dashboardSC.address);
 
-  await web3SendTx(web3, {from: user.ethAddress, password: user.password }, () => {
-    return DashboardInstance.methods.createUser(user.ethAddress, username, profileAddress, '');
+  await web3SendTx(web3, () => {
+    return DashboardInstance.methods.createUser(ethAddress, username, profileAddress, '');
   },{
     gas: 1000000
   });
@@ -41,7 +40,7 @@ module.exports.retrieveUserInfo = async(web3, ethAddress) => {
 
 module.exports.setNextRootDataId = async(web3, user, nextRootDataId) => {
   const { dashboard: dashboardSC } = smartContract;
-  await web3SendTx(web3, { from: user.ethAddress, password: user.password }, () => {
+  await web3SendTx(web3, () => {
     const Dashboard = web3.eth.Contract(dashboardSC.abi, dashboardSC.address);
     return Dashboard.methods.updateRootIPFS(user.ethAddress, nextRootDataId);
   }, {

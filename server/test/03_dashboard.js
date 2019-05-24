@@ -12,8 +12,6 @@ const Dashboard = artifacts.require("Dashboard");
 const Profile = artifacts.require("Profile");
 const { web3Cfg } = require('src/lib/config');
 
-const PermissionedFile = artifacts.require("PermissionedFile");
-
 contract('Dashboard', (accounts) => {
   const ROOT_ACCOUNT = process.env.NETWORK === 'ganache' ? accounts[0] : web3Cfg.from;
   const USER_ACCOUNT = process.env.NETWORK === 'ganache' ? accounts[1] : '0x3a4D89734F60ED62773CC14d042aDB5d2B8d3B3E';

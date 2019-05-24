@@ -9,7 +9,6 @@ contract Faucet is Ownable {
     uint256 private constant decimalFactor = 10 ** uint256(18);
 
     uint256 public topUpLimit = 10 * decimalFactor;
-    uint256 public minTopUp = 1 * decimalFactor;
     mapping(address => uint256) public topUpRecords;
     uint256 public balance;
 
@@ -21,7 +20,6 @@ contract Faucet is Ownable {
     }
 
     function setNewLimit(uint256 _nextLimit) onlyOwner public {
-        require(_nextLimit >= minTopUp);
         topUpLimit = _nextLimit;
     }
 

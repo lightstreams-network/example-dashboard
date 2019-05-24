@@ -17,29 +17,28 @@ module.exports.requestFundingFromHolder = async(beneficiary, amountInPht) => {
   await gateway.wallet.transfer(web3Cfg.holder, web3Cfg.password, beneficiary, phtToWei(amountInPht));
 };
 
-module.exports.requestFunding = async (user, amountInPht) => {
+module.exports.requestFundingFromFaucet = async (user, amountInPht) => {
   const web3 = await Web3();
   const beneficiary = user.ethAddress;
-  const amountInWei = phtToWei(amountInPht);
   const { faucet: faucetSC } = smartContract;
 
-  const beneficiaryRemainingInWei = await faucetSCService.remainingAmount(web3, { beneficiary },
-    { from: user.ethAddress, password: user.password });
-  if(beneficiaryRemainingInWei < amountInWei) {
+  const beneficiaryRemainingInWeiBN = await faucetSCService.remainingAmount(web3, beneficiary);
+  const beneficiaryRemainingInPht = weiToPht(beneficiaryRemainingInWeiBN.toString());
+  if(parseFloat(beneficiaryRemainingInPht) < parseFloat(amountInPht)) {
     debug(`Warning: User ${beneficiary} exceeded faucet limit`);
     return;
   }
 
-  const faucetBalanceInWei = await web3.eth.getBalance(faucetSC.address);
-  if (faucetBalanceInWei < amountInWei) {
-    const faucetBalanceInPht = weiToPht(faucetBalanceInWei);
-    debug(`Error: Faucet contract(${faucetSC.address}) does not have enough funds: ${faucetBalanceInPht} PHT`);
-    throw new Error(`Faucet contract(${faucetSC.address}) does not have enough funds: ${faucetBalanceInPht} PHT`);
+  const faucetBalanceInWeiBN = await web3.eth.getBalance(faucetSC.address);
+  const faucetBalanceInPht = weiToPht(faucetBalanceInWeiBN.toString());
+  if (parseFloat(faucetBalanceInPht) < parseFloat(amountInPht)) {
+    debug(`Warning: Faucet contract(${faucetSC.address}) does not have enough funds: ${faucetBalanceInPht} PHT`);
+    return;
   }
 
   debug(`Sent ${amountInPht}PHT to ${beneficiary} from faucet account`);
   await faucetSCService.requestFreeToken(web3, {
     beneficiary,
-    amountInWei
+    amountInWei: phtToWei(amountInPht)
   }, { from: user.ethAddress, password: user.password });
 };

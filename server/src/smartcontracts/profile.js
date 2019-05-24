@@ -23,13 +23,13 @@ module.exports.createProfile = async (web3, user) => {
   const { profile: profileSC } = smartContract;
   const ProfileArtifact = web3.eth.Contract(profileSC.abi, null);
 
-  const ProfileInstance = await web3SendTx(web3, { from: user.ethAddress, password: user.password }, () => {
+  const ProfileInstance = await web3SendTx(web3, () => {
     return ProfileArtifact.deploy({
       data: profileSC.bytecode,
       arguments: []
     });
   }, {
-    gas: 2000000,
+    gas: 2000000, from: user.ethAddress, password: user.password
   });
 
   debug(`Profile SmartContract created at: ${ProfileInstance.options.address}`);
@@ -40,11 +40,11 @@ module.exports.createProfile = async (web3, user) => {
 module.exports.stackItem = async (web3, user, { title, description, meta, acl, profileAddress }) => {
   const { profile: profileSC } = smartContract;
 
-  const txReceipt = await web3SendTx(web3, { from: user.ethAddress, password: user.password }, () => {
+  const txReceipt = await web3SendTx(web3, () => {
     const Profile = web3.eth.Contract(profileSC.abi, profileAddress);
     return Profile.methods.stackItem(title, description, meta, acl);
   }, {
-    gas: '1200000'
+    gas: '1200000', from: user.ethAddress, password: user.password
   });
 
   return txReceipt.events.StackItem.returnValues['_itemId'];

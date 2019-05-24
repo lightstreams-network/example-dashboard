@@ -1,7 +1,6 @@
 pragma solidity ^0.5.0;
 
 import './utils/Ownable.sol';
-import './leth/permissioned_file.sol';
 
 contract Profile is Ownable {
 
@@ -22,17 +21,5 @@ contract Profile is Ownable {
         Content memory newItem = Content(title, description, meta, acl);
         items[lastItemId] = newItem;
         emit StackItem(lastItemId);
-    }
-
-    function itemAcl(int32 _itemId) view public returns (address) {
-        return items[_itemId].acl;
-    }
-
-    function grantReadAccess(int32 itemId, address _beneficiary) onlyOwner public {
-        PermissionedFile(address(items[itemId].acl)).grantRead(_beneficiary);
-    }
-
-    function revokeAccess(int32 itemId, address _beneficiary) onlyOwner public {
-        PermissionedFile(address(items[itemId].acl)).revokeAccess(_beneficiary);
     }
 }

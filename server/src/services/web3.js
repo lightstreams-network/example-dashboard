@@ -15,6 +15,7 @@ module.exports = async ({ provider } = {}) => {
 
   try {
     return new Web3(cfg.provider, null, {
+      defaultAccount: web3Cfg.holder,
       defaultGas: web3Cfg.defaultGas,
       defaultGasPrice: web3Cfg.gasPrice,
     });
@@ -24,12 +25,13 @@ module.exports = async ({ provider } = {}) => {
   }
 };
 
-module.exports.web3SendTx = (web3, {from, password}, txCall, options = {}) => {
+module.exports.web3SendTx = (web3, txCall, options = {}) => {
   cfg = {
     ...{ gas: web3Cfg.defaultGas, gasPrice: web3Cfg.gasPrice },
-    ...options,
-    ...{ from, password }
+    ...{ from: web3Cfg.holder, password: web3Cfg.password },
+    ...options
   };
+
   return new Promise((resolve, reject) => {
     web3.eth.personal.unlockAccount(cfg.from, cfg.password, 100).then(() => {
       txCall().send(cfg)
