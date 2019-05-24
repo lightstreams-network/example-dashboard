@@ -155,6 +155,14 @@ const Dashboard = () => (
                                 }} disabled={isUploading}> {isUploading ? 'Uploading' : 'Upload'} </Button>
                             </Section>
                             <Section>
+                                <H3>My Files</H3>
+                                <FileList user={user} downloadFile={(itemId) => {
+                                    getFileData({ token, itemId, username: user.username });
+                                }} revokeAccess={({ itemId, username }) => {
+                                    revokeAccess({ token, itemId, toUsername: username });
+                                }} files={files}/>
+                            </Section>
+                            <Section>
                                 <H3>Pending requests</H3>
                                 <PendingList
                                     user={user}
@@ -176,14 +184,6 @@ const Dashboard = () => (
                                         }, {});
                                         return acum.concat(Object.values(pendingPerUser));
                                     }, [])}/>
-                            </Section>
-                            <Section>
-                                <H3>My Files</H3>
-                                <FileList user={user} downloadFile={(itemId) => {
-                                    getFileData({ token, itemId, username: user.username });
-                                }} revokeAccess={({ itemId, username }) => {
-                                    revokeAccess({ token, itemId, toUsername: username });
-                                }} files={files}/>
                             </Section>
                             <Section>
                                 <H3>Other user files</H3>
