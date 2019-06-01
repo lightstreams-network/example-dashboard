@@ -75,6 +75,12 @@ This application is split into two separated projects. A [NodeJS server](/server
 which is connected to the lightstreams smart vault, and a [user interface](/app/README.md)
 implemented in React and connected to NodeJS server.
 
+## Topics
+- IPFS
+- Ethereum
+- Decentralized Application (DApp)
+- NodeJS
+- Smart Vault
 
 ### License
 [MIT LICENSE](/LICENSE)
