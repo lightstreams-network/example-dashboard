@@ -4,10 +4,20 @@
  * Copyright 2019 (c) Lightstreams, Granada
  */
 
-const Web3 = require('web3');
+require('dotenv').config({ path: `${process.env.PWD}/.env` });
 
-let web3 = new Web3(new Web3.providers.WebsocketProvider("ws://localhost:8556"));
-web3.eth.getAccounts()
-    .then(console.log)
-    .then(() => process.exit())
-    .catch(console.error);
+const Web3 = require('web3');
+const { web3Cfg } = require('./lib/config');
+
+console.log(web3Cfg);
+let web = new Web3(web3Cfg.provider, {}, {
+  defaultAccount: web3Cfg.holder,
+  defaultGas: web3Cfg.defaultGas,
+  defaultGasPrice: web3Cfg.gasPrice,
+});
+
+web.eth.personal.unlockAccount(web3Cfg.holder, web3Cfg.password, 1000)
+  .then(console.log('Root Account unlocked!'))
+  .catch((err) => {
+    console.log(err);
+  });

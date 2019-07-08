@@ -29,8 +29,9 @@ module.exports = {
     devServer: {
         contentBase: paths.outputPath,
         compress: true,
-        hot: true,
-        historyApiFallback: true
+        hot: false,
+        historyApiFallback: true,
+        disableHostCheck: true
     },
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
