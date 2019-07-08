@@ -32,9 +32,9 @@ module.exports.createProfile = async (web3, user) => {
     gas: 2000000, from: user.ethAddress, password: user.password
   });
 
-  debug(`Profile SmartContract created at: ${ProfileInstance.contractAddress}`);
+  debug(`Profile SmartContract created at: ${ProfileInstance.options.address}`);
 
-  return ProfileInstance.contractAddress;
+  return ProfileInstance.options.address;
 };
 
 module.exports.stackItem = async (web3, user, { title, description, meta, acl, profileAddress }) => {

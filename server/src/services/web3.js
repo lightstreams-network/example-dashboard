@@ -7,22 +7,27 @@
 const { web3Cfg } = require('src/lib/config');
 const Web3 = require('web3');
 const debug = require('debug')('app:web3');
+let web3;
 
 module.exports = async ({ provider } = {}) => {
-  const cfg = {
-    provider: provider || web3Cfg.provider
-  };
+  if (typeof web3 === 'undefined') {
+    const cfg = {
+      provider: provider || web3Cfg.provider
+    };
 
-  try {
-    return new Web3(cfg.provider, null, {
-      defaultAccount: web3Cfg.holder,
-      defaultGas: web3Cfg.defaultGas,
-      defaultGasPrice: web3Cfg.gasPrice,
-    });
-  } catch ( err ) {
-    console.error(err);
-    return null
+    try {
+      web3 = new Web3(cfg.provider, null, {
+        defaultAccount: web3Cfg.holder,
+        defaultGas: web3Cfg.defaultGas,
+        defaultGasPrice: web3Cfg.gasPrice,
+      });
+    } catch ( err ) {
+      console.error(err);
+      return null
+    }
   }
+
+  return web3;
 };
 
 module.exports.web3SendTx = (web3, txCall, options = {}) => {
