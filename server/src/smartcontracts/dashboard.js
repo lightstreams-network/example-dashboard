@@ -18,9 +18,8 @@ module.exports.createUser = async (web3, { ethAddress, username, profileAddress 
     gas: 1000000
   });
 
-  debug(`Added user to dashboard SC: ${DashboardInstance.options.address}`);
-
-  return DashboardInstance.options.address;
+  debug(`Added user to dashboard SC: ${dashboardSC.address}`);
+  return dashboardSC.address;
 };
 
 module.exports.retrieveUserInfo = async(web3, ethAddress) => {

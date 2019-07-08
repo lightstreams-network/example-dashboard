@@ -54,6 +54,10 @@ router.get('/list', session.authenticate('jwt', { session: false }), async (req,
     } else {
       user = req.user;
     }
+    if (!user) {
+      throw new Error(`User ${attrs.username} not found`)
+    }
+
     const items = await ProfileService.retrieveRemoteItemList(user);
     const itemRequests = await DashboardService.getItemRequestsData(user);
     const responseData = items.map((item) => {
