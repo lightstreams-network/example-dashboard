@@ -9,6 +9,21 @@ node and manage the its distribution and acceptability. In addition you will be 
 to also request access to other users files and manage the pending request to your own content made by
 other users.
 
+## Live Demo
+
+[https://demo.nodejs.lightstreams.io](https://demo.nodejs.lightstreams.io)
+
+## Getting started
+This application is split into two separated projects. A NodeJS server
+which is connected to the lightstreams smart vault, and an the application client
+implemented in React and connected to the NodeJS server.
+
+### Running NodeJS Server
+Follow [this instructions](/server/README.md)
+
+### Running React Client
+Follow [this instructions](/app/README.md)
+
 ## Features
 
 ### Create an account
@@ -69,11 +84,6 @@ The first of them is what it was called stake holder account. This account
 Once users exceeds the initial 10 PHTs they can request more tokens for their accounts contacting Lightstreams Dev Team
 either [Telegram](https://t.me/LightstreamsDevelopers) or on the [Discuss forum](https://discuss.lightstreams.network/c/dev)
 
-## Getting started
-
-This application is split into two separated projects. A [NodeJS server](/server/README.md)
-which is connected to the lightstreams smart vault, and a [user interface](/app/README.md)
-implemented in React and connected to NodeJS server.
 
 ## Topics
 - IPFS
