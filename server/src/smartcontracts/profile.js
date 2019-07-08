@@ -15,13 +15,13 @@ module.exports.address = () => {
 
 module.exports.getMaxItemId = (web3, profileAddress) => {
   const { profile: profileSC } = smartContract;
-  const Profile = web3.eth.Contract(profileSC.abi, profileAddress);
+  const Profile = new web3.eth.Contract(profileSC.abi, profileAddress);
   return Profile.methods.lastItemId.call();
 };
 
 module.exports.createProfile = async (web3, user) => {
   const { profile: profileSC } = smartContract;
-  const ProfileArtifact = web3.eth.Contract(profileSC.abi, null);
+  const ProfileArtifact = new web3.eth.Contract(profileSC.abi, null);
 
   const ProfileInstance = await web3SendTx(web3, () => {
     return ProfileArtifact.deploy({
@@ -41,7 +41,7 @@ module.exports.stackItem = async (web3, user, { title, description, meta, acl, p
   const { profile: profileSC } = smartContract;
 
   const txReceipt = await web3SendTx(web3, () => {
-    const Profile = web3.eth.Contract(profileSC.abi, profileAddress);
+    const Profile = new web3.eth.Contract(profileSC.abi, profileAddress);
     return Profile.methods.stackItem(title, description, meta, acl);
   }, {
     gas: '1200000', from: user.ethAddress, password: user.password
@@ -52,7 +52,7 @@ module.exports.stackItem = async (web3, user, { title, description, meta, acl, p
 
 module.exports.retrieveItemById = async (web3, profileAddress, itemId) => {
   const { profile: profileSC } = smartContract;
-  const Profile = web3.eth.Contract(profileSC.abi, profileAddress);
+  const Profile = new web3.eth.Contract(profileSC.abi, profileAddress);
   const itemObj = await Profile.methods.items(itemId).call();
   return {
     title: itemObj.title,
@@ -65,7 +65,7 @@ module.exports.retrieveItemById = async (web3, profileAddress, itemId) => {
 module.exports.retrieveItemPermissionsById = async (web3, item) => {
   const { permissionedFile: permissionedFileSC } = smartContract;
 
-  const File = web3.eth.Contract(permissionedFileSC.abi, item.acl);
+  const File = new web3.eth.Contract(permissionedFileSC.abi, item.acl);
   const permissionsObj = await File.methods.permissions.call();
   return permissionsObj;
 };

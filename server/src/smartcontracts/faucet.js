@@ -13,7 +13,7 @@ const { weiToPht } = require('src/lib/ethereum');
 module.exports.requestFreeToken = async (web3, { beneficiary, amountInWei }, {from, password}) => {
   await web3SendTx(web3, () => {
     const { faucet: faucetSC } = smartContract;
-    const Faucet = web3.eth.Contract(faucetSC.abi, faucetSC.address);
+    const Faucet = new web3.eth.Contract(faucetSC.abi, faucetSC.address);
     return Faucet.methods.topUp(beneficiary, amountInWei);
   }, { from, password });
 
@@ -23,6 +23,6 @@ module.exports.requestFreeToken = async (web3, { beneficiary, amountInWei }, {fr
 
 module.exports.remainingAmount = async (web3, beneficiary) => {
   const { faucet: faucetSC } = smartContract;
-  const Faucet = web3.eth.Contract(faucetSC.abi, faucetSC.address);
+  const Faucet = new web3.eth.Contract(faucetSC.abi, faucetSC.address);
   return await Faucet.methods.remainingAmount(beneficiary).call()
 };

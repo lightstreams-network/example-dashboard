@@ -10,7 +10,7 @@ const debug = require('debug')('app:web3');
 
 module.exports.createUser = async (web3, { ethAddress, username, profileAddress }) => {
   const { dashboard: dashboardSC } = smartContract;
-  const DashboardInstance = web3.eth.Contract(dashboardSC.abi, dashboardSC.address);
+  const DashboardInstance = new web3.eth.Contract(dashboardSC.abi, dashboardSC.address);
 
   await web3SendTx(web3, () => {
     return DashboardInstance.methods.createUser(ethAddress, username, profileAddress, '');
@@ -25,7 +25,7 @@ module.exports.createUser = async (web3, { ethAddress, username, profileAddress 
 
 module.exports.retrieveUserInfo = async(web3, ethAddress) => {
   const { dashboard: dashboardSC } = smartContract;
-  const DashboardInstance = web3.eth.Contract(dashboardSC.abi, dashboardSC.address);
+  const DashboardInstance = new web3.eth.Contract(dashboardSC.abi, dashboardSC.address);
   const username = await DashboardInstance.methods.findUsername(ethAddress).call();
   const profileAddress = await DashboardInstance.methods.findProfile(ethAddress).call();
   const rootIPFS = await DashboardInstance.methods.findRootIPFS(ethAddress).call();
@@ -41,7 +41,7 @@ module.exports.retrieveUserInfo = async(web3, ethAddress) => {
 module.exports.setNextRootDataId = async(web3, user, nextRootDataId) => {
   const { dashboard: dashboardSC } = smartContract;
   await web3SendTx(web3, () => {
-    const Dashboard = web3.eth.Contract(dashboardSC.abi, dashboardSC.address);
+    const Dashboard = new web3.eth.Contract(dashboardSC.abi, dashboardSC.address);
     return Dashboard.methods.updateRootIPFS(user.ethAddress, nextRootDataId);
   }, {
     gas: 100000
@@ -50,7 +50,7 @@ module.exports.setNextRootDataId = async(web3, user, nextRootDataId) => {
 
 module.exports.findUserByUsername = async (web3, username) => {
   const { dashboard: dashboardSC } = smartContract;
-  const DashboardInstance = web3.eth.Contract(dashboardSC.abi, dashboardSC.address);
+  const DashboardInstance = new web3.eth.Contract(dashboardSC.abi, dashboardSC.address);
   return await DashboardInstance.methods.findUser(username).call();
 };
 
