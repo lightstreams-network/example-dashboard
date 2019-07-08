@@ -7,6 +7,8 @@
 const { web3Cfg } = require('src/lib/config');
 const Web3 = require('web3');
 const debug = require('debug')('app:web3');
+const net = require('net');
+
 let web3;
 
 module.exports = async ({ provider } = {}) => {
@@ -16,7 +18,7 @@ module.exports = async ({ provider } = {}) => {
     };
 
     try {
-      web3 = new Web3(cfg.provider, null, {
+      web3 = new Web3(cfg.provider, net, {
         defaultAccount: web3Cfg.holder,
         defaultGas: web3Cfg.defaultGas,
         defaultGasPrice: web3Cfg.gasPrice,
