@@ -1,7 +1,6 @@
 import CleanWebpackPlugin from 'clean-webpack-plugin';
 
 import paths from './paths';
-import rules from './rules';
 
 module.exports = {
     mode: 'production',
@@ -15,5 +14,12 @@ module.exports = {
             root: paths.root
         })
     ],
-    devtool: 'source-map'
+    devtool: 'source-map',
+    devServer: {
+        contentBase: paths.outputPath,
+        compress: true,
+        hot: false,
+        historyApiFallback: true,
+        disableHostCheck: true
+    }
 };

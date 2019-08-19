@@ -5,6 +5,7 @@ const common = require('./config/webpack/webpack.common.babel');
 
 const envs = {
     development: 'dev',
+    stage: 'stage',
     production: 'prod'
 };
 
