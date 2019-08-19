@@ -16,7 +16,7 @@ module.exports.address = () => {
 module.exports.getMaxItemId = (web3, profileAddress) => {
   const { profile: profileSC } = smartContract;
   const Profile = new web3.eth.Contract(profileSC.abi, profileAddress);
-  return Profile.methods.lastItemId.call();
+  return Profile.methods.lastItemId().call();
 };
 
 module.exports.createProfile = async (web3, user) => {
@@ -32,9 +32,9 @@ module.exports.createProfile = async (web3, user) => {
     gas: 2000000, from: user.ethAddress, password: user.password
   });
 
-  debug(`Profile SmartContract created at: ${ProfileInstance.options.address}`);
+  debug(`Profile SmartContract created at: ${ProfileInstance.contractAddress}`);
 
-  return ProfileInstance.options.address;
+  return ProfileInstance.contractAddress;
 };
 
 module.exports.stackItem = async (web3, user, { title, description, meta, acl, profileAddress }) => {
@@ -66,6 +66,6 @@ module.exports.retrieveItemPermissionsById = async (web3, item) => {
   const { permissionedFile: permissionedFileSC } = smartContract;
 
   const File = new web3.eth.Contract(permissionedFileSC.abi, item.acl);
-  const permissionsObj = await File.methods.permissions.call();
+  const permissionsObj = await File.methods.permissions().call();
   return permissionsObj;
 };
