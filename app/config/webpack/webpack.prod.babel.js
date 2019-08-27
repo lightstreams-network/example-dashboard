@@ -14,12 +14,5 @@ module.exports = {
             root: paths.root
         })
     ],
-    devtool: 'source-map',
-    devServer: {
-        contentBase: paths.outputPath,
-        compress: true,
-        hot: false,
-        historyApiFallback: true,
-        disableHostCheck: true
-    }
+    devtool: 'source-map'
 };
