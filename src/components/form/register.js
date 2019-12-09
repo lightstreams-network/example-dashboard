@@ -23,13 +23,18 @@ const Actions = styled.div`
     text-align: center;
 `;
 
+const generateRandomNumber = (min, max) => {
+    return Math.floor(Math.random() * (max - min)) + min;
+};
+
 const RegisterForm = ({ url, authErrors, handleSubmit }) => {
     const buttonText = 'Create account';
     const buttonTextSubmitting = 'Creating account';
 
     return (
         <Formik
-            initialValues={{ password: '', server: '' }}
+            initialValues={{ username: `user${generateRandomNumber(0, 200)}`, password: 'test123',
+                password2: 'test123', server: '' }}
             validate={values => ({ ...validateAccount(values), ...validatePassword(values), ...validatePassword2(values) })}
             onSubmit={(values, { setSubmitting, setErrors }) => {
                 handleSubmit(url, values)

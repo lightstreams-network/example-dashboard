@@ -14,6 +14,10 @@ Create environment file `.env`
 $> cp .env.sample .env
 ```
 
+```
+SERVER_URL=http://localhost:3000
+```
+
 ## Configure server
 At `.env` file you can define the `SERVER_URL` which is going to act as the server
 side of your application. [Follow the instractions](/server/README.md)

@@ -9,7 +9,7 @@ chai.use(require('chai-as-promised'));
 const assert = chai.assert;
 
 const Faucet = artifacts.require("Faucet");
-const { web3Cfg } = require('src/lib/config');
+const { web3Cfg } = require('../src/constants/config');
 
 const {
   pht2wei,

@@ -10,7 +10,7 @@ import {
     ROUTE_DASHBOARD
 } from './constants';
 
-import store from './store';
+import createStore from './store';
 import Home from './routes/home';
 import Login from './routes/login';
 import Register from './routes/register';
@@ -24,7 +24,7 @@ const GlobalStyle = createGlobalStyle`${reset}${styles}${reactTable}`;
 
 ReactDOM.render(
     <BrowserRouter>
-        <Provider store={store}>
+        <Provider store={createStore()}>
             <Switch>
                 <Route exact path={ROUTE_HOME} component={Home} />
                 <Route path={ROUTE_LOGIN} component={Login} />

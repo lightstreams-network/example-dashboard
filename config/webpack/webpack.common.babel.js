@@ -13,8 +13,10 @@ module.exports = {
         rules
     },
     resolve: {
-        modules: ['src', 'node_modules'],
-        extensions: ['*', '.js', '.scss', '.css']
+        extensions: ['*', '.js', '.scss', '.css', '.json'],
+        modules: [
+            'node_modules',
+        ]
     },
     plugins: [
         new webpack.ProgressPlugin(),

@@ -1,6 +1,6 @@
 require('dotenv').config({ path: `${process.env.PWD}/.env` });
 
-const { web3Cfg } = require('src/lib/config');
+const { web3Cfg } = require('../src/constants/config');
 
 module.exports = (deployer) => {
   process.env.NETWORK = deployer.network;
