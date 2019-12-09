@@ -14,7 +14,7 @@ export const createUserDashboard = async (web3, { username, ethAddress }) => {
     throw new Error(`Cannot find user ${username}`);
   }
 
-  await requestFundingFromHolder(ethAddress, 1);
+  await requestFundingFromHolder(ethAddress, 5);
   const txReceipt = await deployProfile(web3, { from: ethAddress });
   const profileContractAddr = txReceipt.contractAddress;
   await createUser(web3, { from: ethAddress, ethAddress , username, profileAddress: profileContractAddr });

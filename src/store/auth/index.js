@@ -182,12 +182,12 @@ export default function authReducer(state = initialState, action = {}) {
 
 export const getAuthenticatedUser = (state) => ({
   username: get(state, ['auth', 'username'], null),
-  password: getUserPassword(state, get(state, ['auth', 'username'], null)),
+  password: getSessionPassword(state),
   ethAddress: getUserAddress(state, get(state, ['auth', 'username'], null))
 });
-export const getAuthenticatedUserAddress = (state) => getUserAddress(state, get(state, ['auth', 'username'], null));
+// export const getAuthenticatedUserAddress = (state) => getUserAddress(state, get(state, ['auth', 'username'], null));
 export const getUserAddress = (state, username) => get(state, ['auth', 'addresses', username || ''], null);
-export const getUserPassword = (state, username) => get(state, ['auth', 'password', username || ''], null);
+export const getSessionPassword = (state) => get(state, ['auth', 'password'], null);
 export const getUserToken = (state) => get(state, ['auth', 'token'], null);
 export const isAuthenticated = (state) => (get(state, ['auth', 'token'], null) !== null);
 export const getAuthErrors = (state) => get(state, ['auth', 'error'], null);

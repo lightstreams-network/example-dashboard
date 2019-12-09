@@ -4,12 +4,12 @@ import { hGet, hPost } from '../../lib/fetch';
 import { Gateway, Web3 } from 'lightstreams-js-sdk'
 
 import {
-    PATH_ITEM_DOWNLOAD,
-    PATH_ITEM_LIST,
-    PATH_ITEM_ADD,
-    PATH_PERMISSION_GRANT,
-    PATH_PERMISSION_REVOKE,
-    PATH_PERMISSION_REQUEST
+  PATH_ITEM_DOWNLOAD,
+  PATH_ITEM_LIST,
+  PATH_ITEM_ADD,
+  PATH_PERMISSION_GRANT,
+  PATH_PERMISSION_REVOKE,
+  PATH_PERMISSION_REQUEST
 } from '../../constants/routes';
 import { downloadFile } from '../../lib/downloader';
 
@@ -17,9 +17,9 @@ import { gatewayCfg } from '../../constants/config';
 import { uploadNewItem } from '../../services/profile';
 
 const initialState = {
-    files: {},
-    balance: null,
-    error: null
+  files: {},
+  balance: null,
+  error: null
 };
 
 const REQ_LETH_WALLET_BALANCE = 'lsn/leth/REQ_LETH_WALLET_BALANCE';
@@ -58,198 +58,190 @@ const receiveLethError = createAction(RECEIVE_LETH_ERROR);
 const gateway = Gateway(gatewayCfg.provider);
 
 export function lethWalletBalance({ ethAddress }) {
-    return (dispatch) => {
-        dispatch(requestLethWalletBalance());
+  return (dispatch) => {
+    dispatch(requestLethWalletBalance());
 
-        return gateway.wallet.balance(ethAddress)
-            .then(response => dispatch(responseLethWalletBalance(Web3.utils.toPht(response.balance))))
-            .catch(error => dispatch(receiveLethError(error)));
-    };
+    return gateway.wallet.balance(ethAddress)
+      .then(response => dispatch(responseLethWalletBalance(Web3.utils.toPht(response.balance))))
+      .catch(error => dispatch(receiveLethError(error)));
+  };
 }
 
 export function lethItemList({ token }) {
-    return (dispatch) => {
-        dispatch(requestLethItemList());
+  return (dispatch) => {
+    dispatch(requestLethItemList());
 
-        return hGet(PATH_ITEM_LIST, {}, {
-            token
-        }).then(response => dispatch(responseLethItemList(response.data)))
-            .catch(error => dispatch(receiveLethError(error)));
-    };
+    return hGet(PATH_ITEM_LIST, {}, {
+      token
+    }).then(response => dispatch(responseLethItemList(response.data)))
+      .catch(error => dispatch(receiveLethError(error)));
+  };
 }
 
 export function lethUserItemList({ username, token }) {
-    return () => {
-        return hGet(PATH_ITEM_LIST, { username }, {
-            token
-        });
-    };
+  return () => {
+    return hGet(PATH_ITEM_LIST, { username }, {
+      token
+    });
+  };
 }
 
-export function lethStorageAdd(user, {title, description, file }) {
-    return (dispatch) => {
-        dispatch(requestLethStorageAdd());
+export function lethStorageAdd(user, { title, description, file }) {
+  return (dispatch) => {
+    dispatch(requestLethStorageAdd());
 
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('description', description);
-        formData.append('file', file);
-
-        return hPost(PATH_ITEM_ADD, formData, {
-            token
-        }).then((response) => {
-            return response.json();
-        }).then((res) => {
-            dispatch(responseLethStorageAdd(res.data));
-            return res;
-        }).catch((error) => {
-            dispatch(receiveLethError(error));
-            throw error;
-        });
-    };
+    return uploadNewItem(web3, user, { title, description, file })
+      .then((res) => {
+        dispatch(responseLethStorageAdd(res.data));
+        return res;
+      }).catch((error) => {
+        dispatch(receiveLethError(error));
+        throw error;
+      });
+  };
 };
 
 export function lethStorageFetch({ token, itemId, username }) {
-    return (dispatch) => {
-        dispatch(requestLethStorageFetch());
+  return (dispatch) => {
+    dispatch(requestLethStorageFetch());
 
-        return hGet(PATH_ITEM_DOWNLOAD, { item_id: itemId, username }, {
-            token,
-            headers: {
-                'Accept': 'application/octet-stream'
-            }
-        }).then((response) => {
-            const disposition = response.headers.get('content-disposition');
-            const contentType = response.headers.get('Content-Type');
-            let filename;
-            if (disposition && disposition.indexOf('attachment') !== -1) {
-                const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
-                const matches = filenameRegex.exec(disposition);
-                if (matches != null && matches[1]) {
-                    filename = matches[1].replace(/['"]/g, '');
-                }
-            }
-            response.blob().then(data => {
-                downloadFile(data, filename, contentType);
-            });
-        }).catch((error) => {
-            dispatch(receiveLethError(error));
-            throw error;
-        });
-    };
+    return hGet(PATH_ITEM_DOWNLOAD, { item_id: itemId, username }, {
+      token,
+      headers: {
+        'Accept': 'application/octet-stream'
+      }
+    }).then((response) => {
+      const disposition = response.headers.get('content-disposition');
+      const contentType = response.headers.get('Content-Type');
+      let filename;
+      if (disposition && disposition.indexOf('attachment') !== -1) {
+        const filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+        const matches = filenameRegex.exec(disposition);
+        if (matches != null && matches[1]) {
+          filename = matches[1].replace(/['"]/g, '');
+        }
+      }
+      response.blob().then(data => {
+        downloadFile(data, filename, contentType);
+      });
+    }).catch((error) => {
+      dispatch(receiveLethError(error));
+      throw error;
+    });
+  };
 }
 
 export function lethFileGrant({ token, itemId, toUsername }) {
-    return async (dispatch) => {
-        dispatch(requestLethAclGrant());
+  return async (dispatch) => {
+    dispatch(requestLethAclGrant());
 
-        return hPost(PATH_PERMISSION_GRANT, {
-            item_id: `${itemId}`,
-            username: toUsername
-        }, {
-            token
-        }).then(() => {
-            dispatch(lethItemList({ token }));
-        }).catch((error) => {
-            dispatch(receiveLethError(error));
-            throw error;
-        });
-    };
+    return hPost(PATH_PERMISSION_GRANT, {
+      item_id: `${itemId}`,
+      username: toUsername
+    }, {
+      token
+    }).then(() => {
+      dispatch(lethItemList({ token }));
+    }).catch((error) => {
+      dispatch(receiveLethError(error));
+      throw error;
+    });
+  };
 }
 
 export function lethFileRevoke({ token, itemId, toUsername }) {
-    return async (dispatch) => {
-        dispatch(requestLethAclGrant());
+  return async (dispatch) => {
+    dispatch(requestLethAclGrant());
 
-        return hPost(PATH_PERMISSION_REVOKE, {
-            item_id: `${itemId}`,
-            username: toUsername
-        }, {
-            token
-        }).then((res) => {
-            dispatch(lethItemList({ token }));
-        }).catch((error) => {
-            dispatch(receiveLethError(error));
-            throw error;
-        });
-    };
+    return hPost(PATH_PERMISSION_REVOKE, {
+      item_id: `${itemId}`,
+      username: toUsername
+    }, {
+      token
+    }).then((res) => {
+      dispatch(lethItemList({ token }));
+    }).catch((error) => {
+      dispatch(receiveLethError(error));
+      throw error;
+    });
+  };
 }
 
 export function lethFileRequestAccess({ token, itemId, toUsername }) {
-    return async (dispatch) => {
-        dispatch(requestLethAclGrant());
+  return async (dispatch) => {
+    dispatch(requestLethAclGrant());
 
-        return hPost(PATH_PERMISSION_REQUEST, {
-            item_id: `${itemId}`,
-            username: toUsername
-        }, {
-            token
-        }).then((res) => {
-            dispatch(lethItemList({ token }));
-        }).catch((error) => {
-            dispatch(receiveLethError(error));
-            throw error;
-        });
-    };
+    return hPost(PATH_PERMISSION_REQUEST, {
+      item_id: `${itemId}`,
+      username: toUsername
+    }, {
+      token
+    }).then((res) => {
+      dispatch(lethItemList({ token }));
+    }).catch((error) => {
+      dispatch(receiveLethError(error));
+      throw error;
+    });
+  };
 }
 
 const CLEAR_STORED_STATE = 'lsn/auth/CLEAR_STORED_STATE';
 const clearStoredState = createAction(CLEAR_STORED_STATE);
 
 export default createReducer({
-    [requestLethStorageAdd]: (state) => ({
-        ...state,
-        isFetching: true,
-        error: null,
-        lastRequestedAt: (new Date()).toISOString()
-    }),
-    [responseLethStorageAdd]: (state, payload) => {
-        return {
-            ...state,
-            isFetching: false,
-            error: null,
-            files: { ...state.files, ...{ [payload.id]: payload } }
-        };
-    },
-    [requestLethStorageFetch]: (state) => ({
-        ...state,
-        isFetching: true
-    }),
-    [responseLethStorageFetch]: (state, payload) => ({
-        ...state,
-        fileDataUrl: payload,
-        isFetching: false
-    }),
-    [receiveLethError]: (state, payload) => ({
-        ...state,
-        isFetching: false,
-        error: payload
-    }),
-    [requestLethWalletBalance]: (state) => ({
-        ...state,
-        isFetching: true,
-        error: null,
-        lastRequestedAt: (new Date()).toISOString()
-    }),
-    [responseLethWalletBalance]: (state, payload) => ({
-        ...state,
-        isFetching: false,
-        balance: payload,
-        error: null
-    }),
-    [responseLethItemList]: (state, payload) => {
-        const mappedItems = {};
-        payload.forEach(item => {
-            mappedItems[item.id] = item;
-        });
+  [requestLethStorageAdd]: (state) => ({
+    ...state,
+    isFetching: true,
+    error: null,
+    lastRequestedAt: (new Date()).toISOString()
+  }),
+  [responseLethStorageAdd]: (state, payload) => {
+    return {
+      ...state,
+      isFetching: false,
+      error: null,
+      files: { ...state.files, ...{ [payload.id]: payload } }
+    };
+  },
+  [requestLethStorageFetch]: (state) => ({
+    ...state,
+    isFetching: true
+  }),
+  [responseLethStorageFetch]: (state, payload) => ({
+    ...state,
+    fileDataUrl: payload,
+    isFetching: false
+  }),
+  [receiveLethError]: (state, payload) => ({
+    ...state,
+    isFetching: false,
+    error: payload
+  }),
+  [requestLethWalletBalance]: (state) => ({
+    ...state,
+    isFetching: true,
+    error: null,
+    lastRequestedAt: (new Date()).toISOString()
+  }),
+  [responseLethWalletBalance]: (state, payload) => ({
+    ...state,
+    isFetching: false,
+    balance: payload,
+    error: null
+  }),
+  [responseLethItemList]: (state, payload) => {
+    const mappedItems = {};
+    payload.forEach(item => {
+      mappedItems[item.id] = item;
+    });
 
-        return {
-            ...state,
-            isFetching: false,
-            files: { ...mappedItems }
-        };
-    },
-    [clearStoredState]: (state) => initialState
+    return {
+      ...state,
+      isFetching: false,
+      files: { ...mappedItems }
+    };
+  },
+  [clearStoredState]: (state) => initialState
 }, initialState);
 
 export const getLethFiles = (state) => get(state, ['leth', 'files'], null);

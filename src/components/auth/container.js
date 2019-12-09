@@ -24,7 +24,7 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(clearStoredState());
         },
         uploadFile(user, { title, description, file }) {
-            return dispatch(lethStorageAdd(user, { token, title, description, file }));
+            return dispatch(lethStorageAdd(user, { title, description, file }));
         },
         fetchWalletBalance({ethAddress}) {
             return dispatch(lethWalletBalance({ ethAddress}));

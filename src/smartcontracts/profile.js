@@ -15,13 +15,27 @@ export const deployProfile = async (web3, { from }) => {
     params: []
   });
 };
+
+export const stackItem = async (web3, { from, contractAddr, title, description, meta, acl }) => {
+
+  const txReceipt = await Web3.contractSendTx(web3, {
+    to: contractAddr,
+    from,
+    abi: contracts.profile.abi,
+    method: 'stackItem',
+    params: [title, description, meta, acl]
+  });
+
+  debugger;
+  return txReceipt.events.StackItem.returnValues['_itemId'];
+};
 //
-// module.exports.address = () => {
+// export const address = () => {
 //   const { shelves: shelvesSC } = smartContract;
 //   return shelvesSC.address;
 // };
 //
-// module.exports.getMaxItemId = (web3, profileAddress) => {
+// export const getMaxItemId = (web3, profileAddress) => {
 //   const { profile: profileSC } = smartContract;
 //   const Profile = new web3.eth.Contract(profileSC.abi, profileAddress);
 //   return Profile.methods.lastItemId().call();
@@ -29,20 +43,8 @@ export const deployProfile = async (web3, { from }) => {
 //
 //
 //
-// module.exports.stackItem = async (web3, user, { title, description, meta, acl, profileAddress }) => {
-//   const { profile: profileSC } = smartContract;
 //
-//   const txReceipt = await web3SendTx(web3, () => {
-//     const Profile = new web3.eth.Contract(profileSC.abi, profileAddress);
-//     return Profile.methods.stackItem(title, description, meta, acl);
-//   }, {
-//     gas: '1200000', from: user.ethAddress, password: user.password
-//   });
-//
-//   return txReceipt.events.StackItem.returnValues['_itemId'];
-// };
-//
-// module.exports.retrieveItemById = async (web3, profileAddress, itemId) => {
+// export const retrieveItemById = async (web3, profileAddress, itemId) => {
 //   const { profile: profileSC } = smartContract;
 //   const Profile = new web3.eth.Contract(profileSC.abi, profileAddress);
 //   const itemObj = await Profile.methods.items(itemId).call();
@@ -54,7 +56,7 @@ export const deployProfile = async (web3, { from }) => {
 //   }
 // };
 //
-// module.exports.retrieveItemPermissionsById = async (web3, item) => {
+// export const retrieveItemPermissionsById = async (web3, item) => {
 //   const { permissionedFile: permissionedFileSC } = smartContract;
 //
 //   const File = new web3.eth.Contract(permissionedFileSC.abi, item.acl);
