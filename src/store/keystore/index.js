@@ -1,5 +1,6 @@
 import get from 'lodash.get';
 import { Web3, EthersWallet as EW } from 'lightstreams-js-sdk';
+import { generateAuthToken } from 'lightstreams-js-sdk/src/token'
 import { web3Cfg } from '../../constants/config'
 
 const initialState = {
@@ -75,7 +76,7 @@ export const unlockAccountAction = (ethAddress, password) => (dispatch, getState
     return new Promise(async (resolve, reject) => {
         try {
             const web3 = getWeb3Engine(getState());
-            Web3.keystore.unlockAccount(web3, { address: ethAddress, password });
+            await Web3.keystore.unlockAccount(web3, { address: ethAddress, password });
             const isUnlocked = Web3.keystore.isAccountLocked(web3, { address: ethAddress });
             resolve(isUnlocked);
         } catch ( err ) {
@@ -84,27 +85,10 @@ export const unlockAccountAction = (ethAddress, password) => (dispatch, getState
     })
 };
 
-export const importAccountAction = (decryptedWallet, password) => (dispatch, getState) => {
-  return new Promise(async (resolve, reject) => {
-    try {
-      const web3 = getWeb3Engine(getState());
-      await waitFor(0.2);
-      const encryptedJson = await EW.Keystore.encryptWallet(decryptedWallet, password);
-      const formattedAddress = EW.Account.formatAddress(encryptedJson.address);
-      console.log(`Imported account ${formattedAddress}`);
-      Web3.keystore.importAccount(web3, { encryptedJson, decryptedWallet });
-      dispatch({
-        type: KEYSTORE_APPEND_ENCODED_JSON_KEY_ACTION,
-        payload: {
-          encryptedJson
-        }
-      });
 
-      resolve(formattedAddress);
-    } catch ( err ) {
-      reject(err);
-    }
-  })
+export const generateAccountAuthToken = (ethAddress) => (dispatch, getState) => {
+    const web3 = getWeb3Engine(getState());
+    return generateAuthToken(web3, { address: ethAddress, tokenBlocksLifespan: 1000})
 };
 
 // REDUCERS

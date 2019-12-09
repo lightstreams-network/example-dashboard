@@ -1,9 +1,10 @@
 import get from 'lodash.get';
-import { createAccountAction, unlockAccountAction } from '../keystore'
+import { createAccountAction, unlockAccountAction, generateAccountAuthToken } from '../keystore'
 
 const initialState = {
     password: null,
     username: null,
+    token: null,
     error: null,
     addresses: {}
 };
@@ -25,11 +26,18 @@ export function loggedUser(username, password) {
 }
 
 const CREATE_NEW_USER = 'lsn/auth/CREATE_NEW_USER';
-
 export function createdNewUser(username, ethAddress) {
     return {
         type: CREATE_NEW_USER,
         payload: { username, address: ethAddress }
+    };
+}
+
+const RECEIVE_TOKEN = 'lsn/auth/RECEIVE_TOKEN';
+export function receiveToken(token) {
+    return {
+        type: RECEIVE_TOKEN,
+        payload: token
     };
 }
 
@@ -57,8 +65,12 @@ export function createUser({ username, password }) {
                 .then((ethAddress) => {
                     dispatch(createdNewUser(username, ethAddress));
                     dispatch(loggedUser(username, password));
-                    resolve(ethAddress);
+                    return dispatch(generateAccountAuthToken(ethAddress))
                 })
+                .then((token) => {
+                    dispatch(receiveToken(token));
+                })
+                .then(resolve)
                 .catch((error) => {
                     console.error(error);
                     dispatch(receiveAuthError(error));
@@ -71,18 +83,23 @@ export function createUser({ username, password }) {
 export function login({ username, password }) {
     return (dispatch, getState) => {
         return new Promise((resolve, reject) => {
-            const userAddr = getUserAddress(getState(), username);
-            if(!userAddr) {
+            const ethAddress = getUserAddress(getState(), username);
+            if(!ethAddress) {
                 const errMsg = `User ${username} is not registered`;
                 dispatch(receiveAuthError(errMsg));
                 reject(new Error(errMsg));
                 return;
             }
-            dispatch(unlockAccountAction(userAddr, password))
+
+            dispatch(unlockAccountAction(ethAddress, password))
                 .then(() => {
                     dispatch(loggedUser(username, password));
-                    resolve(userAddr);
+                    return dispatch(generateAccountAuthToken(ethAddress))
                 })
+                .then((token) => {
+                    dispatch(receiveToken(token));
+                })
+                .then(resolve)
                 .catch((error) => {
                     if (error.response && typeof error.response.json === 'function') {
                         error.response.json().then(err => {
@@ -125,6 +142,14 @@ export default function authReducer(state = initialState, action = {}) {
                 },
             };
 
+        case RECEIVE_TOKEN:
+            return {
+                ...state,
+                inProgress: false,
+                error: null,
+                token: action.payload
+            };
+
         case RECEIVE_AUTH_ERROR:
             return {
                 ...state,
@@ -147,5 +172,5 @@ export default function authReducer(state = initialState, action = {}) {
 export const getAuthenticatedUser = (state) => get(state, ['auth', 'username'], null);
 export const getUserAddress = (state, username) => get(state, ['auth', 'addresses', username], null);
 export const getUserToken = (state) => get(state, ['auth', 'token'], null);
-export const isAuthenticated = (state) => (get(state, ['auth', 'password'], null) !== null);
+export const isAuthenticated = (state) => (get(state, ['auth', 'token'], null) !== null);
 export const getAuthErrors = (state) => get(state, ['auth', 'error'], null);
