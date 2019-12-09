@@ -23,16 +23,16 @@ const Actions = styled.div`
     text-align: center;
 `;
 
-const LoginForm = ({ url, authErrors, handleSubmit }) => {
+const LoginForm = ({ user, authErrors, handleSubmit }) => {
     const buttonText = 'Sign in';
     const buttonTextSubmitting = 'Signing in';
 
     return (
         <Formik
-            initialValues={{ username: '', password: '', server: '' }}
+            initialValues={{ username: user || '', password: '', server: '' }}
             validate={values => ({ ...validateAccount(values), ...validatePassword(values) })}
             onSubmit={(values, { setSubmitting, setErrors }) => {
-                handleSubmit(url, values)
+                handleSubmit(values)
                     .catch(err => {
                         setErrors({
                             server: err.message
@@ -81,7 +81,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        handleSubmit(url, { username, password }) {
+        handleSubmit({ username, password }) {
             return dispatch(login({ username, password }));
         }
     };

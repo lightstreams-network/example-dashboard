@@ -1,5 +1,5 @@
 import get from 'lodash.get';
-import { Web3 } from 'lightstreams-js-sdk';
+import { Web3, EthersWallet as EW } from 'lightstreams-js-sdk';
 import { web3Cfg } from '../../constants/config'
 
 const initialState = {
@@ -16,9 +16,8 @@ export const KEYSTORE_SET_WEB3_ACTION = 'lsn/keystore/KEYSTORE_SET_WEB3';
 export const initializeWeb3Action = () => (dispatch, getState) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const { keystore } = getState();
-      let web3 = getWeb3Engine(keystore);
-      const encryptedKeys = getEncryptedKeys(keystore);
+      let web3 = getWeb3Engine(getState());
+      const encryptedKeys = getEncryptedKeys(getState());
       if (web3 !== null) {
         throw new Error(`Web3 is already initialized`);
       }
@@ -31,7 +30,7 @@ export const initializeWeb3Action = () => (dispatch, getState) => {
       }
 
       encryptedKeys.forEach(encryptedJson => {
-        console.log(`Import ${EW.Account.formatAddress(encryptedJson.address)} into web3 engine`);
+        console.log(`Imported ${EW.Account.formatAddress(encryptedJson.address)} into web3 engine`);
         Web3.keystore.importAccount(web3, { encryptedJson });
       });
 
@@ -51,9 +50,7 @@ export const initializeWeb3Action = () => (dispatch, getState) => {
 export const createAccountAction = (password) => (dispatch, getState) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const { keystore } = getState();
-      const web3 = getWeb3Engine(keystore);
-      await waitFor(0.2); // WHY? We need to switch CPU context to refresh component
+      const web3 = getWeb3Engine(getState());
       const decryptedWallet = EW.Keystore.createRandomWallet();
       const encryptedJson = await EW.Keystore.encryptWallet(decryptedWallet, password);
       console.log(`Create new account ${EW.Account.formatAddress(encryptedJson.address)}`);
@@ -77,8 +74,7 @@ export const createAccountAction = (password) => (dispatch, getState) => {
 export const unlockAccountAction = (ethAddress, password) => (dispatch, getState) => {
     return new Promise(async (resolve, reject) => {
         try {
-            const { keystore } = getState();
-            const web3 = getWeb3Engine(keystore);
+            const web3 = getWeb3Engine(getState());
             Web3.keystore.unlockAccount(web3, { address: ethAddress, password });
             const isUnlocked = Web3.keystore.isAccountLocked(web3, { address: ethAddress });
             resolve(isUnlocked);
@@ -91,8 +87,7 @@ export const unlockAccountAction = (ethAddress, password) => (dispatch, getState
 export const importAccountAction = (decryptedWallet, password) => (dispatch, getState) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const { keystore } = getState();
-      const web3 = getWeb3Engine(keystore);
+      const web3 = getWeb3Engine(getState());
       await waitFor(0.2);
       const encryptedJson = await EW.Keystore.encryptWallet(decryptedWallet, password);
       const formattedAddress = EW.Account.formatAddress(encryptedJson.address);

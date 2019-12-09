@@ -9,7 +9,6 @@ const initialState = {
 };
 
 const ACTION_IN_PROGRESS = 'lsn/auth/ACTION_IN_PROGRESS';
-
 function fetchingInProgress() {
     return {
         type: ACTION_IN_PROGRESS,
@@ -18,7 +17,6 @@ function fetchingInProgress() {
 }
 
 const LOGGED_USER = 'lsn/auth/LOGGED_USER';
-
 export function loggedUser(username, password) {
     return {
         type: LOGGED_USER,
@@ -31,16 +29,23 @@ const CREATE_NEW_USER = 'lsn/auth/CREATE_NEW_USER';
 export function createdNewUser(username, ethAddress) {
     return {
         type: CREATE_NEW_USER,
-        payload: { username, ethAddress }
+        payload: { username, address: ethAddress }
     };
 }
 
 const CLEAR_STORED_STATE = 'lsn/auth/CLEAR_STORED_STATE';
-
 export function clearStoredState() {
     return {
         type: CLEAR_STORED_STATE,
         payload: null
+    };
+}
+
+const RECEIVE_AUTH_ERROR = 'lsn/auth/RECEIVE_AUTH_ERROR';
+export function receiveAuthError(error) {
+    return {
+        type: RECEIVE_AUTH_ERROR,
+        payload: typeof error === 'string' ? error : error.message
     };
 }
 
@@ -55,6 +60,7 @@ export function createUser({ username, password }) {
                     resolve(ethAddress);
                 })
                 .catch((error) => {
+                    console.error(error);
                     dispatch(receiveAuthError(error));
                     reject(error);
                 });
@@ -66,10 +72,16 @@ export function login({ username, password }) {
     return (dispatch, getState) => {
         return new Promise((resolve, reject) => {
             const userAddr = getUserAddress(getState(), username);
+            if(!userAddr) {
+                const errMsg = `User ${username} is not registered`;
+                dispatch(receiveAuthError(errMsg));
+                reject(new Error(errMsg));
+                return;
+            }
             dispatch(unlockAccountAction(userAddr, password))
-                .then((response) => {
+                .then(() => {
                     dispatch(loggedUser(username, password));
-                    resolve(response.token);
+                    resolve(userAddr);
                 })
                 .catch((error) => {
                     if (error.response && typeof error.response.json === 'function') {
@@ -78,6 +90,7 @@ export function login({ username, password }) {
                             reject(new Error(err.message));
                         });
                     } else {
+                        console.error(error);
                         dispatch(receiveAuthError(error));
                         reject(error);
                     }
@@ -96,20 +109,35 @@ export default function authReducer(state = initialState, action = {}) {
         case LOGGED_USER:
             return {
                 ...state,
-                username: payload.username,
-                password: payload.password
+                error: null,
+                inProgress: false,
+                username: action.payload.username,
+                password: action.payload.password
             };
         case CREATE_NEW_USER:
             return {
                 ...state,
+                error: null,
+                inProgress: false,
                 addresses: {
                     ...state.addresses,
                     [action.payload.username]: action.payload.address
                 },
             };
 
+        case RECEIVE_AUTH_ERROR:
+            return {
+                ...state,
+                inProgress: false,
+                error: action.payload
+            };
+
         case CLEAR_STORED_STATE:
-            return initialState;
+            return {
+                ...initialState,
+                addresses: state.addresses,
+                username: state.username
+            };
 
         default:
             return state;
@@ -118,6 +146,6 @@ export default function authReducer(state = initialState, action = {}) {
 
 export const getAuthenticatedUser = (state) => get(state, ['auth', 'username'], null);
 export const getUserAddress = (state, username) => get(state, ['auth', 'addresses', username], null);
-export const getUserToken = (state) => null;
-export const isAuthenticated = (state) => getAuthenticatedUser(state) !== null;
+export const getUserToken = (state) => get(state, ['auth', 'token'], null);
+export const isAuthenticated = (state) => (get(state, ['auth', 'password'], null) !== null);
 export const getAuthErrors = (state) => get(state, ['auth', 'error'], null);
