@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
 import AuthConnect from './container';
-import { ROUTE_HOME, ROUTE_DASHBOARD } from '../../constants';
+import { ROUTE_HOME, ROUTE_DASHBOARD } from '../../constants/routes';
 
 export const IfAuth = ({ children }) => (
     <AuthConnect>

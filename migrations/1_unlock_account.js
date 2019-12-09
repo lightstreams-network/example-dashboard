@@ -1,7 +1,5 @@
 require('dotenv').config({ path: `${process.env.PWD}/.env` });
 
-const { web3Cfg } = require('../src/constants/config');
-
 module.exports = (deployer) => {
   process.env.NETWORK = deployer.network;
 
@@ -10,8 +8,9 @@ module.exports = (deployer) => {
       return true;
     }
 
-    console.log(web3Cfg);
-    return web3.eth.personal.unlockAccount(web3Cfg.holder, web3Cfg.password, 1000)
+    const rootAcc = process.env.STAKEHOLDER_ADDRESS;
+    const rootAccPwd = process.env.STAKEHOLDER_PASSWORD;
+    return web3.eth.personal.unlockAccount(rootAcc, rootAccPwd, 1000)
       .then(console.log('Root Account unlocked!'))
       .catch((err) => {
         console.log(err);

@@ -6026,9 +6026,54 @@
     "name": "solc",
     "version": "0.5.1+commit.c8a2cb62.Emscripten.clang"
   },
-  "networks": {},
+  "networks": {
+    "161": {
+      "events": {
+        "0x0901442e07450f9456b6f824376423ece1dcd913018fbdee1a54e8bbe324785d": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "_account",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "_nextid",
+              "type": "string"
+            }
+          ],
+          "name": "UpdateRootData",
+          "type": "event",
+          "signature": "0x0901442e07450f9456b6f824376423ece1dcd913018fbdee1a54e8bbe324785d"
+        },
+        "0xe2f575a5a35292e0ae2785e6dcc322b6db378215a11a053a4b114b9a59b5226a": {
+          "anonymous": false,
+          "inputs": [
+            {
+              "indexed": false,
+              "name": "_account",
+              "type": "address"
+            },
+            {
+              "indexed": false,
+              "name": "_username",
+              "type": "string"
+            }
+          ],
+          "name": "NewUserAdded",
+          "type": "event",
+          "signature": "0xe2f575a5a35292e0ae2785e6dcc322b6db378215a11a053a4b114b9a59b5226a"
+        }
+      },
+      "links": {},
+      "address": "0x787D249673baf2f64466c72E345e809569F56C26",
+      "transactionHash": "0x193226399804b956d5be421b8bca5c92724adf02e27c98338b6f1cdde2064fee"
+    }
+  },
   "schemaVersion": "3.0.19",
-  "updatedAt": "2019-12-09T11:07:26.604Z",
+  "updatedAt": "2019-12-09T16:18:12.802Z",
+  "networkType": "ethereum",
   "devdoc": {
     "methods": {}
   },

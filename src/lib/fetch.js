@@ -1,4 +1,4 @@
-import { SERVER_URL } from '../constants';
+import { SERVER_URL } from '../constants/routes';
 
 function getBaseUrl(uri = '') {
     return `${SERVER_URL}${uri}`;

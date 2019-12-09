@@ -2,7 +2,7 @@ import React from 'react';
 import { Container, Wrapper, StyledLink } from '../components/elements';
 import Logo from '../components/logo';
 import { IfAuth, IfNotAuth, IfAuthRedirectTo } from '../components/auth';
-import { ROUTE_DASHBOARD } from '../constants';
+import { ROUTE_DASHBOARD } from '../constants/routes';
 
 
 const Home = () => (

@@ -86,10 +86,6 @@ export const unlockAccountAction = (ethAddress, password) => (dispatch, getState
 };
 
 
-export const generateAccountAuthToken = (ethAddress) => (dispatch, getState) => {
-    const web3 = getWeb3Engine(getState());
-    return generateAuthToken(web3, { address: ethAddress, tokenBlocksLifespan: 1000})
-};
 
 // REDUCERS
 

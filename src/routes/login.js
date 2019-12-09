@@ -3,7 +3,7 @@ import Logo from '../components/logo';
 import LoginForm from '../components/form/login';
 import { Container, Wrapper, StyledLink, Box, Section } from '../components/elements';
 import { IfAuthRedirectTo } from '../components/auth';
-import { ROUTE_DASHBOARD, ROUTE_REGISTER } from '../constants';
+import { ROUTE_DASHBOARD, ROUTE_REGISTER } from '../constants/routes';
 
 const Login = () => (
     <IfAuthRedirectTo route={ROUTE_DASHBOARD}>

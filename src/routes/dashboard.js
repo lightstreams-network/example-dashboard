@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { ROUTE_LOGIN } from '../constants';
+import { ROUTE_LOGIN } from '../constants/routes';
 import { IfNotAuthRedirectTo } from '../components/auth';
 import Logo from '../components/logo';
 import CopyToClipboard from '../components/copy-to-clipboard';
@@ -58,14 +58,14 @@ const Dashboard = () => (
             const [isFetchingUser, setIsFetchingUser] = useState(false);
 
             const refreshUser = () => {
-                fetchWalletBalance({ token });
-                fetchItemList({ token });
+                fetchWalletBalance({ ethAddress: user.ethAddress });
+                fetchItemList({ username: user.username, ethAddress: user.ethAddress });
             };
 
             useEffect(() => {
                 if (!hasLoadedBefore) {
                     setHasLoadedBefore(true);
-                    fetchWalletBalance({ token });
+                    fetchWalletBalance({ ethAddress: user.ethAddress });
                     fetchItemList({ token, ethAddress: user.ethAddress });
                 }
             });
@@ -113,7 +113,7 @@ const Dashboard = () => (
                                 <br/>
                                 <Button onClick={() => {
                                     setIsUploading(true);
-                                    uploadFile({ token, file, description, title }).finally(() => {
+                                    uploadFile(user, { file, description, title }).finally(() => {
                                         setTitle('');
                                         setDescription('');
                                         setFile(null);
@@ -129,39 +129,39 @@ const Dashboard = () => (
                                     revokeAccess({ token, itemId, toUsername: username });
                                 }} files={files}/>
                             </Section>
-                          <Section>
-                            <H3>Grant Access</H3>
-                            <Label>
-                              <span className='w-20'>Username:</span>
-                              <Input className='w-30' type='text'
-                                     onChange={(e) => setGrantUsername(e.target.value)}
-                                     value={grantUsername}/>
-                            </Label>
-                            <Label>
-                              <span className='w-20'>File:</span>
-                              <Select className='w-50' onChange={(e) => setGrantFileId(e.target.value)}>
-                                <option value=''>Select a file</option>
-                                {
-                                  Object.values(files).map(fileItem => {
-                                    return <option
-                                      value={fileItem.id}>{fileItem.id} - {fileItem.title}</option>;
-                                  })
-                                }
-                              </Select>
-                            </Label>
-                            <Button onClick={() => {
-                              setIsGranting(true);
-                              grantAccess({
-                                token,
-                                itemId: grantFileId,
-                                toUsername: grantUsername
-                              }).finally(() => {
-                                setGrantUsername('');
-                                setGrantFileId(null);
-                                setIsGranting(false);
-                              });
-                            }} disabled={isGranting}> {isGranting ? 'Granting' : 'Grant'} </Button>
-                          </Section>
+                            <Section>
+                                <H3>Grant Access</H3>
+                                <Label>
+                                    <span className='w-20'>Username:</span>
+                                    <Input className='w-30' type='text'
+                                           onChange={(e) => setGrantUsername(e.target.value)}
+                                           value={grantUsername}/>
+                                </Label>
+                                <Label>
+                                    <span className='w-20'>File:</span>
+                                    <Select className='w-50' onChange={(e) => setGrantFileId(e.target.value)}>
+                                        <option value=''>Select a file</option>
+                                        {
+                                            Object.values(files).map(fileItem => {
+                                                return <option
+                                                    value={fileItem.id}>{fileItem.id} - {fileItem.title}</option>;
+                                            })
+                                        }
+                                    </Select>
+                                </Label>
+                                <Button onClick={() => {
+                                    setIsGranting(true);
+                                    grantAccess({
+                                        token,
+                                        itemId: grantFileId,
+                                        toUsername: grantUsername
+                                    }).finally(() => {
+                                        setGrantUsername('');
+                                        setGrantFileId(null);
+                                        setIsGranting(false);
+                                    });
+                                }} disabled={isGranting}> {isGranting ? 'Granting' : 'Grant'} </Button>
+                            </Section>
                             <Section>
                                 <H3>Pending requests</H3>
                                 <PendingList
@@ -199,8 +199,8 @@ const Dashboard = () => (
                                         .then(res => {
                                             setFromUserFiles(res.data);
                                         }).finally(() => {
-                                            setIsFetchingUser(false);
-                                        });
+                                        setIsFetchingUser(false);
+                                    });
                                 }} disabled={isFetchingUser}> {isFetchingUser ? 'Fetching' : 'Fetch'} </Button>
                                 <UserFileList user={user} downloadFile={(itemId) => {
                                     getFileData({ token, itemId, username: fromUsername });

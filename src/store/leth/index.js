@@ -1,6 +1,8 @@
 import get from 'lodash.get';
 import { createAction, createReducer } from 'redux-act';
 import { hGet, hPost } from '../../lib/fetch';
+import { Gateway, Web3 } from 'lightstreams-js-sdk'
+
 import {
     PATH_ITEM_DOWNLOAD,
     PATH_ITEM_LIST,
@@ -8,8 +10,11 @@ import {
     PATH_PERMISSION_GRANT,
     PATH_PERMISSION_REVOKE,
     PATH_PERMISSION_REQUEST
-} from '../../constants';
+} from '../../constants/routes';
 import { downloadFile } from '../../lib/downloader';
+
+import { gatewayCfg } from '../../constants/config';
+import { uploadNewItem } from '../../services/profile';
 
 const initialState = {
     files: {},
@@ -50,13 +55,14 @@ const responseLethAclGrant = createAction(RES_LETH_ACL_GRANT);
 const RECEIVE_LETH_ERROR = 'lsn/leth/RECEIVE_LETH_ERROR';
 const receiveLethError = createAction(RECEIVE_LETH_ERROR);
 
-export function lethWalletBalance({ token }) {
-    return (dispatch, getState) => {
+const gateway = Gateway(gatewayCfg.provider);
+
+export function lethWalletBalance({ ethAddress }) {
+    return (dispatch) => {
         dispatch(requestLethWalletBalance());
 
-        return hGet('/wallet/balance', { }, {
-            token
-        }).then(response => dispatch(responseLethWalletBalance(response.data)))
+        return gateway.wallet.balance(ethAddress)
+            .then(response => dispatch(responseLethWalletBalance(Web3.utils.toPht(response.balance))))
             .catch(error => dispatch(receiveLethError(error)));
     };
 }
@@ -80,7 +86,7 @@ export function lethUserItemList({ username, token }) {
     };
 }
 
-export function lethStorageAdd({ token, title, description, file }) {
+export function lethStorageAdd(user, {title, description, file }) {
     return (dispatch) => {
         dispatch(requestLethStorageAdd());
 
@@ -169,7 +175,6 @@ export function lethFileRevoke({ token, itemId, toUsername }) {
     };
 }
 
-
 export function lethFileRequestAccess({ token, itemId, toUsername }) {
     return async (dispatch) => {
         dispatch(requestLethAclGrant());
@@ -229,7 +234,7 @@ export default createReducer({
     [responseLethWalletBalance]: (state, payload) => ({
         ...state,
         isFetching: false,
-        balance: payload.pht,
+        balance: payload,
         error: null
     }),
     [responseLethItemList]: (state, payload) => {

@@ -4,30 +4,47 @@
  * Copyright 2019 (c) Lightstreams, Granada
  */
 
-const { smartContract } = require('src/lib/config');
-const { web3SendTx } = require('src/services/web3');
-const debug = require('debug')('app:web3');
+import { Web3 } from 'lightstreams-js-sdk';
+import { contracts } from '../constants/config'
 
-module.exports.createUser = async (web3, { ethAddress, username, profileAddress }) => {
-  const { dashboard: dashboardSC } = smartContract;
-  const DashboardInstance = new web3.eth.Contract(dashboardSC.abi, dashboardSC.address);
-
-  await web3SendTx(web3, () => {
-    return DashboardInstance.methods.createUser(ethAddress, username, profileAddress, '');
-  },{
-    gas: 1000000
+export const createUser = async (web3, { from, ethAddress, username, profileAddress }) => {
+  return await Web3.contractSendTx(web3, {
+    to: contracts.dashboard.address,
+    abi: contracts.dashboard.abi,
+    method: 'createUser',
+    from: from,
+    params: [ethAddress, username, profileAddress, '']
   });
-
-  debug(`Added user to dashboard SC: ${dashboardSC.address}`);
-  return dashboardSC.address;
 };
 
-module.exports.retrieveUserInfo = async(web3, ethAddress) => {
-  const { dashboard: dashboardSC } = smartContract;
-  const DashboardInstance = new web3.eth.Contract(dashboardSC.abi, dashboardSC.address);
-  const username = await DashboardInstance.methods.findUsername(ethAddress).call();
-  const profileAddress = await DashboardInstance.methods.findProfile(ethAddress).call();
-  const rootIPFS = await DashboardInstance.methods.findRootIPFS(ethAddress).call();
+export const findUserByUsername = async (web3, { username }) => {
+  return await Web3.contractCall(web3, {
+    to: contracts.dashboard.address,
+    abi: contracts.dashboard.abi,
+    method: 'findUser',
+    params: [username]
+  });
+};
+
+export const retrieveUserInfo = async (web3, { username }) => {
+  const ethAddress = await Web3.contractCall(web3, {
+    to: contracts.dashboard.address,
+    abi: contracts.dashboard.abi,
+    method: 'findUser',
+    params: [username]
+  });
+  const profileAddress = await Web3.contractCall(web3, {
+    to: contracts.dashboard.address,
+    abi: contracts.dashboard.abi,
+    method: 'findProfile',
+    params: [ethAddress]
+  });
+  const rootIPFS = await Web3.contractCall(web3, {
+    to: contracts.dashboard.address,
+    abi: contracts.dashboard.abi,
+    method: 'findRootIPFS',
+    params: [ethAddress]
+  });
 
   return {
     username,
@@ -37,19 +54,12 @@ module.exports.retrieveUserInfo = async(web3, ethAddress) => {
   }
 };
 
-module.exports.setNextRootDataId = async(web3, user, nextRootDataId) => {
-  const { dashboard: dashboardSC } = smartContract;
-  await web3SendTx(web3, () => {
-    const Dashboard = new web3.eth.Contract(dashboardSC.abi, dashboardSC.address);
-    return Dashboard.methods.updateRootIPFS(user.ethAddress, nextRootDataId);
-  }, {
-    gas: 100000
+export const setNextRootDataId = async (web3, { ethAddress, nextRootDataId }) => {
+  return await Web3.contractSendTx(web3, {
+    to: contracts.dashboard.address,
+    abi: contracts.dashboard.abi,
+    method: 'updateRootIPFS',
+    params: [ethAddress, nextRootDataId]
   });
-};
-
-module.exports.findUserByUsername = async (web3, username) => {
-  const { dashboard: dashboardSC } = smartContract;
-  const DashboardInstance = new web3.eth.Contract(dashboardSC.abi, dashboardSC.address);
-  return await DashboardInstance.methods.findUser(username).call();
 };
 

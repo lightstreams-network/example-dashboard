@@ -9,7 +9,7 @@ import {
 } from '../components/elements';
 import Logo from '../components/logo';
 import { IfAuthRedirectTo } from '../components/auth';
-import { ROUTE_DASHBOARD } from '../constants';
+import { ROUTE_DASHBOARD } from '../constants/routes';
 
 const Register = () => (
     <IfAuthRedirectTo route={ROUTE_DASHBOARD}>

@@ -8,7 +8,7 @@ import {
     ROUTE_LOGIN,
     ROUTE_REGISTER,
     ROUTE_DASHBOARD
-} from './constants';
+} from './constants/routes';
 
 import createStore from './store';
 import Home from './routes/home';

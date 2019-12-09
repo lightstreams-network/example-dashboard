@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { login, getAuthenticatedUser, getAuthErrors } from '../../store/auth';
 import { validateAccount, validatePassword } from '../../lib/validators';
 import { Button, Label } from '../elements';
+import get from 'lodash.get';
 
 const StyledField = styled(Field)`
     border: 1px solid var(--silver);
@@ -29,7 +30,7 @@ const LoginForm = ({ user, authErrors, handleSubmit }) => {
 
     return (
         <Formik
-            initialValues={{ username: user || '', password: '', server: '' }}
+            initialValues={{ username: get(user, ['username'], null) , password: '', server: '' }}
             validate={values => ({ ...validateAccount(values), ...validatePassword(values) })}
             onSubmit={(values, { setSubmitting, setErrors }) => {
                 handleSubmit(values)
