@@ -7,6 +7,7 @@
 
 import profileContract from '@contracts/Profile.json'
 import dashboardContract from '@contracts/Dashboard.json'
+import aclContract from '@contracts/ACL.json'
 
 export const web3Cfg = {
   provider: process.env.WEB3_PROVIDER,
@@ -25,6 +26,10 @@ export const contracts = {
   profile: {
     bytecode: profileContract.bytecode,
     abi: profileContract.abi,
+  },
+  acl: {
+    bytecode: aclContract.bytecode,
+    abi: aclContract.abi,
   },
   dashboard: {
     address: dashboardContract.networks[process.env.NET_ID]

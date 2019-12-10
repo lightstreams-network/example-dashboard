@@ -15,6 +15,9 @@ import { downloadFile } from '../../lib/downloader';
 
 import { gatewayCfg } from '../../constants/config';
 import { uploadNewItem } from '../../services/profile';
+import { getUserFileList } from '../../services/dashboard';
+import { getWeb3Engine } from '../keystore'
+import { getSessionUsername } from '../auth'
 
 const initialState = {
   files: {},
@@ -68,21 +71,25 @@ export function lethWalletBalance({ ethAddress }) {
 }
 
 export function lethItemList({ token }) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     dispatch(requestLethItemList());
-
-    return hGet(PATH_ITEM_LIST, {}, {
+    const web3 = getWeb3Engine(getState());
+    const username = getSessionUsername(getState());
+    return getUserFileList(web3, {
+      username,
       token
-    }).then(response => dispatch(responseLethItemList(response.data)))
+    }).then(response => dispatch(responseLethItemList(response)))
       .catch(error => dispatch(receiveLethError(error)));
   };
 }
 
 export function lethUserItemList({ username, token }) {
-  return () => {
-    return hGet(PATH_ITEM_LIST, { username }, {
+  return (dispatch, getState) => {
+    const web3 = getWeb3Engine(getState());
+    return getUserFileList(web3, {
+      username,
       token
-    });
+    })
   };
 }
 
@@ -92,26 +99,22 @@ export function lethStorageAdd(user, { title, description, file }) {
 
     return uploadNewItem(web3, user, { title, description, file })
       .then((res) => {
-        dispatch(responseLethStorageAdd(res.data));
+        dispatch(responseLethStorageAdd(res));
         return res;
       }).catch((error) => {
         dispatch(receiveLethError(error));
         throw error;
       });
   };
-};
+}
 
-export function lethStorageFetch({ token, itemId, username }) {
+export function lethStorageFetch({ token, meta }) {
   return (dispatch) => {
     dispatch(requestLethStorageFetch());
 
-    return hGet(PATH_ITEM_DOWNLOAD, { item_id: itemId, username }, {
-      token,
-      headers: {
-        'Accept': 'application/octet-stream'
-      }
-    }).then((response) => {
-      const disposition = response.headers.get('content-disposition');
+    return gateway.storage.fetch(meta, token, true).then((response) => {
+      if(response.status !== 200) throw new Error(response.message);
+      const disposition = response.headers.get('Content-Disposition');
       const contentType = response.headers.get('Content-Type');
       let filename;
       if (disposition && disposition.indexOf('attachment') !== -1) {

@@ -5,7 +5,8 @@
  */
 
 import { findUserByUsername, retrieveUserInfo, createUser } from '../smartcontracts/dashboard';
-import { deployProfile } from '../smartcontracts/profile';
+import { deployContract as deployContractProfile } from '../smartcontracts/profile';
+import { retrieveRemoteItemList } from './profile';
 import { requestFundingFromHolder } from './faucet';
 
 export const createUserDashboard = async (web3, { username, ethAddress }) => {
@@ -15,7 +16,7 @@ export const createUserDashboard = async (web3, { username, ethAddress }) => {
   }
 
   await requestFundingFromHolder(ethAddress, 5);
-  const txReceipt = await deployProfile(web3, { from: ethAddress });
+  const txReceipt = await deployContractProfile(web3, { from: ethAddress });
   const profileContractAddr = txReceipt.contractAddress;
   await createUser(web3, { from: ethAddress, ethAddress , username, profileAddress: profileContractAddr });
   return await retrieveUserInfo(web3, { username });
@@ -29,7 +30,38 @@ export const retrieveUserByUsername = async (web3, { username }) => {
 
   return await retrieveUserInfo(web3, { username });
 };
-//
+
+export const getUserFileList = async (web3, { username, token }) => {
+  const user = await retrieveUserByUsername(web3, { username });
+  if(!user) {
+    throw new Error(`User ${username} dose not exists`);
+  }
+
+  const items = await retrieveRemoteItemList(web3, { user });
+  const itemRequests = await getItemRequestsData({ user, token });
+  return items.map((item) => {
+    item.events = itemRequests[item.id] || [];
+    return item;
+  });
+};
+
+export const getItemRequestsData = async ({ user, token }) => {
+  const rootData = await retrieveUserRootData({ user, token });
+  return rootData.permissionsByItem || {};
+};
+
+export const retrieveUserRootData = ({ user, token }) => {
+  if (!user.rootIPFS || user.rootIPFS === '') {
+    return {}
+  }
+
+  return gateway.storage.fetch(user.rootIPFS, token, false)
+    .then(rawData => {
+      debugger;
+      return JSON.parse(rawData);
+    });
+};
+
 // export const setProfilePictureData = async (user, item) => {
 //   await this.updateUserRootData(user, {
 //     profilePicture: {
@@ -44,19 +76,9 @@ export const retrieveUserByUsername = async (web3, { username }) => {
 //   return rootData.profilePicture || {};
 // };
 //
-// export const getItemRequestsData = async (user) => {
-//   const rootData = await this.retrieveUserRootData(user);
-//   return rootData.permissionsByItem || {};
-// };
+
 //
-// export const retrieveUserRootData = async (user) => {
-//   if (!user.rootIPFS || user.rootIPFS === '') {
-//     return {}
-//   }
-//
-//   const { token } = await gateway.user.signIn(web3Cfg.holder, web3Cfg.password); // @TODO Cache it somewhere
-//   return await gateway.storage.fetch(user.rootIPFS, token);
-// };
+
 //
 // export const updateUserRootData = async (user, values) => {
 //   const curRootData = await this.retrieveUserRootData(user);

@@ -10,6 +10,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import authReducer from './auth';
 import lethReducer from './leth';
 import keystoreReducer, { initializeWeb3Action } from './keystore';
+import { getAuthenticatedUser, isAuthenticated, login } from './auth';
 
 
 function restoreGlobalKeystore({ getState, dispatch }) {
@@ -17,6 +18,10 @@ function restoreGlobalKeystore({ getState, dispatch }) {
     const nextState = next(action);
     if (action.type === 'persist/REHYDRATE') {
       dispatch(initializeWeb3Action());
+      if(isAuthenticated(getState())) {
+        const sessionUser = getAuthenticatedUser(getState());
+        dispatch(login({ username: sessionUser.username, password: sessionUser.password}));
+      }
     }
 
     return nextState;

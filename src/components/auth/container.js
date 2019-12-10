@@ -44,8 +44,8 @@ const mapDispatchToProps = (dispatch) => {
         requestAccess({ token, itemId, toUsername }) {
             return dispatch(lethFileRequestAccess({ token, itemId, toUsername }));
         },
-        getFileData({ token, itemId, username }) {
-            return dispatch(lethStorageFetch({ token, itemId, username }));
+        getFileData({ token, meta }) {
+            return dispatch(lethStorageFetch({ token, meta }));
         }
     };
 };

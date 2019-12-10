@@ -1,13 +1,15 @@
 import { Web3, Gateway } from 'lightstreams-js-sdk';
 import { gatewayCfg } from '../constants/config';
-import { stackItem } from '../smartcontracts/profile';
+import { stackItem, getMaxItemId, retrieveItemById } from '../smartcontracts/profile';
+import { deployContract as deployContractAcl } from '../smartcontracts/acl';
 
 
 export const uploadNewItem = (web3, user, { title, description, file }) => {
   return new Promise(async (resolve, reject) => {
     const gateway = Gateway(gatewayCfg.provider);
 
-    const aclAddr = "0x0";
+    const txReceiptAcl = await deployContractAcl(web3, { from: user.ethAddress, owner: user.ethAddress, isPublic: false});
+    const aclAddr = txReceiptAcl.contractAddress;
     const gwRes = await gateway.storage.addWithAcl(user.ethAddress, aclAddr, file);
     console.log(`Leth gateway response: ${JSON.stringify(gwRes)}`);
     if (gwRes.error) {
@@ -23,11 +25,6 @@ export const uploadNewItem = (web3, user, { title, description, file }) => {
       acl: gwRes.acl
     });
 
-    // Granting admin access to Profile SC of the new file
-    await gateway.acl.grant(gwRes.acl, user.ethAddress, user.password, user.profileAddress, 'admin');
-    // Granting admin access to Dashboard SC of the new file
-    await gateway.acl.grant(gwRes.acl, user.ethAddress, user.password, dashboardSC.address, 'admin');
-
     const item = {
       id: itemId,
       owner: user.ethAddress,
@@ -35,29 +32,27 @@ export const uploadNewItem = (web3, user, { title, description, file }) => {
       description: description,
       meta: gwRes.meta,
       acl: gwRes.acl,
+      events: []
     };
 
     console.log(`File was uploaded correctly. ${JSON.stringify(item)}`);
-    resolve(itemId);
+    resolve(item);
   });
 };
 
-// export const retrieveRemoteItem = async (user, itemId) => {
-//   const web3 = await Web3();
-//   const item = await profileSCService.retrieveItemById(web3, user.profileAddress, itemId);
-//
-//   return { ...item, id: itemId };
-// };
-//
-// export const retrieveRemoteItemList = async (user) => {
-//   const web3 = await Web3();
-//   const remoteMaxItemId = await profileSCService.getMaxItemId(web3, user.profileAddress);
-//
-//   const items = [];
-//   for ( let i = 0; i <= remoteMaxItemId; i++ ) {
-//     const item = await this.retrieveRemoteItem(user, i);
-//     items.push(item);
-//   }
-//
-//   return items;
-// };
+export const retrieveRemoteItem = async (web3, { user, itemId }) => {
+  const item = await retrieveItemById(web3, { contractAddr: user.profileAddress, itemId });
+  return { ...item, id: itemId };
+};
+
+export const retrieveRemoteItemList = async (web3, { user }) => {
+  const remoteMaxItemId = await getMaxItemId(web3, { contractAddr: user.profileAddress });
+
+  const items = [];
+  for ( let i = 0; i <= remoteMaxItemId; i++ ) {
+    const item = await retrieveRemoteItem(web3, { user, itemId: i});
+    items.push(item);
+  }
+
+  return items;
+};

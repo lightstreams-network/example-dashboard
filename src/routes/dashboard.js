@@ -123,8 +123,8 @@ const Dashboard = () => (
                             </Section>
                             <Section>
                                 <H3>My Files</H3>
-                                <FileList user={user} downloadFile={(itemId) => {
-                                    getFileData({ token, itemId, username: user.username });
+                                <FileList user={user} downloadFile={(meta) => {
+                                    getFileData({ token, meta });
                                 }} revokeAccess={({ itemId, username }) => {
                                     revokeAccess({ token, itemId, toUsername: username });
                                 }} files={files}/>
@@ -197,7 +197,7 @@ const Dashboard = () => (
                                     setIsFetchingUser(true);
                                     fetchUserItemList({ token, username: fromUsername })
                                         .then(res => {
-                                            setFromUserFiles(res.data);
+                                            setFromUserFiles(res);
                                         }).finally(() => {
                                         setIsFetchingUser(false);
                                     });
