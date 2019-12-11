@@ -18,7 +18,7 @@ export const createUserDashboard = async (web3, { username, ethAddress }) => {
   await requestFundingFromHolder(ethAddress, 5);
   const txReceipt = await deployContractProfile(web3, { from: ethAddress });
   const profileContractAddr = txReceipt.contractAddress;
-  await createUser(web3, { from: ethAddress, ethAddress , username, profileAddress: profileContractAddr });
+  await createUser(web3, { from: ethAddress, ethAddress, username, profileAddress: profileContractAddr });
   return await retrieveUserInfo(web3, { username });
 };
 
@@ -33,7 +33,7 @@ export const retrieveUserByUsername = async (web3, { username }) => {
 
 export const getUserFileList = async (web3, { username, token }) => {
   const user = await retrieveUserByUsername(web3, { username });
-  if(!user) {
+  if (!user) {
     throw new Error(`User ${username} dose not exists`);
   }
 
@@ -45,12 +45,33 @@ export const getUserFileList = async (web3, { username, token }) => {
   });
 };
 
-export const getItemRequestsData = async ({ user, token }) => {
+export const requestAccessToFile = async (web3, { fromUsername, toUsername, itemId, token }) => {
+  const fromUser = await retrieveUserByUsername(web3, { username: fromUsername });
+  if (!fromUser) {
+    throw new Error(`User ${fromUsername} dose not exists`);
+  }
+
+  const toUser = await retrieveUserByUsername(web3, { username: toUsername });
+  if (!toUser) {
+    throw new Error(`User ${toUsername} dose not exists`);
+  }
+
+  const curRootData = await retrieveUserRootData({ user: toUser, token });
+  const nextRootData = insertPermissionItemRequest(curRootData, { toUsername, itemId, status: 'pending'});
+  await updateUserRootData({user: toUser, nextRootData});
+  return nextRootData.permissionsByItem[itemId];
+};
+
+/**
+ * IPFS
+ */
+
+const getItemRequestsData = async ({ user, token }) => {
   const rootData = await retrieveUserRootData({ user, token });
   return rootData.permissionsByItem || {};
 };
 
-export const retrieveUserRootData = ({ user, token }) => {
+const retrieveUserRootData = ({ user, token }) => {
   if (!user.rootIPFS || user.rootIPFS === '') {
     return {}
   }
@@ -60,6 +81,64 @@ export const retrieveUserRootData = ({ user, token }) => {
       debugger;
       return JSON.parse(rawData);
     });
+};
+
+const insertPermissionItemRequest = (curRootData, { fromUsername, toUsername, itemId, status }) => {
+  const newRequestItem = toUsername ? {
+      from: fromUsername,
+      status: status,
+      createdAt: Date.now()
+    } : {
+      to: toUsername,
+      status: status,
+      createdAt: Date.now()
+    };
+
+  const nextRootData = {
+    ...curRootData,
+    permissionsByItem: {
+      ...(curRootData.permissionsByItem || {})
+    }
+  };
+
+  if(!nextRootData.permissionsByItem[itemId]) {
+    nextRootData.permissionsByItem[itemId] = [newRequestItem]
+  } else {
+    nextRootData.permissionsByItem[itemId].push(newRequestItem)
+  }
+
+  return nextRootData;
+};
+
+export const updateUserRootData = async ({ user, nextRootData }) => {
+  try {
+    debugger;
+    const tmpFile = tempfile('.json');
+    fs.writeFileSync(tmpFile, JSON.stringify(nextRootData));
+    const nextRootDataStream = fs.createReadStream(tmpFile);
+    let gwRes;
+    if (user.rootIPFS) {
+      gwRes = await gateway.storage.update(user.ethAddress, user.rootIPFS, nextRootDataStream);
+    } else {
+      gwRes = await gateway.storage.add(user.ethAddress, user.password, nextRootDataStream);
+    }
+
+    console.log(`Created new root data for user ${user.username}: ${JSON.stringify(gwRes)}`);
+    const { is_granted } = await gateway.acl.grantPublic(gwRes.acl, user.ethAddress, user.password);
+    if (!is_granted) {
+      throw new Error(`Failed to grant public access to: ${JSON.stringify(gwRes)}`);
+    }
+    await DashboardSC.setNextRootDataId(await Web3(), user, gwRes.meta);
+    fs.unlinkSync(tmpFile);
+    return nextRootData;
+  } catch ( err ) {
+    fs.unlinkSync(tmpFile);
+    if (err.host) {
+      const gwErr = JSON.parse(err.body);
+      throw new Error(gwErr.error.message);
+    }
+    throw err;
+  }
 };
 
 // export const setProfilePictureData = async (user, item) => {
@@ -80,66 +159,6 @@ export const retrieveUserRootData = ({ user, token }) => {
 //
 
 //
-// export const updateUserRootData = async (user, values) => {
-//   const curRootData = await this.retrieveUserRootData(user);
-//   const nextRootData = {
-//     ...curRootData,
-//     ...values
-//   };
-//
-//   const tmpFile = tempfile('.json');
-//   fs.writeFileSync(tmpFile, JSON.stringify(nextRootData));
-//   const nextRootDataStream = fs.createReadStream(tmpFile);
-//   try {
-//     const gwRes = await gateway.storage.add(web3Cfg.holder, web3Cfg.password, nextRootDataStream, { throwHttpErrors: true });
-//     console.log(`Created new root data for user ${user.username}: ${JSON.stringify(gwRes)}`);
-//     const { is_granted } = await gateway.acl.grantPublic(gwRes.acl, web3Cfg.holder, web3Cfg.password);
-//     if (!is_granted) {
-//       throw new Error(`Failed to grant public access to: ${JSON.stringify(gwRes)}`);
-//     }
-//     await DashboardSC.setNextRootDataId(await Web3(), user, gwRes.meta);
-//     fs.unlinkSync(tmpFile);
-//     return nextRootData;
-//   } catch ( err ) {
-//     fs.unlinkSync(tmpFile);
-//     if (err.host) {
-//       const gwErr = JSON.parse(err.body);
-//       throw new Error(gwErr.error.message);
-//     }
-//     throw err;
-//   }
-// };
-//
-// export const createNewItemPermissionRequest = async (user, { fromUsername, toUsername }, itemId, status) => {
-//   // @TODO Filter duplicated requests
-//   const curRequestList = await this.getItemRequestsData(user);
-//   const nextItemRequests = curRequestList[itemId] || [];
-//   // @TODO Use classes instead of raw objects
-//   if (fromUsername) {
-//     nextItemRequests.push({
-//       from: fromUsername,
-//       status: status,
-//       createdAt: Date.now()
-//     });
-//   } else if (toUsername) {
-//     nextItemRequests.push({
-//       to: toUsername,
-//       status: status,
-//       createdAt: Date.now()
-//     });
-//   } else {
-//     throw new Error(`Missing argument`);
-//   }
-//
-//   await this.updateUserRootData(user, {
-//     permissionsByItem: {
-//       ...curRequestList,
-//       [itemId]: nextItemRequests
-//     },
-//   });
-//
-//   return nextItemRequests;
-// };
 //
 //
 // export const denyPermissionRequest = async (user, toUsername, itemId) => {

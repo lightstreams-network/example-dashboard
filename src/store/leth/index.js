@@ -4,9 +4,6 @@ import { hGet, hPost } from '../../lib/fetch';
 import { Gateway, Web3 } from 'lightstreams-js-sdk'
 
 import {
-  PATH_ITEM_DOWNLOAD,
-  PATH_ITEM_LIST,
-  PATH_ITEM_ADD,
   PATH_PERMISSION_GRANT,
   PATH_PERMISSION_REVOKE,
   PATH_PERMISSION_REQUEST
@@ -15,7 +12,7 @@ import { downloadFile } from '../../lib/downloader';
 
 import { gatewayCfg } from '../../constants/config';
 import { uploadNewItem } from '../../services/profile';
-import { getUserFileList } from '../../services/dashboard';
+import { getUserFileList, requestAccessToFile } from '../../services/dashboard';
 import { getWeb3Engine } from '../keystore'
 import { getSessionUsername } from '../auth'
 
@@ -171,15 +168,16 @@ export function lethFileRevoke({ token, itemId, toUsername }) {
 }
 
 export function lethFileRequestAccess({ token, itemId, toUsername }) {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     dispatch(requestLethAclGrant());
-
-    return hPost(PATH_PERMISSION_REQUEST, {
-      item_id: `${itemId}`,
-      username: toUsername
-    }, {
-      token
-    }).then((res) => {
+    const web3 = getWeb3Engine(getState());
+    const username = getSessionUsername(getState());
+    return requestAccessToFile(web3, {
+      fromUsername: username,
+      toUsername,
+      itemId,
+      token,
+    }).then(() => {
       dispatch(lethItemList({ token }));
     }).catch((error) => {
       dispatch(receiveLethError(error));
