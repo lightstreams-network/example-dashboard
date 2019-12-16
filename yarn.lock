@@ -7009,9 +7009,9 @@ liftoff@^3.1.0:
     rechoir "^0.6.2"
     resolve "^1.1.7"
 
-"lightstreams-js-sdk@git+https://github.com/lightstreams-network/lightstreams-js-sdk.git#0.12.0":
-  version "0.12.0"
-  resolved "git+https://github.com/lightstreams-network/lightstreams-js-sdk.git#c7a4992298e18baa4cffb104b104501ada53055e"
+"lightstreams-js-sdk@git+https://github.com/lightstreams-network/lightstreams-js-sdk.git#0.13.4":
+  version "0.13.4"
+  resolved "git+https://github.com/lightstreams-network/lightstreams-js-sdk.git#6a8bc5b9ef0511376a975497ba8d4146d88c00ae"
   dependencies:
     "@ensdomains/ens" "0.3.11"
     "@ensdomains/resolver" "0.1.9"

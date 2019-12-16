@@ -62,7 +62,7 @@
         "cross-env": "^5.2.0",
         "dotenv-webpack": "^1.7.0",
         "formik": "^1.5.1",
-        "lightstreams-js-sdk": "git+https://github.com/lightstreams-network/lightstreams-js-sdk.git#0.12.0",
+        "lightstreams-js-sdk": "git+https://github.com/lightstreams-network/lightstreams-js-sdk.git#0.13.4",
         "lodash.get": "^4.4.2",
         "prop-types": "^15.7.2",
         "react": "^16.8.6",

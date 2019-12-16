@@ -4,27 +4,118 @@ Lightstreams Smart Vault Dashboard app showcase an example of a decentralize app
 using [Lightstreams Smart Vault SDK](https://docs.lightstreams.network/getting-started/quick-start/)
 in a NodeJS.
 
+This project also showcase the usage of [lightstreams-js-sdk](https://github.com/lightstreams-network/lightstreams-js-sdk),
+a set of wrappers around Lightstreams Smart Vault and Web3js.
+
 Using this DApp you will be able to upload your files uploaded into a Lightstreams Smart Vault
-node and manage the its distribution and acceptability. In addition you will be able
+node to manage the its distribution and acceptability. In addition you will be able
 to also request access to other users files and manage the pending request to your own content made by
 other users.
 
 ## Live Demo
 
-[https://demo.nodejs.lightstreams.io](https://demo.nodejs.lightstreams.io)
+[https://demo.dashboard.lightstreams.io](https://demo.dashboard.lightstreams.io)
+
+## Requirements
+
+To run this project you need to have a local instance of the `Smart Vault` running
+on your machine. Learn how to do that in [our getting started documentation](https://docs.lightstreams.network/products-1/smart-vault/getting-started)
+
+Your smart vault node can either be connected to [`Standalone`](https://github.com/lightstreams-network/lightchain#standalone)
+or `Sirius`.
+
+**Init node**
+```bash
+$> leth init --nodeid=1 --network={standalone|sirius}
+```
+
+**Run node**
+```bash
+$> leth run --nodeid=1 --network={standalone|sirius} --https
+```
+
+> Note: In case you selected `Sirius` you have to wait till it syncs. You can
+check the status of the network [in its block explorer](https://explorer.sirius.lightstreams.io)
 
 ## Getting started
-This application is split into two separated projects. A NodeJS server
-which is connected to the lightstreams smart vault, and an the application client
-implemented in React and connected to the NodeJS server.
 
-### Running NodeJS Server
-Follow [this instructions](/server/README.md)
+### Install dependencies
 
-### Running React Client
-Follow [this instructions](/app/README.md)
+```bash
+yarn install
+```
 
-## Features
+### Setup your environment
+
+Firstly, copy sample .env as follow:
+``` bash
+$> cp .env.sample .env
+```
+
+> Note: The `STAKEHOLDER_ADDRESS` is used to top up users accounts with `5 PHT`
+to fund the usage of the app.
+
+**Option 1: Standalone Network**
+
+Then, edit your `.env` with:
+```
+NODE_PATH=.
+NODE_ENV=development
+PORT=3000
+DEBUG=*:*
+
+GATEWAY_DOMAIN="http://localhost:9091"
+WEB3_PROVIDER="http://localhost:8545"
+NET_ID="161"
+
+STAKEHOLDER_ADDRESS="0xc916cfe5c83dd4fc3c3b0bf2ec2d4e401782875e"
+STAKEHOLDER_PASSWORD="WelcomeToSirius"
+```
+
+and after you have to deploy a `Dashboard.sol` contract to standalone network:
+```bash
+$> yarn truffle:deploy -- standalone
+```
+
+Account `0xc916cfe5c83dd4fc3c3b0bf2ec2d4e401782875e` is the genesis
+account of Standalone
+
+**Option 2: Sirius Network**
+
+Firstly you will need to create a new wallet in your peer as follow:
+```
+$> leth user signup --nodeid=1 --network=sirius
+Enter password: ****
+{"account":"0xC37c560c2987F214e75868595a1db181E90Ee955"}
+```
+
+Then, edit your `.env` with:
+```
+NODE_PATH=.
+NODE_ENV=development
+PORT=3000
+DEBUG=*:*
+
+GATEWAY_DOMAIN="http://localhost:9091"
+WEB3_PROVIDER="http://localhost:8545"
+NET_ID="162"
+
+STAKEHOLDER_ADDRESS="{YOUR_ACCOUNT}"
+STAKEHOLDER_PASSWORD="{YOUR_PASSWORD}"
+
+ADDRESS_DASHBOARD_CONTRACT="0xFe829259DA7B913528E6A994338aEbFa45E1faae"
+```
+
+Then you can request some free token [following this instructions](https://docs.lightstreams.network/products-1/smart-vault/getting-started/untitled#get-free-testing-tokens)
+
+### Run dev server
+
+Now it is time to execute a dev server:
+```bash
+$> yarn web:dev
+```
+
+## Screenshots
 
 ### Create an account
 
@@ -71,25 +162,16 @@ On this section it will listed the pending access requests from other users to y
 ## Freemium Model
 
 This project implements a simple freemium model to fund users activity within the
-platform. The source for this funding come from two different sources.
+platform.
 
-The first of them is what it was called stake holder account. This account
- is linked to every instance of the server application and it is funding the creation
- of new users through its own endpoints.
-
- The second funding source is an Faucet smart contract [0xdf81615E44b34C7015bF148De30526A4863c0DcD](https://explorer.sirius.lightstreams.io/addr/0xdf81615e44b34c7015bf148de30526a4863c0dcd) which will fund
- the activity of users up to 10 PHTs. This smart contract can be top up by every entity
- interested in the growth of the project.
-
-Once users exceeds the initial 10 PHTs they can request more tokens for their accounts contacting Lightstreams Dev Team
-either [Telegram](https://t.me/LightstreamsDevelopers) or on the [Discuss forum](https://discuss.lightstreams.network/c/dev)
-
+Instead of the rudimentary implementation Lightstreams team has integrated a Gas Station Network(GSN)
+to fund user transactions instead of pre-funding their wallets before hand. If you want to
+read more about this topic read [this medium article](https://medium.com/lightstreams/no-gas-needed-to-interact-with-lightstreams-dapps-41aea98d1089)
 
 ## Topics
 - IPFS
 - Ethereum
 - Decentralized Application (DApp)
-- NodeJS
 - Smart Vault
 
 ### License
