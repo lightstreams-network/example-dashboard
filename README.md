@@ -60,7 +60,6 @@ to fund the usage of the app.
 Then, edit your `.env` with:
 ```
 NODE_PATH=.
-NODE_ENV=development
 PORT=3000
 DEBUG=*:*
 
@@ -72,7 +71,8 @@ STAKEHOLDER_ADDRESS="0xc916cfe5c83dd4fc3c3b0bf2ec2d4e401782875e"
 STAKEHOLDER_PASSWORD="WelcomeToSirius"
 ```
 
-and after you have to deploy a `Dashboard.sol` contract to standalone network:
+and after you have to compile and deploy `Dashboard.sol` contract to standalone network:
+
 ```bash
 $> yarn truffle:deploy -- standalone
 ```
@@ -92,7 +92,6 @@ Enter password: ****
 Then, edit your `.env` with:
 ```
 NODE_PATH=.
-NODE_ENV=development
 PORT=3000
 DEBUG=*:*
 
@@ -100,8 +99,8 @@ GATEWAY_DOMAIN="http://localhost:9091"
 WEB3_PROVIDER="http://localhost:8545"
 NET_ID="162"
 
-STAKEHOLDER_ADDRESS="{YOUR_ACCOUNT}"
-STAKEHOLDER_PASSWORD="{YOUR_PASSWORD}"
+STAKEHOLDER_ADDRESS="${YOUR_ACCOUNT}"
+STAKEHOLDER_PASSWORD="${YOUR_PASSWORD}"
 
 ADDRESS_DASHBOARD_CONTRACT="0xFe829259DA7B913528E6A994338aEbFa45E1faae"
 ```
@@ -161,11 +160,10 @@ On this section it will listed the pending access requests from other users to y
 
 ## Freemium Model
 
-This project implements a simple freemium model to fund users activity within the
-platform.
-
-Instead of the rudimentary implementation Lightstreams team has integrated a Gas Station Network(GSN)
-to fund user transactions instead of pre-funding their wallets before hand. If you want to
+This project implements a simple freemium model where the `STAKEHOLDER_ADDRESS` account transfer
+`5 PHT` tokens to every new user to fund the initial usage of it. Instead of Lightstreams team has
+integrated a Gas Station Network(GSN), a standardized pattern within Ethereum community
+ where users transaction are funded using an advance implementation of the contract design. If you want to
 read more about this topic read [this medium article](https://medium.com/lightstreams/no-gas-needed-to-interact-with-lightstreams-dapps-41aea98d1089)
 
 ## Topics
