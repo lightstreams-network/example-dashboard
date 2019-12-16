@@ -177,7 +177,7 @@ const Dashboard = () => (
                                             if (e.status === 'pending') {
                                                 acum2[e.from] = e;
                                                 acum2[e.from].item_id = fileItem.id;
-                                            } else if (typeof acum2[e.to] !== 'undefined') {
+                                            } else if (['granted', 'revoked', 'denied'].indexOf(e.status) !== -1) {
                                                 delete acum2[e.to];
                                             }
                                             return acum2;
@@ -202,8 +202,8 @@ const Dashboard = () => (
                                         setIsFetchingUser(false);
                                     });
                                 }} disabled={isFetchingUser}> {isFetchingUser ? 'Fetching' : 'Fetch'} </Button>
-                                <UserFileList user={user} downloadFile={(itemId) => {
-                                    getFileData({ token, itemId, username: fromUsername });
+                                <UserFileList user={user} downloadFile={(meta) => {
+                                    getFileData({ token, meta });
                                 }} requestAccess={(itemId) => {
                                     requestAccess({ token, itemId, toUsername: fromUsername });
                                 }} files={fromUserFiles}/>

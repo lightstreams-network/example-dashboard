@@ -12,9 +12,9 @@ import { downloadFile } from '../../lib/downloader';
 
 import { gatewayCfg } from '../../constants/config';
 import { uploadNewItem } from '../../services/profile';
-import { getUserFileList, requestAccessToFile } from '../../services/dashboard';
+import { getUserFileList, requestAccessToFile, grantReadAccess, revokeReadAccess } from '../../services/dashboard';
 import { getWeb3Engine } from '../keystore'
-import { getSessionUsername } from '../auth'
+import { getSessionUsername, getAuthenticatedUser } from '../auth'
 
 const initialState = {
   files: {},
@@ -109,6 +109,7 @@ export function lethStorageFetch({ token, meta }) {
   return (dispatch) => {
     dispatch(requestLethStorageFetch());
 
+    debugger;
     return gateway.storage.fetch(meta, token, true).then((response) => {
       if(response.status !== 200) throw new Error(response.message);
       const disposition = response.headers.get('Content-Disposition');
@@ -132,14 +133,15 @@ export function lethStorageFetch({ token, meta }) {
 }
 
 export function lethFileGrant({ token, itemId, toUsername }) {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     dispatch(requestLethAclGrant());
-
-    return hPost(PATH_PERMISSION_GRANT, {
-      item_id: `${itemId}`,
-      username: toUsername
-    }, {
-      token
+    const web3 = getWeb3Engine(getState());
+    const user = getAuthenticatedUser(getState());
+    return grantReadAccess(web3, {
+      fromUser: user,
+      toUsername,
+      itemId,
+      token,
     }).then(() => {
       dispatch(lethItemList({ token }));
     }).catch((error) => {
@@ -150,15 +152,16 @@ export function lethFileGrant({ token, itemId, toUsername }) {
 }
 
 export function lethFileRevoke({ token, itemId, toUsername }) {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     dispatch(requestLethAclGrant());
-
-    return hPost(PATH_PERMISSION_REVOKE, {
-      item_id: `${itemId}`,
-      username: toUsername
-    }, {
-      token
-    }).then((res) => {
+    const web3 = getWeb3Engine(getState());
+    const user = getAuthenticatedUser(getState());
+    return revokeReadAccess(web3, {
+      fromUser: user,
+      toUsername,
+      itemId,
+      token,
+    }).then(() => {
       dispatch(lethItemList({ token }));
     }).catch((error) => {
       dispatch(receiveLethError(error));
@@ -171,9 +174,9 @@ export function lethFileRequestAccess({ token, itemId, toUsername }) {
   return async (dispatch, getState) => {
     dispatch(requestLethAclGrant());
     const web3 = getWeb3Engine(getState());
-    const username = getSessionUsername(getState());
+    const user = getAuthenticatedUser(getState());
     return requestAccessToFile(web3, {
-      fromUsername: username,
+      fromUser: user,
       toUsername,
       itemId,
       token,

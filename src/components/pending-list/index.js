@@ -30,12 +30,12 @@ const PendingList = ({ user, requests, showModal, onAccept, onReject }) => {
         Cell: (item) => {
             return (
                 <div>
-                    <TableActionButton onClick={() => {
+                    <TableActionButton key={'grant-user'} onClick={() => {
                         onAccept({itemId: item.value, username: item.row.from});
                     }}><img src="https://img.icons8.com/bubbles/50/000000/add-user-male.png" />
                         Accept
                     </TableActionButton>
-                    <TableActionButton onClick={() => {
+                    <TableActionButton key={'deny-user'} onClick={() => {
                         onReject({ itemId: item.value, username: item.row.from });
                     }}><img src="https://img.icons8.com/bubbles/50/000000/delete-male-user.png"/>
                         Reject

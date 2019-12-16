@@ -36,10 +36,10 @@ const FileList = ({ user, files, showModal, revokeAccess, downloadFile, }) => {
       return (
         <div>
           {
-            Object.keys(grantedUsers).map((username) => {
+            Object.keys(grantedUsers).map((username, key) => {
               if (grantedUsers[username]) {
                 return (
-                  <TableActionButton onClick={() => revokeAccess({ itemId: item.row.id, username })}>
+                  <TableActionButton key={key} onClick={() => revokeAccess({ itemId: item.row.id, username })}>
                     <img src="https://img.icons8.com/bubbles/50/000000/delete-male-user.png"/>
                     {username}
                   </TableActionButton>

@@ -26,6 +26,15 @@ export const findUserByUsername = async (web3, { username }) => {
   });
 };
 
+export const retrievePublicAclAddr = async(web3) => {
+  return await Web3.contractCall(web3, {
+    to: contracts.dashboard.address,
+    abi: contracts.dashboard.abi,
+    method: 'publicAcl',
+    params: []
+  });
+};
+
 export const retrieveUserInfo = async (web3, { username }) => {
   const ethAddress = await Web3.contractCall(web3, {
     to: contracts.dashboard.address,
@@ -54,8 +63,9 @@ export const retrieveUserInfo = async (web3, { username }) => {
   }
 };
 
-export const setNextRootDataId = async (web3, { ethAddress, nextRootDataId }) => {
+export const setNextRootDataId = async (web3, { from, ethAddress, nextRootDataId }) => {
   return await Web3.contractSendTx(web3, {
+    from,
     to: contracts.dashboard.address,
     abi: contracts.dashboard.abi,
     method: 'updateRootIPFS',

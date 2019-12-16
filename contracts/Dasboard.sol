@@ -4,14 +4,19 @@ import './Profile.sol';
 
 contract Dashboard {
 
-    event UpdateRootData(address _account, string  _nextid);
-    event NewUserAdded(address _account, string  _username);
+    event UpdateRootData(address _account, string _nextid);
+    event NewUserAdded(address _account, string _username);
 
     mapping(bytes32 => address) public _users;
     mapping(address => string) _usernames;
     mapping(address => Profile) _profiles;
     mapping(address => string) _rootIPFSs;
     mapping(address => address) _holders;
+    address public _publicAcl;
+
+    constructor(address acl) public {
+        _publicAcl = acl;
+    }
 
     function createUser(address _account, string memory _username, address _profile, string memory _rootIpfs) public {
         _usernames[_account] = _username;
@@ -37,6 +42,10 @@ contract Dashboard {
 
     function rootIPFS() public view returns (string memory) {
         return _rootIPFSs[msg.sender];
+    }
+
+    function publicAcl() public view returns (address) {
+        return _publicAcl;
     }
 
     function updateRootIPFS(address _account, string memory _nextRootIpfs) public {

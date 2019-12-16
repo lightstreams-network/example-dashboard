@@ -4,9 +4,17 @@
  * Copyright 2019 (c) Lightstreams, Granada
  */
 
-import { findUserByUsername, retrieveUserInfo, createUser } from '../smartcontracts/dashboard';
+import { Gateway, Leth } from 'lightstreams-js-sdk';
+import { gatewayCfg } from '../constants/config';
+import {
+  findUserByUsername,
+  retrieveUserInfo,
+  createUser,
+  setNextRootDataId,
+  retrievePublicAclAddr
+} from '../smartcontracts/dashboard';
 import { deployContract as deployContractProfile } from '../smartcontracts/profile';
-import { retrieveRemoteItemList } from './profile';
+import { retrieveRemoteItemList, retrieveRemoteItem } from './profile';
 import { requestFundingFromHolder } from './faucet';
 
 export const createUserDashboard = async (web3, { username, ethAddress }) => {
@@ -45,20 +53,72 @@ export const getUserFileList = async (web3, { username, token }) => {
   });
 };
 
-export const requestAccessToFile = async (web3, { fromUsername, toUsername, itemId, token }) => {
-  const fromUser = await retrieveUserByUsername(web3, { username: fromUsername });
-  if (!fromUser) {
-    throw new Error(`User ${fromUsername} dose not exists`);
-  }
-
+export const requestAccessToFile = async (web3, { fromUser, toUsername, itemId, token }) => {
   const toUser = await retrieveUserByUsername(web3, { username: toUsername });
   if (!toUser) {
     throw new Error(`User ${toUsername} dose not exists`);
   }
 
   const curRootData = await retrieveUserRootData({ user: toUser, token });
-  const nextRootData = insertPermissionItemRequest(curRootData, { toUsername, itemId, status: 'pending'});
-  await updateUserRootData({user: toUser, nextRootData});
+  const nextRootData = insertPermissionItemRequest(curRootData, {
+    fromUsername: fromUser.username,
+    toUsername,
+    itemId,
+    status: 'pending'
+  });
+
+  const gateway = Gateway(gatewayCfg.provider);
+  await updateUserRootData(web3, gateway, fromUser, { user: toUser, nextRootData });
+  return nextRootData.permissionsByItem[itemId];
+};
+
+export const grantReadAccess = async (web3, { fromUser, toUsername, itemId, token }) => {
+  const toUser = await retrieveUserByUsername(web3, { username: toUsername });
+  if (!toUser) {
+    throw new Error(`User ${toUsername} dose not exists`);
+  }
+
+  const item = await retrieveRemoteItem(web3, { user: fromUser, itemId });
+  const curRootData = await retrieveUserRootData({ user: toUser, token });
+  const nextRootData = insertPermissionItemRequest(curRootData, {
+    fromUsername: fromUser.username,
+    toUsername,
+    itemId,
+    status: 'granted'
+  });
+
+  const gateway = Gateway(gatewayCfg.provider);
+  await Leth.ACL.grantRead(web3, {
+    from: fromUser.ethAddress,
+    contractAddr: item.acl,
+    account: toUser.ethAddress
+  });
+  await updateUserRootData(web3, gateway, fromUser, { user: fromUser, nextRootData });
+  return nextRootData.permissionsByItem[itemId];
+};
+
+export const revokeReadAccess = async (web3, { fromUser, toUsername, itemId, token }) => {
+  const toUser = await retrieveUserByUsername(web3, { username: toUsername });
+  if (!toUser) {
+    throw new Error(`User ${toUsername} dose not exists`);
+  }
+
+  const item = await retrieveRemoteItem(web3, { user: fromUser, itemId });
+  const curRootData = await retrieveUserRootData({ user: toUser, token });
+  const nextRootData = insertPermissionItemRequest(curRootData, {
+    fromUsername: fromUser.username,
+    toUsername,
+    itemId,
+    status: 'revoked'
+  });
+
+  const gateway = Gateway(gatewayCfg.provider);
+  await Leth.ACL.revokeAccess(web3, {
+    from: fromUser.ethAddress,
+    contractAddr: item.acl,
+    account: toUser.ethAddress
+  });
+  await updateUserRootData(web3, gateway, fromUser, { user: fromUser, nextRootData });
   return nextRootData.permissionsByItem[itemId];
 };
 
@@ -76,23 +136,21 @@ const retrieveUserRootData = ({ user, token }) => {
     return {}
   }
 
+  const gateway = Gateway(gatewayCfg.provider);
   return gateway.storage.fetch(user.rootIPFS, token, false)
-    .then(rawData => {
-      debugger;
-      return JSON.parse(rawData);
-    });
+  .then(rawData => {
+    return rawData;
+    // return JSON.parse(rawData);
+  });
 };
 
 const insertPermissionItemRequest = (curRootData, { fromUsername, toUsername, itemId, status }) => {
-  const newRequestItem = toUsername ? {
-      from: fromUsername,
-      status: status,
-      createdAt: Date.now()
-    } : {
-      to: toUsername,
-      status: status,
-      createdAt: Date.now()
-    };
+  const newRequestItem = {
+    from: fromUsername,
+    to: toUsername,
+    status: status,
+    createdAt: Date.now()
+  };
 
   const nextRootData = {
     ...curRootData,
@@ -101,7 +159,7 @@ const insertPermissionItemRequest = (curRootData, { fromUsername, toUsername, it
     }
   };
 
-  if(!nextRootData.permissionsByItem[itemId]) {
+  if (!nextRootData.permissionsByItem[itemId]) {
     nextRootData.permissionsByItem[itemId] = [newRequestItem]
   } else {
     nextRootData.permissionsByItem[itemId].push(newRequestItem)
@@ -110,29 +168,21 @@ const insertPermissionItemRequest = (curRootData, { fromUsername, toUsername, it
   return nextRootData;
 };
 
-export const updateUserRootData = async ({ user, nextRootData }) => {
+export const updateUserRootData = async (web3, gateway, fromUser, { user, nextRootData }) => {
   try {
-    debugger;
-    const tmpFile = tempfile('.json');
-    fs.writeFileSync(tmpFile, JSON.stringify(nextRootData));
-    const nextRootDataStream = fs.createReadStream(tmpFile);
-    let gwRes;
-    if (user.rootIPFS) {
-      gwRes = await gateway.storage.update(user.ethAddress, user.rootIPFS, nextRootDataStream);
-    } else {
-      gwRes = await gateway.storage.add(user.ethAddress, user.password, nextRootDataStream);
-    }
+    const data = new Blob([JSON.stringify(nextRootData, null, 2)], { type: 'application/json' });
+    const aclAddr = await retrievePublicAclAddr(web3);
+    const gwRes = await gateway.storage.addRawWithAcl(fromUser.ethAddress, aclAddr, data, "json");
 
-    console.log(`Created new root data for user ${user.username}: ${JSON.stringify(gwRes)}`);
-    const { is_granted } = await gateway.acl.grantPublic(gwRes.acl, user.ethAddress, user.password);
-    if (!is_granted) {
-      throw new Error(`Failed to grant public access to: ${JSON.stringify(gwRes)}`);
-    }
-    await DashboardSC.setNextRootDataId(await Web3(), user, gwRes.meta);
-    fs.unlinkSync(tmpFile);
-    return nextRootData;
+    await setNextRootDataId(web3, {
+      from: fromUser.ethAddress,
+      ethAddress: user.ethAddress,
+      nextRootDataId: gwRes.meta
+    });
+
+    console.log(`User ${fromUser.username} updated root data of user ${user.username} to ${JSON.stringify(gwRes)}`);
+    return gwRes.meta;
   } catch ( err ) {
-    fs.unlinkSync(tmpFile);
     if (err.host) {
       const gwErr = JSON.parse(err.body);
       throw new Error(gwErr.error.message);
@@ -155,31 +205,11 @@ export const updateUserRootData = async ({ user, nextRootData }) => {
 //   return rootData.profilePicture || {};
 // };
 //
-
-//
-
-//
 //
 //
 // export const denyPermissionRequest = async (user, toUsername, itemId) => {
 //   // return await this.updatePendingRequestItemAccess(user, fromUsername, itemId, 'denied');
 //   return await this.createNewItemPermissionRequest(user, { toUsername: toUsername }, itemId, 'denied');
-// };
-//
-// export const grantReadAccess = async (user, toUsername, itemId) => {
-//   const web3 = await Web3();
-//   const item = await ProfileService.retrieveRemoteItem(user, itemId);
-//   if (!item) {
-//     throw new Error(`Cannot find item '${itemId}'`);
-//   }
-//
-//   const beneficiaryUser = await this.retrieveUserByUsername(toUsername);
-//   if (!beneficiaryUser) {
-//     throw new Error(`Cannot find username '${toUsername}'`);
-//   }
-//   await gateway.acl.grant(item.acl, user.ethAddress, user.password, beneficiaryUser.ethAddress, "read");
-//
-//   return await this.createNewItemPermissionRequest(user, { toUsername: toUsername }, itemId, 'granted');
 // };
 //
 // export const revokeAccess = async (user, toUsername, itemId) => {

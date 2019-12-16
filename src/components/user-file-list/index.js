@@ -34,7 +34,7 @@ const UserFileList = ({ user, files, showModal, requestAccess, downloadFile }) =
                 <div>
                 { hasAccess
                     ? <TableActionButton type="submit" onClick={() => {
-                        downloadFile(item.row.id);
+                        downloadFile(item.row['_original'].meta);
                     }}><img src="https://img.icons8.com/ios/64/000000/download-from-cloud.png"/>
                     </TableActionButton>
                     : <TableActionButton type="submit" onClick={() => {

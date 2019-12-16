@@ -1,7 +1,7 @@
 import get from 'lodash.get';
 import { createAccountAction, unlockAccountAction, generateAccountAuthToken, getWeb3Engine } from '../keystore'
 import { createUserDashboard, retrieveUserByUsername } from '../../services/dashboard';
-import { generateAuthToken } from "lightstreams-js-sdk/src/token";
+import { Leth } from 'lightstreams-js-sdk';
 
 const initialState = {
   user: {},
@@ -115,7 +115,7 @@ export function updateAuthUserToken(ethAddress) {
     return new Promise(async (resolve, reject) => {
       try {
         const web3 = getWeb3Engine(getState());
-        const token = await generateAuthToken(web3, { address: ethAddress, tokenBlocksLifespan: 1000 });
+        const token = await Leth.Token.generateAuthToken(web3, { address: ethAddress, tokenBlocksLifespan: 1000 });
         dispatch(receiveToken(token));
       } catch ( error ) {
         console.error(error);

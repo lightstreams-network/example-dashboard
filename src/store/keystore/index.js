@@ -1,6 +1,5 @@
 import get from 'lodash.get';
 import { Web3, EthersWallet as EW } from 'lightstreams-js-sdk';
-import { generateAuthToken } from 'lightstreams-js-sdk/src/token'
 import { web3Cfg } from '../../constants/config'
 
 const initialState = {
