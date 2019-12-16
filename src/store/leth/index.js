@@ -108,8 +108,6 @@ export function lethStorageAdd(user, { title, description, file }) {
 export function lethStorageFetch({ token, meta }) {
   return (dispatch) => {
     dispatch(requestLethStorageFetch());
-
-    debugger;
     return gateway.storage.fetch(meta, token, true).then((response) => {
       if(response.status !== 200) throw new Error(response.message);
       const disposition = response.headers.get('Content-Disposition');
