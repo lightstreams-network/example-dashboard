@@ -11,7 +11,7 @@
     "postinstall": "rm -f node_modules/src; ln -nsf ../src node_modules/src"
   },
   "dependencies": {
-    "bcrypt": "^3.0.5",
+    "bcrypt": "^5.0.0",
     "bignumber.js": "^8.1.1",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.4",
